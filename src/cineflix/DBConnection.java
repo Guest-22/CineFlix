@@ -10,13 +10,13 @@ public class DBConnection {
     private static final String USER = "root"; 
     private static final String PASSWORD = ""; 
     
-    public static Connection dbConnect() {
+    public static Connection getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver"); // Helps locate MySQL JDBC Driver (Connector/J, version: 9.3.0).
             return DriverManager.getConnection(URL, USER, PASSWORD); // Retursn the DB connection.
         } catch (Exception e) {
             // Catch and print the error; failed DB connection.
-            JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE);
+            Message.error("Connection error: " + e.getMessage());
             return null;
         }
     }

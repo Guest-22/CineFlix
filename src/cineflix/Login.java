@@ -4,6 +4,7 @@ public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
+        this.setLocationRelativeTo(null); // Centers the JFrame.
     }
 
     /**
@@ -73,16 +74,15 @@ public class Login extends javax.swing.JFrame {
             .addGroup(pnlSignupLayout.createSequentialGroup()
                 .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlSignupLayout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNotice2)
-                            .addGroup(pnlSignupLayout.createSequentialGroup()
-                                .addGap(68, 68, 68)
-                                .addComponent(lblNotice))))
+                        .addGap(128, 128, 128)
+                        .addComponent(lblNotice))
                     .addGroup(pnlSignupLayout.createSequentialGroup()
-                        .addGap(93, 93, 93)
+                        .addGap(54, 54, 54)
+                        .addComponent(lblNotice2))
+                    .addGroup(pnlSignupLayout.createSequentialGroup()
+                        .addGap(91, 91, 91)
                         .addComponent(btnSignup, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         pnlSignupLayout.setVerticalGroup(
             pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

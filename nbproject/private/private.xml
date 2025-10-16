@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/Login.java</file>
-            <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/DBConnection.java</file>
+            <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/PersonalInfoDAO.java</file>
+            <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/ActiveSession.java</file>
+            <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/Account.java</file>
+            <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/PersonalInfo.java</file>
             <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/AccountDAO.java</file>
             <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/Signup.java</file>
-            <file>file:/C:/Users/Erickson%20Miguel/Documents/NetBeansProjects/CineFlix/src/cineflix/CineFlix.java</file>
         </group>
     </open-files>
 </project-private>

@@ -5,18 +5,116 @@ import java.sql.*;
 public class AccountDAO {
     private Connection conn;
     
-    // Finalizing Tables & Columns variables.
-    private final static String TABLE_NAME = "tblAccounts";
-    private final static String COL_ID = "tblAccounts";
-    private final static String COL_USER = "tblAccounts";
-    private final static String COL_PASSWORD = "tblAccounts";
-    private final static String COL_ROLE = "tblAccounts";
+    // Database variables.
+    private final static String TABLE_ACCOUNT = "tblAccounts";
+    private final static String COL_ID = "accountID";
+    private final static String COL_USERNAME = "username";
+    private final static String COL_PASSWORD = "password";
+    private final static String COL_ROLE = "role";
     
-    // Default constructor
+    // Default constructor.
     public AccountDAO (){}
     
     // Receives a DBConnection to enable CRUD operations on tblAccounts.
     public AccountDAO(Connection conn) {
         this.conn = conn;
+    }
+    
+    // Checks if a username already exists in tblAccounts.
+    public boolean isUsernameExist(String username) {
+        String sql = 
+                "SELECT " + COL_ID + " FROM " + TABLE_ACCOUNT + 
+                " WHERE " + COL_USERNAME + " = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // returns true if the username exists.
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+        return false; //Error or not found.
+    }
+
+    // Inserts a new account with default role 'User'; returns the generated accountID if successful, else -1.
+    public int insertAccount(String username, String password) {
+        // Insert query; creates a new account; automatically assigns user as default role.
+        String sql = 
+                "INSERT INTO " + TABLE_ACCOUNT + 
+                "(" + COL_USERNAME + ", " + COL_PASSWORD + ", " + COL_ROLE + ") " + 
+                "VALUES (?, ?, 'User')";
+        
+        try (
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys(); // Gets the PK.
+            if (rs.next()) {
+                return rs.getInt(1); // Returns the PK (to be stored for reference).
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+        return -1; // Insertion failed.
+    }
+
+    // Checks login credentials; returns true if username and password match a record inside DB.
+    public boolean verifyAccount(String username, String password) {
+        // Read query; looks for an existing account inside DB.
+        String sql = 
+                "SELECT * FROM " + TABLE_ACCOUNT
+                + " WHERE " + COL_USERNAME + " = ?" + " AND " + COL_PASSWORD + " = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // return true if match has been found.
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+        return false; // Else, return false; account not found.
+    }
+
+    // Get role of a user by username; returns role as a String or null if not found.
+    public String getRole(String username) {
+        String sql = 
+                "SELECT " + COL_ROLE + " FROM " + TABLE_ACCOUNT
+                + " WHERE " + COL_USERNAME + " = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString(COL_ROLE); // Returns role if found.
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+        return null; // Not found/error.
+    }
+    
+    // Gets accountID by username and password (used after login).
+    public int getAccountID(String username, String password) {
+        String sql = "SELECT " + COL_ID + " FROM " + TABLE_ACCOUNT +
+                     " WHERE " + COL_USERNAME + " = ? AND " + COL_PASSWORD + " = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(COL_ID); // Return acc ID if found.
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+        return -1; // Not found.
     }
 }

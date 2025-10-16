@@ -1,9 +1,12 @@
 package cineflix;
 
+import java.sql.Connection;
+
 public class Signup extends javax.swing.JFrame {
 
     public Signup() {
         initComponents();
+        this.setLocationRelativeTo(null); // Centers the JFrame.
     }
 
     /**
@@ -15,14 +18,15 @@ public class Signup extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGrpSex = new javax.swing.ButtonGroup();
         pnlSignup = new javax.swing.JPanel();
         pnlLogin = new javax.swing.JPanel();
         lblNotice = new javax.swing.JLabel();
         lblNotice2 = new javax.swing.JLabel();
         btnLogin = new javax.swing.JButton();
         lblSignup = new javax.swing.JLabel();
-        lblName = new javax.swing.JLabel();
-        txtName = new javax.swing.JTextField();
+        lblFullName = new javax.swing.JLabel();
+        txtFullName = new javax.swing.JTextField();
         txtAddress = new javax.swing.JTextField();
         lblAddress = new javax.swing.JLabel();
         lblSex = new javax.swing.JLabel();
@@ -32,8 +36,8 @@ public class Signup extends javax.swing.JFrame {
         btnSignup = new javax.swing.JButton();
         radMale = new javax.swing.JRadioButton();
         radFemale = new javax.swing.JRadioButton();
-        lblContact = new javax.swing.JLabel();
-        txtContact = new javax.swing.JTextField();
+        lblContactNum = new javax.swing.JLabel();
+        txtContactNum = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
         txtEmail = new javax.swing.JTextField();
         lblEmail = new javax.swing.JLabel();
@@ -101,19 +105,19 @@ public class Signup extends javax.swing.JFrame {
         lblSignup.setForeground(new java.awt.Color(0, 0, 0));
         lblSignup.setText("Sign Up Form");
 
-        lblName.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblName.setForeground(new java.awt.Color(0, 0, 0));
-        lblName.setText("Name:");
+        lblFullName.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblFullName.setForeground(new java.awt.Color(0, 0, 0));
+        lblFullName.setText("Name:");
 
-        txtName.setBackground(new java.awt.Color(51, 51, 51));
-        txtName.setForeground(new java.awt.Color(255, 255, 255));
-        txtName.addActionListener(new java.awt.event.ActionListener() {
+        txtFullName.setBackground(new java.awt.Color(0, 0, 0));
+        txtFullName.setForeground(new java.awt.Color(255, 255, 255));
+        txtFullName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNameActionPerformed(evt);
+                txtFullNameActionPerformed(evt);
             }
         });
 
-        txtAddress.setBackground(new java.awt.Color(51, 51, 51));
+        txtAddress.setBackground(new java.awt.Color(0, 0, 0));
         txtAddress.setForeground(new java.awt.Color(255, 255, 255));
         txtAddress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,7 +137,7 @@ public class Signup extends javax.swing.JFrame {
         lblUsername.setForeground(new java.awt.Color(0, 0, 0));
         lblUsername.setText("Username:");
 
-        txtUsername.setBackground(new java.awt.Color(51, 51, 51));
+        txtUsername.setBackground(new java.awt.Color(0, 0, 0));
         txtUsername.setForeground(new java.awt.Color(255, 255, 255));
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,6 +161,7 @@ public class Signup extends javax.swing.JFrame {
             }
         });
 
+        btnGrpSex.add(radMale);
         radMale.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         radMale.setForeground(new java.awt.Color(0, 0, 0));
         radMale.setText("Male");
@@ -167,6 +172,7 @@ public class Signup extends javax.swing.JFrame {
             }
         });
 
+        btnGrpSex.add(radFemale);
         radFemale.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         radFemale.setForeground(new java.awt.Color(0, 0, 0));
         radFemale.setText("Female");
@@ -177,22 +183,22 @@ public class Signup extends javax.swing.JFrame {
             }
         });
 
-        lblContact.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblContact.setForeground(new java.awt.Color(0, 0, 0));
-        lblContact.setText("Contact:");
+        lblContactNum.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblContactNum.setForeground(new java.awt.Color(0, 0, 0));
+        lblContactNum.setText("Contact:");
 
-        txtContact.setBackground(new java.awt.Color(51, 51, 51));
-        txtContact.setForeground(new java.awt.Color(255, 255, 255));
-        txtContact.addActionListener(new java.awt.event.ActionListener() {
+        txtContactNum.setBackground(new java.awt.Color(0, 0, 0));
+        txtContactNum.setForeground(new java.awt.Color(255, 255, 255));
+        txtContactNum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtContactActionPerformed(evt);
+                txtContactNumActionPerformed(evt);
             }
         });
 
-        txtPassword.setBackground(new java.awt.Color(51, 51, 51));
+        txtPassword.setBackground(new java.awt.Color(0, 0, 0));
         txtPassword.setForeground(new java.awt.Color(255, 255, 255));
 
-        txtEmail.setBackground(new java.awt.Color(51, 51, 51));
+        txtEmail.setBackground(new java.awt.Color(0, 0, 0));
         txtEmail.setForeground(new java.awt.Color(255, 255, 255));
 
         lblEmail.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -203,34 +209,34 @@ public class Signup extends javax.swing.JFrame {
         pnlSignup.setLayout(pnlSignupLayout);
         pnlSignupLayout.setHorizontalGroup(
             pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignupLayout.createSequentialGroup()
+            .addGroup(pnlSignupLayout.createSequentialGroup()
                 .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlSignupLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblContact)
+                            .addComponent(lblContactNum)
                             .addComponent(lblEmail)
                             .addComponent(lblAddress)
                             .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(lblUsername, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(lblPassword))
                             .addComponent(lblSex)
-                            .addComponent(lblName))
+                            .addComponent(lblFullName))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(pnlSignupLayout.createSequentialGroup()
                                     .addComponent(radMale)
                                     .addGap(85, 85, 85)
                                     .addComponent(radFemale))
                                 .addComponent(txtEmail)
-                                .addComponent(txtContact, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtContactNum, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(txtAddress)
                                 .addComponent(txtUsername)
                                 .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignupLayout.createSequentialGroup()
+                        .addGap(32, 32, 32))
+                    .addGroup(pnlSignupLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignupLayout.createSequentialGroup()
@@ -239,6 +245,7 @@ public class Signup extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignupLayout.createSequentialGroup()
                                 .addComponent(lblSignup)
                                 .addGap(102, 102, 102)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(pnlLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlSignupLayout.setVerticalGroup(
@@ -250,13 +257,13 @@ public class Signup extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlSignupLayout.createSequentialGroup()
-                        .addComponent(lblName)
+                        .addComponent(lblFullName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblSex)
                         .addGap(18, 18, 18)
                         .addComponent(lblEmail))
                     .addGroup(pnlSignupLayout.createSequentialGroup()
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(radMale)
@@ -267,8 +274,8 @@ public class Signup extends javax.swing.JFrame {
                 .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlSignupLayout.createSequentialGroup()
                         .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblContact))
+                            .addComponent(txtContactNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblContactNum))
                         .addGap(18, 18, 18)
                         .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblAddress, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -304,9 +311,9 @@ public class Signup extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLoginActionPerformed
 
-    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
+    private void txtFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFullNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNameActionPerformed
+    }//GEN-LAST:event_txtFullNameActionPerformed
 
     private void txtAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAddressActionPerformed
         // TODO add your handling code here:
@@ -317,7 +324,59 @@ public class Signup extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsernameActionPerformed
 
     private void btnSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupActionPerformed
-        // TODO add your handling code here:
+        // Get all infos from signup TextFields.
+        String fullName = txtFullName.getText().trim();
+        String sex = radMale.isSelected() ? "Male" : radFemale.isSelected() ? "Female" : null;
+        String email = txtEmail.getText().trim();
+        String contactNum = txtContactNum.getText().trim();
+        String address = txtAddress.getText().trim();
+        String username = txtUsername.getText().trim();
+        String password = String.valueOf(txtPassword.getPassword());
+        
+        // Validates all values of TextFields; if any of those are empty display the problem.
+        if (fullName.isEmpty() || sex == null || email.isEmpty() || contactNum.isEmpty() ||
+            address.isEmpty() || username.isEmpty() || password.isEmpty()) {
+            Message.show("Please fill in all fields.");
+            return;
+        }
+
+        // Create an intance of DAO classes.
+        Connection conn = DBConnection.getConnection(); // Attemps to get a DB connection.
+        // Pass the connection as an argument so we can use the CRUD methods of these classes.
+        AccountDAO accountDAO = new AccountDAO(conn);
+        PersonalInfoDAO infoDAO = new PersonalInfoDAO(conn);
+
+        // Check if username already exists.
+        if (accountDAO.isUsernameExist(username)) {
+            Message.show("Username already exists. Please choose another.");
+            return;
+        }
+
+        // Inserts an account and get generated accountID; will be used for tblPersonalInfo.
+        int accountID = accountDAO.insertAccount(username, password);
+        if (accountID == -1) { // Failed attempt.
+            Message.show("Account creation failed.");
+            return; // Stops here.
+        }
+
+        // Create PersonalInfo object and link accountID; only runs if the account has been inserted successfully.
+        PersonalInfo info = new PersonalInfo();
+        info.setAccountID(accountID); // FK reference
+        info.setFullName(fullName);
+        info.setSex(sex);
+        info.setEmail(email);
+        info.setContactNum(contactNum);
+        info.setAddress(address);
+
+        // Inserts personal infos to DB.
+        boolean success = infoDAO.insertInfo(info);
+        if (success) { // If the insertion succeed, return to login frame.
+            Message.show("Signup successful!");
+            new Login().setVisible(true); // Redirects to Login frame.
+            this.dispose();
+        } else { // Else, insertion failed.
+            Message.show("Failed to save personal information.");
+        }
     }//GEN-LAST:event_btnSignupActionPerformed
 
     private void radMaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radMaleActionPerformed
@@ -328,9 +387,9 @@ public class Signup extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_radFemaleActionPerformed
 
-    private void txtContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContactActionPerformed
+    private void txtContactNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContactNumActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtContactActionPerformed
+    }//GEN-LAST:event_txtContactNumActionPerformed
 
     /**
      * @param args the command line arguments
@@ -368,12 +427,13 @@ public class Signup extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup btnGrpSex;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnSignup;
     private javax.swing.JLabel lblAddress;
-    private javax.swing.JLabel lblContact;
+    private javax.swing.JLabel lblContactNum;
     private javax.swing.JLabel lblEmail;
-    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblFullName;
     private javax.swing.JLabel lblNotice;
     private javax.swing.JLabel lblNotice2;
     private javax.swing.JLabel lblPassword;
@@ -385,9 +445,9 @@ public class Signup extends javax.swing.JFrame {
     private javax.swing.JRadioButton radFemale;
     private javax.swing.JRadioButton radMale;
     private javax.swing.JTextField txtAddress;
-    private javax.swing.JTextField txtContact;
+    private javax.swing.JTextField txtContactNum;
     private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtFullName;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
