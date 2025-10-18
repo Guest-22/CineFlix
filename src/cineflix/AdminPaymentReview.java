@@ -1,11 +1,10 @@
 package cineflix;
 
-public class AdminDashboard extends javax.swing.JFrame {
+public class AdminPaymentReview extends javax.swing.JFrame {
 
-    public AdminDashboard() {
+    public AdminPaymentReview() {
         initComponents();
         this.setLocationRelativeTo(null); // Centers the JFrame.
-        lblHeader3.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message to admin.
     }
 
     /**
@@ -30,9 +29,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         lblHeader3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CineFlix: Admin Dashboard");
-        setBackground(new java.awt.Color(255, 255, 255));
-        setResizable(false);
+        setTitle("CineFlix: Payment Review");
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -86,9 +83,9 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnPaymentReview.setBackground(new java.awt.Color(0, 0, 0));
-        btnPaymentReview.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnPaymentReview.setForeground(new java.awt.Color(255, 255, 255));
+        btnPaymentReview.setBackground(new java.awt.Color(255, 255, 255));
+        btnPaymentReview.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnPaymentReview.setForeground(new java.awt.Color(0, 0, 0));
         btnPaymentReview.setText("Payment Review");
         btnPaymentReview.setFocusable(false);
         btnPaymentReview.addActionListener(new java.awt.event.ActionListener() {
@@ -124,7 +121,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                     .addComponent(lblHeader1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblHeader3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -152,7 +149,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(183, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
@@ -161,7 +158,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 870, Short.MAX_VALUE))
+                .addGap(0, 731, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,20 +218,20 @@ public class AdminDashboard extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdminDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminPaymentReview.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdminDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminPaymentReview.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdminDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminPaymentReview.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdminDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminPaymentReview.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdminDashboard().setVisible(true);
+                new AdminPaymentReview().setVisible(true);
             }
         });
     }

@@ -40,14 +40,14 @@ public class Login extends javax.swing.JFrame {
         pnlLogin.setMinimumSize(new java.awt.Dimension(900, 500));
 
         lblSubheader.setFont(new java.awt.Font("Serif", 2, 24)); // NOI18N
-        lblSubheader.setForeground(java.awt.SystemColor.control);
+        lblSubheader.setForeground(new java.awt.Color(255, 255, 255));
         lblSubheader.setText("Your Video Rental Partner");
 
         lblHeader.setFont(new java.awt.Font("Serif", 1, 36)); // NOI18N
-        lblHeader.setForeground(java.awt.SystemColor.control);
+        lblHeader.setForeground(new java.awt.Color(255, 255, 255));
         lblHeader.setText("Welcome to CineFlix");
 
-        pnlSignup.setBackground(java.awt.SystemColor.controlHighlight);
+        pnlSignup.setBackground(new java.awt.Color(255, 255, 255));
 
         lblNotice.setFont(new java.awt.Font("Serif", 1, 26)); // NOI18N
         lblNotice.setForeground(new java.awt.Color(0, 0, 0));
@@ -59,7 +59,7 @@ public class Login extends javax.swing.JFrame {
 
         btnSignup.setBackground(new java.awt.Color(0, 0, 0));
         btnSignup.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        btnSignup.setForeground(java.awt.SystemColor.controlHighlight);
+        btnSignup.setForeground(new java.awt.Color(255, 255, 255));
         btnSignup.setText("Sign Up");
         btnSignup.setBorder(null);
         btnSignup.setFocusable(false);
@@ -99,14 +99,15 @@ public class Login extends javax.swing.JFrame {
         );
 
         lblPassword.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblPassword.setForeground(java.awt.SystemColor.controlHighlight);
+        lblPassword.setForeground(new java.awt.Color(255, 255, 255));
         lblPassword.setText("Password:");
 
         lblUsername.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblUsername.setForeground(java.awt.SystemColor.controlHighlight);
+        lblUsername.setForeground(new java.awt.Color(255, 255, 255));
         lblUsername.setText("Username:");
 
-        txtUsername.setBackground(java.awt.SystemColor.control);
+        txtUsername.setBackground(new java.awt.Color(255, 255, 255));
+        txtUsername.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtUsername.setForeground(new java.awt.Color(0, 0, 0));
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -114,7 +115,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        btnLogin.setBackground(java.awt.SystemColor.controlHighlight);
+        btnLogin.setBackground(new java.awt.Color(255, 255, 255));
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(0, 0, 0));
         btnLogin.setText("Log In");
@@ -126,7 +127,8 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        txtPassword.setBackground(java.awt.SystemColor.control);
+        txtPassword.setBackground(new java.awt.Color(255, 255, 255));
+        txtPassword.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPassword.setForeground(java.awt.SystemColor.activeCaptionText);
 
         javax.swing.GroupLayout pnlLoginLayout = new javax.swing.GroupLayout(pnlLogin);

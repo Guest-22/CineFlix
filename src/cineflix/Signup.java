@@ -46,7 +46,7 @@ public class Signup extends javax.swing.JFrame {
         setTitle("CineFlix: Singup");
         setResizable(false);
 
-        pnlSignup.setBackground(java.awt.SystemColor.control);
+        pnlSignup.setBackground(new java.awt.Color(255, 255, 255));
         pnlSignup.setForeground(new java.awt.Color(0, 0, 0));
         pnlSignup.setMaximumSize(new java.awt.Dimension(900, 500));
         pnlSignup.setMinimumSize(new java.awt.Dimension(900, 500));
@@ -54,14 +54,14 @@ public class Signup extends javax.swing.JFrame {
         pnlLogin.setBackground(new java.awt.Color(0, 0, 0));
 
         lblNotice.setFont(new java.awt.Font("Serif", 1, 26)); // NOI18N
-        lblNotice.setForeground(java.awt.SystemColor.controlHighlight);
+        lblNotice.setForeground(new java.awt.Color(255, 255, 255));
         lblNotice.setText("Already have an account?");
 
         lblNotice2.setFont(new java.awt.Font("Serif", 1, 24)); // NOI18N
-        lblNotice2.setForeground(java.awt.SystemColor.controlHighlight);
+        lblNotice2.setForeground(new java.awt.Color(255, 255, 255));
         lblNotice2.setText("Log In here");
 
-        btnLogin.setBackground(java.awt.SystemColor.controlHighlight);
+        btnLogin.setBackground(new java.awt.Color(255, 255, 255));
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(0, 0, 0));
         btnLogin.setText("Log In");
@@ -110,6 +110,7 @@ public class Signup extends javax.swing.JFrame {
         lblFullName.setText("Name:");
 
         txtFullName.setBackground(new java.awt.Color(0, 0, 0));
+        txtFullName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtFullName.setForeground(new java.awt.Color(255, 255, 255));
         txtFullName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +119,7 @@ public class Signup extends javax.swing.JFrame {
         });
 
         txtAddress.setBackground(new java.awt.Color(0, 0, 0));
+        txtAddress.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtAddress.setForeground(new java.awt.Color(255, 255, 255));
         txtAddress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,6 +140,7 @@ public class Signup extends javax.swing.JFrame {
         lblUsername.setText("Username:");
 
         txtUsername.setBackground(new java.awt.Color(0, 0, 0));
+        txtUsername.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtUsername.setForeground(new java.awt.Color(255, 255, 255));
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,6 +191,7 @@ public class Signup extends javax.swing.JFrame {
         lblContactNum.setText("Contact:");
 
         txtContactNum.setBackground(new java.awt.Color(0, 0, 0));
+        txtContactNum.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtContactNum.setForeground(new java.awt.Color(255, 255, 255));
         txtContactNum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,9 +200,11 @@ public class Signup extends javax.swing.JFrame {
         });
 
         txtPassword.setBackground(new java.awt.Color(0, 0, 0));
+        txtPassword.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPassword.setForeground(new java.awt.Color(255, 255, 255));
 
         txtEmail.setBackground(new java.awt.Color(0, 0, 0));
+        txtEmail.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtEmail.setForeground(new java.awt.Color(255, 255, 255));
 
         lblEmail.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
