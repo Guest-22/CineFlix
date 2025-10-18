@@ -43,7 +43,7 @@ public class Signup extends javax.swing.JFrame {
         lblEmail = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Singup");
+        setTitle("CineFlix: Singup");
         setResizable(false);
 
         pnlSignup.setBackground(java.awt.SystemColor.control);
@@ -342,10 +342,12 @@ public class Signup extends javax.swing.JFrame {
 
         // Create an intance of DAO classes.
         Connection conn = DBConnection.getConnection(); // Attemps to get a DB connection.
-        // Pass the connection as an argument so we can use the CRUD methods of these classes.
+        if (conn == null) return; // Validates the connection before continuing; Error already handled inside DBConnection.
+        
+        // Pass the connection as an argument so we can use the CRUD methods of these two classes.
         AccountDAO accountDAO = new AccountDAO(conn);
         PersonalInfoDAO infoDAO = new PersonalInfoDAO(conn);
-
+        
         // Check if username already exists.
         if (accountDAO.isUsernameExist(username)) {
             Message.show("Username already exists. Please choose another.");

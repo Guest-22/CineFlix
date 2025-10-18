@@ -16,7 +16,7 @@ public class DBConnection {
             return DriverManager.getConnection(URL, USER, PASSWORD); // Retursn the DB connection.
         } catch (Exception e) {
             // Catch and print the error; failed DB connection.
-            Message.error("Connection error: " + e.getMessage());
+            Message.error("Database Connection Error: " + e.getMessage());
             return null;
         }
     }

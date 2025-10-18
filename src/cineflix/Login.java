@@ -1,5 +1,7 @@
 package cineflix;
 
+import java.sql.Connection;
+
 public class Login extends javax.swing.JFrame {
 
     public Login() {
@@ -30,7 +32,7 @@ public class Login extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Login");
+        setTitle("CineFlix: Login");
         setResizable(false);
 
         pnlLogin.setBackground(new java.awt.Color(0, 0, 0));
@@ -202,7 +204,47 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsernameActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        // TODO add your handling code here:
+        String username = txtUsername.getText().trim();
+        String password = String.valueOf(txtPassword.getPassword());
+        
+        // Handles empty inputs from TextFields.
+        if (username.isEmpty() || password.isEmpty()) {
+        Message.show("Please enter both username and password.");
+        return;
+        }
+         
+        // Attemps to get a DB Connection.
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) return; // Validates the connection before continuing; Error already handled inside DBConnection.
+        
+        // Passing the connection as an argument to perform some SQL operations.
+        AccountDAO accountDAO = new AccountDAO(conn);
+        
+        // Verifies credentials.
+        if (!accountDAO.verifyAccount(username, password)) { // Account not found inside tblAccounts.
+        Message.show("Invalid credentials. Please try again."); 
+        return;
+        }
+        
+        // Gets the account role and accountID for storing active sessions; to know whose currently using the system.
+        String role = accountDAO.getRole(username);
+        int accountID = accountDAO.getAccountID(username, password);
+        
+        // Stores the credentials of currently logged-in user; used identifying for active session.
+        ActiveSession.loggedInAccountID = accountID;
+        ActiveSession.loggedInUsername = username;
+        ActiveSession.role = role;
+
+        if (role.equalsIgnoreCase("User")) {  
+            Message.show("Login successful!");
+            new UserDashboard().setVisible(true);
+        } else if (role.equalsIgnoreCase("Admin")) {
+            Message.show("Login successful!");
+            new AdminDashboard().setVisible(true);
+        } else {
+            Message.show("Unknown role. Please contact support."); // Handles manually DB inserted account with no roles.
+        }
+        dispose(); // Close login frame
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**

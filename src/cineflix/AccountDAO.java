@@ -7,7 +7,7 @@ public class AccountDAO {
     
     // Database variables.
     private final static String TABLE_ACCOUNT = "tblAccounts";
-    private final static String COL_ID = "accountID";
+    private final static String COL_ID = "accountID"; // PRIMARY KEY.
     private final static String COL_USERNAME = "username";
     private final static String COL_PASSWORD = "password";
     private final static String COL_ROLE = "role";
@@ -61,7 +61,7 @@ public class AccountDAO {
         return -1; // Insertion failed.
     }
 
-    // Checks login credentials; returns true if username and password match a record inside DB.
+    // Checks existing credentials; returns true if username and password match a certain record inside DB.
     public boolean verifyAccount(String username, String password) {
         // Read query; looks for an existing account inside DB.
         String sql = 

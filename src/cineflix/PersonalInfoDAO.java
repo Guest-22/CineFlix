@@ -7,8 +7,8 @@ public class PersonalInfoDAO {
 
     // Database variables.
     private final static String TABLE_INFO = "tblPersonalInfo";
-    private final static String COL_ID = "infoID";
-    private final static String COL_ACCOUNT_ID = "accountID";
+    private final static String COL_ID = "infoID"; // PRIMARY KEY.
+    private final static String COL_ACCOUNT_ID = "accountID"; // FOREIGN KEY
     private final static String COL_FULLNAME = "fullName";
     private final static String COL_SEX = "sex";
     private final static String COL_EMAIL = "email";
