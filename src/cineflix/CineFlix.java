@@ -10,10 +10,13 @@ public class CineFlix {
         // Use (Ctrl + 7 shortcut) to see all the variables used in this system project.
         // Shows the login JFrame by default.
          
+        /*
         // Pre-loads UI; avoid glitches.
         javax.swing.SwingUtilities.invokeLater(() -> {
             new Login().setVisible(true);    
-        }); 
+        }); */
+        
+        new AdminMovieInventory().setVisible(true);
         
         /*
         // You can check the database connection first by uncommenting the ff. code below & the java.sql import above.

@@ -1,12 +1,103 @@
 package cineflix;
 
-public class AdminMovieInventory extends javax.swing.JFrame {
+import java.awt.Color;
+import java.awt.Image;
+import java.io.File;
+import java.sql.Connection;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
+public class AdminMovieInventory extends javax.swing.JFrame {
+    // Declaring variables.
+    private Connection conn;
+    private MovieDAO movieDAO;
+    
+    // Initializing the default cover image of a movie.
+    private String selectedImagePath = "src/images/default.png";
+    
     public AdminMovieInventory() {
         initComponents();
         this.setLocationRelativeTo(null); // Centers the JFrame.
+        setDefaultCoverImage(); // Sets default cover for new movie.
+        setDefaultTglSort();
+        setDefaultSynopsysTxta();
+        
+        // Attemps to get a DB Connection.
+        conn = DBConnection.getConnection();
+        if (conn == null) return; // Validates the connection before continuing; Error already handled inside DBConnection.
+        movieDAO = new MovieDAO(conn); // Pass the connection as an argument inside MovieDAO class for methods that performs CRUD.
+        
+        populateMovieTable(); // Populates the movie table.
     }
 
+    // Sets the default cover image of a movie.
+    private void setDefaultCoverImage() {
+    String defaultPath = "src/images/default_cover.png";
+    ImageIcon defaultIcon = new ImageIcon("src/images/default_cover.png"); // Default movie cover image.
+    Image scaled = defaultIcon.getImage().getScaledInstance(
+    lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);
+    lblImagePath.setIcon(new ImageIcon(scaled));
+    }
+
+    // Sets the default toggle button style.
+    private void setDefaultTglSort(){
+        tglSort.setFocusPainted(false);         // Removes dotted focus ring
+        tglSort.setContentAreaFilled(false);    // Removes default background fill
+        tglSort.setBorderPainted(false);        // Removes border highlight
+        tglSort.setOpaque(true);                // Ensures custom background shows
+        tglSort.setBackground(Color.BLACK);     // Constant black background
+        tglSort.setForeground(Color.WHITE);     // White text for contrast
+    }
+    
+    // Wraps the synopsys; proceed to new line when it exceed the length space.
+    private void setDefaultSynopsysTxta(){
+        txtaSynopsis.setLineWrap(true); 
+        txtaSynopsis.setWrapStyleWord(true);
+    }
+    
+    // Clears all inputs.
+    private void clearForm() {
+        txtTitle.setText("");
+        txtGenre.setText("");
+        txtaSynopsis.setText("");
+        txtReleaseYear.setText("");
+        txtDuration.setText("");
+        txtCopies.setText("");
+        txtPricePerWeek.setText("");
+        setDefaultCoverImage();
+    }
+    
+    // Populates the movie table with data from our tblMovies.
+    private void populateMovieTable() {
+        DefaultTableModel model = (DefaultTableModel) tblMovie.getModel();
+        model.setRowCount(0); // Clear existing rows
+
+        try {
+            List<Movie> movies = movieDAO.getAllMovies(); // Gets all the movies and store inside the list.
+            for (Movie m : movies) {
+                Object[] row = {
+                    m.getMovieID(),
+                    m.getTitle(),
+                    m.getSynopsis(),
+                    m.getGenre(),
+                    m.getReleaseYear(),
+                    m.getDuration(),
+                    m.getCopies(),
+                    m.getPricePerWeek(),
+                    m.getImagePath(),
+                    m.getCreatedAt()
+                };
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Message.error("Error loading movie table: " + e.getMessage());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -16,48 +107,80 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlMain4 = new javax.swing.JPanel();
-        pnlSideNav4 = new javax.swing.JPanel();
-        lblTitle4 = new javax.swing.JLabel();
-        lblHeader13 = new javax.swing.JLabel();
-        lblHeader14 = new javax.swing.JLabel();
-        btnMovieInventory4 = new javax.swing.JButton();
+        pnlMain = new javax.swing.JPanel();
+        pnlSideNav = new javax.swing.JPanel();
+        lblHeader1 = new javax.swing.JLabel();
+        lblHeader3 = new javax.swing.JLabel();
+        lblHeader2 = new javax.swing.JLabel();
+        btnMovieInventory = new javax.swing.JButton();
         btnUserProfiles4 = new javax.swing.JButton();
         btnRentalLogs4 = new javax.swing.JButton();
-        btnPaymentReview4 = new javax.swing.JButton();
+        btnPaymentReview = new javax.swing.JButton();
         btnLogout4 = new javax.swing.JButton();
-        lblHeader15 = new javax.swing.JLabel();
+        lblHeader4 = new javax.swing.JLabel();
+        pnlForm = new javax.swing.JPanel();
+        lblManageMovieRecord = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        txtTitle = new javax.swing.JTextField();
+        lblGenre = new javax.swing.JLabel();
+        txtGenre = new javax.swing.JTextField();
+        lblReleaseYear = new javax.swing.JLabel();
+        txtReleaseYear = new javax.swing.JTextField();
+        lblCopies = new javax.swing.JLabel();
+        txtDuration = new javax.swing.JTextField();
+        lblPricePerWeek = new javax.swing.JLabel();
+        lblDuration = new javax.swing.JLabel();
+        txtCopies = new javax.swing.JTextField();
+        txtPricePerWeek = new javax.swing.JTextField();
+        lblSynopsis = new javax.swing.JLabel();
+        scrlSynopsis = new javax.swing.JScrollPane();
+        txtaSynopsis = new javax.swing.JTextArea();
+        lblImagePath = new javax.swing.JLabel();
+        lblCoverImage = new javax.swing.JLabel();
+        btnBrowseImage = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        lblMovieInventory = new javax.swing.JLabel();
+        btnSearch = new javax.swing.JButton();
+        cmbSort = new javax.swing.JComboBox<>();
+        tglSort = new javax.swing.JToggleButton();
+        txtSearch = new javax.swing.JTextField();
+        scrlMovie = new javax.swing.JScrollPane();
+        tblMovie = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: MovieInventory");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        pnlMain4.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMain.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
 
-        pnlSideNav4.setBackground(new java.awt.Color(0, 0, 0));
+        pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
 
-        lblTitle4.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblTitle4.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle4.setText("CineFlix");
-        lblTitle4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblHeader1.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblHeader1.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader1.setText("CineFlix");
+        lblHeader1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        lblHeader13.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        lblHeader13.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader13.setText("Dashboard");
-        lblHeader13.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblHeader3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblHeader3.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader3.setText("Dashboard");
+        lblHeader3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        lblHeader14.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        lblHeader14.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader14.setText("Admin");
-        lblHeader14.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblHeader2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblHeader2.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader2.setText("Admin");
+        lblHeader2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnMovieInventory4.setBackground(new java.awt.Color(255, 255, 255));
-        btnMovieInventory4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnMovieInventory4.setForeground(new java.awt.Color(0, 0, 0));
-        btnMovieInventory4.setText("Movie Inventory");
-        btnMovieInventory4.setFocusable(false);
-        btnMovieInventory4.addActionListener(new java.awt.event.ActionListener() {
+        btnMovieInventory.setBackground(new java.awt.Color(255, 255, 255));
+        btnMovieInventory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnMovieInventory.setForeground(new java.awt.Color(0, 0, 0));
+        btnMovieInventory.setText("Movie Inventory");
+        btnMovieInventory.setFocusable(false);
+        btnMovieInventory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMovieInventory4ActionPerformed(evt);
+                btnMovieInventoryActionPerformed(evt);
             }
         });
 
@@ -83,14 +206,14 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             }
         });
 
-        btnPaymentReview4.setBackground(new java.awt.Color(0, 0, 0));
-        btnPaymentReview4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnPaymentReview4.setForeground(new java.awt.Color(255, 255, 255));
-        btnPaymentReview4.setText("Payment Review");
-        btnPaymentReview4.setFocusable(false);
-        btnPaymentReview4.addActionListener(new java.awt.event.ActionListener() {
+        btnPaymentReview.setBackground(new java.awt.Color(0, 0, 0));
+        btnPaymentReview.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnPaymentReview.setForeground(new java.awt.Color(255, 255, 255));
+        btnPaymentReview.setText("Payment Review");
+        btnPaymentReview.setFocusable(false);
+        btnPaymentReview.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPaymentReview4ActionPerformed(evt);
+                btnPaymentReviewActionPerformed(evt);
             }
         });
 
@@ -105,75 +228,431 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             }
         });
 
-        lblHeader15.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblHeader15.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader15.setText("Welcome, Admin");
-        lblHeader15.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader4.setText("Welcome, Admin");
+        lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        javax.swing.GroupLayout pnlSideNav4Layout = new javax.swing.GroupLayout(pnlSideNav4);
-        pnlSideNav4.setLayout(pnlSideNav4Layout);
-        pnlSideNav4Layout.setHorizontalGroup(
-            pnlSideNav4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSideNav4Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
+        pnlSideNav.setLayout(pnlSideNavLayout);
+        pnlSideNavLayout.setHorizontalGroup(
+            pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addGroup(pnlSideNav4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblHeader13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTitle4, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHeader15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(18, Short.MAX_VALUE))
-            .addComponent(btnMovieInventory4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
             .addComponent(btnUserProfiles4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnPaymentReview4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogout4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        pnlSideNav4Layout.setVerticalGroup(
-            pnlSideNav4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSideNav4Layout.createSequentialGroup()
+        pnlSideNavLayout.setVerticalGroup(
+            pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(lblTitle4)
+                .addComponent(lblHeader1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader14, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblHeader2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader13)
+                .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader15)
+                .addComponent(lblHeader4)
                 .addGap(44, 44, 44)
-                .addComponent(btnMovieInventory4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMovieInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnUserProfiles4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnRentalLogs4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnPaymentReview4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout pnlMain4Layout = new javax.swing.GroupLayout(pnlMain4);
-        pnlMain4.setLayout(pnlMain4Layout);
-        pnlMain4Layout.setHorizontalGroup(
-            pnlMain4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMain4Layout.createSequentialGroup()
-                .addComponent(pnlSideNav4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 676, Short.MAX_VALUE))
+        pnlForm.setBackground(new java.awt.Color(0, 0, 0));
+
+        lblManageMovieRecord.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblManageMovieRecord.setForeground(new java.awt.Color(255, 255, 255));
+        lblManageMovieRecord.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManageMovieRecord.setText("Manage Movie Record");
+        lblManageMovieRecord.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitle.setText("Title:");
+
+        txtTitle.setBackground(new java.awt.Color(255, 255, 255));
+        txtTitle.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTitle.setForeground(new java.awt.Color(0, 0, 0));
+        txtTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTitleActionPerformed(evt);
+            }
+        });
+
+        lblGenre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblGenre.setForeground(new java.awt.Color(255, 255, 255));
+        lblGenre.setText("Genre:");
+
+        txtGenre.setBackground(new java.awt.Color(255, 255, 255));
+        txtGenre.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtGenre.setForeground(new java.awt.Color(0, 0, 0));
+        txtGenre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtGenreActionPerformed(evt);
+            }
+        });
+
+        lblReleaseYear.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblReleaseYear.setForeground(new java.awt.Color(255, 255, 255));
+        lblReleaseYear.setText("Release Year:");
+
+        txtReleaseYear.setBackground(new java.awt.Color(255, 255, 255));
+        txtReleaseYear.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtReleaseYear.setForeground(new java.awt.Color(0, 0, 0));
+        txtReleaseYear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtReleaseYearActionPerformed(evt);
+            }
+        });
+
+        lblCopies.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblCopies.setForeground(new java.awt.Color(255, 255, 255));
+        lblCopies.setText("Copies:");
+
+        txtDuration.setBackground(new java.awt.Color(255, 255, 255));
+        txtDuration.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtDuration.setForeground(new java.awt.Color(0, 0, 0));
+        txtDuration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDurationActionPerformed(evt);
+            }
+        });
+
+        lblPricePerWeek.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPricePerWeek.setForeground(new java.awt.Color(255, 255, 255));
+        lblPricePerWeek.setText("Price/Week:");
+
+        lblDuration.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblDuration.setForeground(new java.awt.Color(255, 255, 255));
+        lblDuration.setText("Duration:");
+
+        txtCopies.setBackground(new java.awt.Color(255, 255, 255));
+        txtCopies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtCopies.setForeground(new java.awt.Color(0, 0, 0));
+        txtCopies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCopiesActionPerformed(evt);
+            }
+        });
+
+        txtPricePerWeek.setBackground(new java.awt.Color(255, 255, 255));
+        txtPricePerWeek.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPricePerWeek.setForeground(new java.awt.Color(0, 0, 0));
+        txtPricePerWeek.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPricePerWeekActionPerformed(evt);
+            }
+        });
+
+        lblSynopsis.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblSynopsis.setForeground(new java.awt.Color(255, 255, 255));
+        lblSynopsis.setText("Synopsis:");
+
+        txtaSynopsis.setBackground(new java.awt.Color(255, 255, 255));
+        txtaSynopsis.setColumns(20);
+        txtaSynopsis.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtaSynopsis.setForeground(new java.awt.Color(0, 0, 0));
+        txtaSynopsis.setRows(5);
+        scrlSynopsis.setViewportView(txtaSynopsis);
+
+        lblImagePath.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblImagePath.setForeground(new java.awt.Color(255, 255, 255));
+
+        lblCoverImage.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblCoverImage.setForeground(new java.awt.Color(255, 255, 255));
+        lblCoverImage.setText("Cover Image:");
+
+        btnBrowseImage.setBackground(new java.awt.Color(255, 255, 255));
+        btnBrowseImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnBrowseImage.setForeground(new java.awt.Color(0, 0, 0));
+        btnBrowseImage.setText("Browse Image");
+        btnBrowseImage.setFocusable(false);
+        btnBrowseImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrowseImageActionPerformed(evt);
+            }
+        });
+
+        btnAdd.setBackground(new java.awt.Color(0, 204, 153));
+        btnAdd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("Add");
+        btnAdd.setFocusable(false);
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 153, 204));
+        btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Update");
+        btnUpdate.setFocusable(false);
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(255, 51, 0));
+        btnDelete.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.setFocusable(false);
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
+        pnlForm.setLayout(pnlFormLayout);
+        pnlFormLayout.setHorizontalGroup(
+            pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblManageMovieRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlFormLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(pnlFormLayout.createSequentialGroup()
+                            .addComponent(lblSynopsis)
+                            .addGap(172, 172, 172)
+                            .addComponent(lblCoverImage))
+                        .addGroup(pnlFormLayout.createSequentialGroup()
+                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblReleaseYear)
+                                .addComponent(lblDuration))
+                            .addGap(18, 18, 18)
+                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                    .addComponent(lblPricePerWeek)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtPricePerWeek, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
+                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                    .addComponent(lblCopies)
+                                    .addGap(45, 45, 45)
+                                    .addComponent(txtCopies))))
+                        .addGroup(pnlFormLayout.createSequentialGroup()
+                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblTitle)
+                                .addComponent(lblGenre))
+                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                    .addGap(17, 17, 17)
+                                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtGenre, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(scrlSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBrowseImage))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
-        pnlMain4Layout.setVerticalGroup(
-            pnlMain4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlSideNav4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        pnlFormLayout.setVerticalGroup(
+            pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFormLayout.createSequentialGroup()
+                .addComponent(lblManageMovieRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblGenre, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGenre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCopies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCoverImage, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addComponent(scrlSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBrowseImage))
+                    .addComponent(lblImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        lblMovieInventory.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblMovieInventory.setForeground(new java.awt.Color(0, 0, 0));
+        lblMovieInventory.setText("Movie Inventory");
+        lblMovieInventory.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        btnSearch.setBackground(new java.awt.Color(0, 0, 0));
+        btnSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.setFocusable(false);
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        cmbSort.setBackground(new java.awt.Color(0, 0, 0));
+        cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cmbSort.setForeground(new java.awt.Color(255, 255, 255));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
+        cmbSort.setFocusable(false);
+        cmbSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSortActionPerformed(evt);
+            }
+        });
+
+        tglSort.setBackground(new java.awt.Color(0, 0, 0));
+        tglSort.setFont(new java.awt.Font("SansSerif", 1, 10)); // NOI18N
+        tglSort.setForeground(new java.awt.Color(255, 255, 255));
+        tglSort.setText("ASC");
+        tglSort.setBorderPainted(false);
+        tglSort.setFocusPainted(false);
+        tglSort.setFocusable(false);
+        tglSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tglSortActionPerformed(evt);
+            }
+        });
+
+        txtSearch.setBackground(new java.awt.Color(0, 0, 0));
+        txtSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtSearch.setForeground(new java.awt.Color(255, 255, 255));
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        tblMovie.setBackground(new java.awt.Color(0, 0, 0));
+        tblMovie.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblMovie.setForeground(new java.awt.Color(255, 255, 255));
+        tblMovie.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Title", "Synopsis", "Genre", "Year", "Duration", "Copies", "Price/Week", "ImagePath", "CreatedAt"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        scrlMovie.setViewportView(tblMovie);
+
+        javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
+        pnlMain.setLayout(pnlMainLayout);
+        pnlMainLayout.setHorizontalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblMovieInventory)
+                    .addComponent(scrlMovie))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        pnlMainLayout.setVerticalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblMovieInventory)
+                .addGap(4, 4, 4)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch)
+                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tglSort))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(85, 85, 85))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1310, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
         );
 
         pack();
@@ -185,9 +664,9 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogout4ActionPerformed
 
-    private void btnPaymentReview4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReview4ActionPerformed
+    private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnPaymentReview4ActionPerformed
+    }//GEN-LAST:event_btnPaymentReviewActionPerformed
 
     private void btnRentalLogs4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogs4ActionPerformed
         // TODO add your handling code here:
@@ -197,9 +676,115 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUserProfiles4ActionPerformed
 
-    private void btnMovieInventory4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventory4ActionPerformed
+    private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnMovieInventory4ActionPerformed
+    }//GEN-LAST:event_btnMovieInventoryActionPerformed
+
+    private void txtTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTitleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTitleActionPerformed
+
+    private void txtGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGenreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtGenreActionPerformed
+
+    private void txtReleaseYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReleaseYearActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtReleaseYearActionPerformed
+
+    private void txtDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDurationActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDurationActionPerformed
+
+    private void txtCopiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCopiesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCopiesActionPerformed
+
+    private void txtPricePerWeekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPricePerWeekActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPricePerWeekActionPerformed
+
+    private void btnBrowseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseImageActionPerformed
+        JFileChooser fileChooser = new JFileChooser(); // Create an instance of JFileChooser; for cover image selection.
+        fileChooser.setDialogTitle("Select Cover Image"); // Sets the dialog title.
+
+        fileChooser.setCurrentDirectory(new File("src/images")); // Sets the default directory inside the project.
+
+        // Creates a filtered selection.
+        FileNameExtensionFilter imageFilter = new FileNameExtensionFilter(
+        "Image Files (*.jpg, *.jpeg, *.png)", "jpg", "jpeg", "png"); // Only accepts the ff. file types.
+        fileChooser.setFileFilter(imageFilter); // Apply file filters.
+        fileChooser.setAcceptAllFileFilterUsed(false); // Disable other file type options.
+
+        int result = fileChooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            selectedImagePath = selectedFile.getAbsolutePath(); // Stores the newly selected image path.
+
+            ImageIcon icon = new ImageIcon(selectedImagePath);
+            Image scaled = icon.getImage().getScaledInstance(
+                lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);
+            lblImagePath.setIcon(new ImageIcon(scaled)); // Sets the new movie cover image.
+        }
+    }//GEN-LAST:event_btnBrowseImageActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        try {
+            String title = txtTitle.getText().trim();
+            String genre = txtGenre.getText().trim();
+            String synopsis = txtaSynopsis.getText().trim();
+            int releaseYear = Integer.parseInt(txtReleaseYear.getText().trim());
+            int duration = Integer.parseInt(txtDuration.getText().trim());
+            int copies = Integer.parseInt(txtCopies.getText().trim());
+            double pricePerWeek = Double.parseDouble(txtPricePerWeek.getText().trim());
+            String imagePath = selectedImagePath;
+
+            Movie movie = new Movie(title, genre, synopsis, releaseYear, duration, copies, pricePerWeek, imagePath);
+
+            MovieDAO dao = new MovieDAO(conn); // Pass the Connection to perform an insertion (insertMovie method).
+            dao.insertMovie(movie);
+
+            Message.show("Movie added successfully!");
+            clearForm(); // Clear all inputs.
+            populateMovieTable(); // Refresh/Repopulate movie table.
+            
+
+        } catch (NumberFormatException e) {
+            Message.show("Please enter valid numeric values for year, duration, copies, and price.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Message.error("Error adding movie: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
+        if (tglSort.isSelected()) {
+        tglSort.setText("DESC");
+        } else {
+            tglSort.setText("ASC");
+        }
+    }//GEN-LAST:event_tglSortActionPerformed
+
+    private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSortActionPerformed
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,16 +822,46 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnBrowseImage;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnLogout4;
-    private javax.swing.JButton btnMovieInventory4;
-    private javax.swing.JButton btnPaymentReview4;
+    private javax.swing.JButton btnMovieInventory;
+    private javax.swing.JButton btnPaymentReview;
     private javax.swing.JButton btnRentalLogs4;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUserProfiles4;
-    private javax.swing.JLabel lblHeader13;
-    private javax.swing.JLabel lblHeader14;
-    private javax.swing.JLabel lblHeader15;
-    private javax.swing.JLabel lblTitle4;
-    private javax.swing.JPanel pnlMain4;
-    private javax.swing.JPanel pnlSideNav4;
+    private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JLabel lblCopies;
+    private javax.swing.JLabel lblCoverImage;
+    private javax.swing.JLabel lblDuration;
+    private javax.swing.JLabel lblGenre;
+    private javax.swing.JLabel lblHeader1;
+    private javax.swing.JLabel lblHeader2;
+    private javax.swing.JLabel lblHeader3;
+    private javax.swing.JLabel lblHeader4;
+    private javax.swing.JLabel lblImagePath;
+    private javax.swing.JLabel lblManageMovieRecord;
+    private javax.swing.JLabel lblMovieInventory;
+    private javax.swing.JLabel lblPricePerWeek;
+    private javax.swing.JLabel lblReleaseYear;
+    private javax.swing.JLabel lblSynopsis;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel pnlForm;
+    private javax.swing.JPanel pnlMain;
+    private javax.swing.JPanel pnlSideNav;
+    private javax.swing.JScrollPane scrlMovie;
+    private javax.swing.JScrollPane scrlSynopsis;
+    private javax.swing.JTable tblMovie;
+    private javax.swing.JToggleButton tglSort;
+    private javax.swing.JTextField txtCopies;
+    private javax.swing.JTextField txtDuration;
+    private javax.swing.JTextField txtGenre;
+    private javax.swing.JTextField txtPricePerWeek;
+    private javax.swing.JTextField txtReleaseYear;
+    private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtTitle;
+    private javax.swing.JTextArea txtaSynopsis;
     // End of variables declaration//GEN-END:variables
 }

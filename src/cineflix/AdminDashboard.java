@@ -183,19 +183,22 @@ public class AdminDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
-        // TODO add your handling code here:
+        new AdminMovieInventory().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMovieInventoryActionPerformed
 
     private void btnUserProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfilesActionPerformed
-        // TODO add your handling code here:
+        new AdminUserProfiles().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnUserProfilesActionPerformed
 
     private void btnRentalLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogsActionPerformed
-        // TODO add your handling code here:
+        new AdminRentalLogs().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRentalLogsActionPerformed
 
     private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed
-        // TODO add your handling code here:
+        new AdminPaymentReview().setVisible(true);
     }//GEN-LAST:event_btnPaymentReviewActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
