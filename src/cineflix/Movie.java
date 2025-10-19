@@ -9,8 +9,24 @@ public class Movie {
     // Constructors
     public Movie() {}
 
+    
+    // Model for DB insertion (movieID AUTO_INCREMENTED, cratedAt DEFAULT CURRENT_TIMESTAMP).
     public Movie(String title, String genre, String synopsis, int releaseYear,
                  int duration, int copies, double pricePerWeek, String imagePath) {
+        this.title = title;
+        this.genre = genre;
+        this.synopsis = synopsis;
+        this.releaseYear = releaseYear;
+        this.duration = duration;
+        this.copies = copies;
+        this.pricePerWeek = pricePerWeek;
+        this.imagePath = imagePath;
+    }
+    
+    // For DB Updates (ID (PK) for reference).
+    public Movie(int movieID, String title, String genre, String synopsis, int releaseYear,
+                 int duration, int copies, double pricePerWeek, String imagePath) {
+        this.movieID = movieID;
         this.title = title;
         this.genre = genre;
         this.synopsis = synopsis;

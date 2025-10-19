@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MovieDAO {
     private Connection conn;
-    public static final String TABLE_NAME = "tblMovies";
+    public static final String TABLE_MOVIES = "tblMovies";
     public static final String COL_ID = "movieID"; // PRIMARY KEY.
     public static final String COL_TITLE = "title";
     public static final String COL_GENRE = "genre";
@@ -28,7 +28,7 @@ public class MovieDAO {
     // Inserts the movie infor to the DB; exclude PK, createdAt;
     public void insertMovie(Movie movie) {
         String sql = 
-                "INSERT INTO " + TABLE_NAME + " (" +
+                "INSERT INTO " + TABLE_MOVIES + " (" +
                 COL_TITLE + ", " + COL_GENRE + ", " + COL_SYNOPSIS + ", " + COL_YEAR + 
                 ", " + COL_DURATION + ", " + COL_COPIES + ", " + COL_PRICE + ", " + COL_IMAGEPATH + 
                 ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -53,7 +53,7 @@ public class MovieDAO {
     // Gets all the movies and store returns a list.
     public List<Movie> getAllMovies() {
         List<Movie> list = new ArrayList<>();
-        String sql = "SELECT * FROM " + TABLE_NAME;
+        String sql = "SELECT * FROM " + TABLE_MOVIES;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -80,4 +80,44 @@ public class MovieDAO {
         return list;
     }
 
+    public void updateMovie(Movie movie)  {
+        String sql = 
+                "UPDATE " + TABLE_MOVIES + 
+                " SET " + COL_TITLE + " = ?, " + COL_GENRE  + " = ?, " + COL_SYNOPSIS + 
+                " = ?, " + COL_YEAR + " = ?, " + COL_DURATION + " = ?, " + COL_COPIES + 
+                " = ?, " + COL_PRICE + " = ?, " + COL_IMAGEPATH + " = ? " +
+                "WHERE " + COL_ID + " = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, movie.getTitle());
+            stmt.setString(2, movie.getGenre());
+            stmt.setString(3, movie.getSynopsis());
+            stmt.setInt(4, movie.getReleaseYear());
+            stmt.setInt(5, movie.getDuration());
+            stmt.setInt(6, movie.getCopies());
+            stmt.setDouble(7, movie.getPricePerWeek());
+            stmt.setString(8, movie.getImagePath());
+            stmt.setInt(9, movie.getMovieID());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+    }
+    
+    // Deletes a movie from the DB using its primary key (movieID).
+    public void deleteMovie(int movieID) {
+        String sql = 
+                "DELETE FROM " + TABLE_MOVIES + 
+                " WHERE " + COL_ID + " = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, movieID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+    }
 }

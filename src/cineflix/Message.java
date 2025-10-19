@@ -18,4 +18,10 @@ public class Message {
     public static void error(String message) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
+    
+    // Shows a confirmation dialog and returns true if user clicks YES.
+    public static boolean confirm(String message, String title) {
+        int result = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+        return result == JOptionPane.YES_OPTION;
+    }
 }

@@ -2,6 +2,8 @@ package cineflix;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.sql.Connection;
 import java.util.List;
@@ -15,8 +17,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     private Connection conn;
     private MovieDAO movieDAO;
     
-    // Initializing the default cover image of a movie.
-    private String selectedImagePath = "src/images/default.png";
+    private String selectedImagePath = "src/images/default.png"; // Default cover image of a movie.
+    private int selectedMovieID = -1; // Stores the ID of the selected movie
     
     public AdminMovieInventory() {
         initComponents();
@@ -35,8 +37,9 @@ public class AdminMovieInventory extends javax.swing.JFrame {
 
     // Sets the default cover image of a movie.
     private void setDefaultCoverImage() {
-    String defaultPath = "src/images/default_cover.png";
-    ImageIcon defaultIcon = new ImageIcon("src/images/default_cover.png"); // Default movie cover image.
+    selectedImagePath = "src/images/default_cover.png"; // Set movie image path back to default.
+    
+    ImageIcon defaultIcon = new ImageIcon(selectedImagePath); // Use the default movie cover image.
     Image scaled = defaultIcon.getImage().getScaledInstance(
     lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);
     lblImagePath.setIcon(new ImageIcon(scaled));
@@ -72,12 +75,12 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     
     // Populates the movie table with data from our tblMovies.
     private void populateMovieTable() {
-        DefaultTableModel model = (DefaultTableModel) tblMovie.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblMovieRecord.getModel();
         model.setRowCount(0); // Clear existing rows
 
         try {
-            List<Movie> movies = movieDAO.getAllMovies(); // Gets all the movies and store inside the list.
-            for (Movie m : movies) {
+            List<Movie> movies = movieDAO.getAllMovies(); // Gets all the movies and store it inside a list.
+            for (Movie m : movies) { // Enhance for loop; loops thru the list of movies.
                 Object[] row = {
                     m.getMovieID(),
                     m.getTitle(),
@@ -90,7 +93,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                     m.getImagePath(),
                     m.getCreatedAt()
                 };
-                model.addRow(row);
+                model.addRow(row); // Adds the movie one-by-one.
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,10 +116,10 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         lblHeader3 = new javax.swing.JLabel();
         lblHeader2 = new javax.swing.JLabel();
         btnMovieInventory = new javax.swing.JButton();
-        btnUserProfiles4 = new javax.swing.JButton();
-        btnRentalLogs4 = new javax.swing.JButton();
+        btnUserProfiles = new javax.swing.JButton();
+        btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
-        btnLogout4 = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         lblHeader4 = new javax.swing.JLabel();
         pnlForm = new javax.swing.JPanel();
         lblManageMovieRecord = new javax.swing.JLabel();
@@ -141,13 +144,14 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
         lblMovieInventory = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
         cmbSort = new javax.swing.JComboBox<>();
         tglSort = new javax.swing.JToggleButton();
         txtSearch = new javax.swing.JTextField();
         scrlMovie = new javax.swing.JScrollPane();
-        tblMovie = new javax.swing.JTable();
+        tblMovieRecord = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: MovieInventory");
@@ -184,25 +188,25 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             }
         });
 
-        btnUserProfiles4.setBackground(new java.awt.Color(0, 0, 0));
-        btnUserProfiles4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnUserProfiles4.setForeground(new java.awt.Color(255, 255, 255));
-        btnUserProfiles4.setText("User Profiles");
-        btnUserProfiles4.setFocusable(false);
-        btnUserProfiles4.addActionListener(new java.awt.event.ActionListener() {
+        btnUserProfiles.setBackground(new java.awt.Color(0, 0, 0));
+        btnUserProfiles.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnUserProfiles.setForeground(new java.awt.Color(255, 255, 255));
+        btnUserProfiles.setText("User Profiles");
+        btnUserProfiles.setFocusable(false);
+        btnUserProfiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUserProfiles4ActionPerformed(evt);
+                btnUserProfilesActionPerformed(evt);
             }
         });
 
-        btnRentalLogs4.setBackground(new java.awt.Color(0, 0, 0));
-        btnRentalLogs4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnRentalLogs4.setForeground(new java.awt.Color(255, 255, 255));
-        btnRentalLogs4.setText("Rental Logs");
-        btnRentalLogs4.setFocusable(false);
-        btnRentalLogs4.addActionListener(new java.awt.event.ActionListener() {
+        btnRentalLogs.setBackground(new java.awt.Color(0, 0, 0));
+        btnRentalLogs.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnRentalLogs.setForeground(new java.awt.Color(255, 255, 255));
+        btnRentalLogs.setText("Rental Logs");
+        btnRentalLogs.setFocusable(false);
+        btnRentalLogs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRentalLogs4ActionPerformed(evt);
+                btnRentalLogsActionPerformed(evt);
             }
         });
 
@@ -217,14 +221,14 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             }
         });
 
-        btnLogout4.setBackground(new java.awt.Color(0, 0, 0));
-        btnLogout4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnLogout4.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogout4.setText("Logout");
-        btnLogout4.setFocusable(false);
-        btnLogout4.addActionListener(new java.awt.event.ActionListener() {
+        btnLogout.setBackground(new java.awt.Color(0, 0, 0));
+        btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout.setText("Logout");
+        btnLogout.setFocusable(false);
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogout4ActionPerformed(evt);
+                btnLogoutActionPerformed(evt);
             }
         });
 
@@ -246,10 +250,10 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                     .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-            .addComponent(btnUserProfiles4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnRentalLogs4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnLogout4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,13 +269,13 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addComponent(btnMovieInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnUserProfiles4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnUserProfiles, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnRentalLogs4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRentalLogs, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLogout4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -423,6 +427,17 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             }
         });
 
+        btnClear.setBackground(new java.awt.Color(153, 153, 255));
+        btnClear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(255, 255, 255));
+        btnClear.setText("Clear");
+        btnClear.setFocusable(false);
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
@@ -430,54 +445,57 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             .addComponent(lblManageMovieRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlFormLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addComponent(lblSynopsis)
+                                .addGap(172, 172, 172)
+                                .addComponent(lblCoverImage))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblReleaseYear)
+                                    .addComponent(lblDuration))
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(lblPricePerWeek)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtPricePerWeek, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(lblCopies)
+                                        .addGap(45, 45, 45)
+                                        .addComponent(txtCopies))))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblTitle)
+                                    .addComponent(lblGenre))
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addGap(17, 17, 17)
+                                        .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtGenre, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGroup(pnlFormLayout.createSequentialGroup()
-                            .addComponent(lblSynopsis)
-                            .addGap(172, 172, 172)
-                            .addComponent(lblCoverImage))
-                        .addGroup(pnlFormLayout.createSequentialGroup()
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblReleaseYear)
-                                .addComponent(lblDuration))
+                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(scrlSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnBrowseImage))
                             .addGap(18, 18, 18)
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addComponent(lblPricePerWeek)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtPricePerWeek, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addComponent(lblCopies)
-                                    .addGap(45, 45, 45)
-                                    .addComponent(txtCopies))))
-                        .addGroup(pnlFormLayout.createSequentialGroup()
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblTitle)
-                                .addComponent(lblGenre))
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addGap(17, 17, 17)
-                                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtGenre, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(lblImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlFormLayout.createSequentialGroup()
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(scrlSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBrowseImage))
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(lblImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                            .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(4, 4, 4)))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         pnlFormLayout.setVerticalGroup(
@@ -527,8 +545,11 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -553,6 +574,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         cmbSort.setForeground(new java.awt.Color(255, 255, 255));
         cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
         cmbSort.setFocusable(false);
+        cmbSort.setRequestFocusEnabled(false);
         cmbSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbSortActionPerformed(evt);
@@ -581,10 +603,10 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             }
         });
 
-        tblMovie.setBackground(new java.awt.Color(0, 0, 0));
-        tblMovie.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblMovie.setForeground(new java.awt.Color(255, 255, 255));
-        tblMovie.setModel(new javax.swing.table.DefaultTableModel(
+        tblMovieRecord.setBackground(new java.awt.Color(0, 0, 0));
+        tblMovieRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblMovieRecord.setForeground(new java.awt.Color(255, 255, 255));
+        tblMovieRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null},
@@ -603,7 +625,12 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        scrlMovie.setViewportView(tblMovie);
+        tblMovieRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMovieRecordMouseClicked(evt);
+            }
+        });
+        scrlMovie.setViewportView(tblMovieRecord);
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -658,23 +685,23 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLogout4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout4ActionPerformed
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         ActiveSession.clearSession(); // Clears active session.
         new Login().setVisible(true); // Returns to login frame.
         this.dispose();
-    }//GEN-LAST:event_btnLogout4ActionPerformed
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPaymentReviewActionPerformed
 
-    private void btnRentalLogs4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogs4ActionPerformed
+    private void btnRentalLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnRentalLogs4ActionPerformed
+    }//GEN-LAST:event_btnRentalLogsActionPerformed
 
-    private void btnUserProfiles4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfiles4ActionPerformed
+    private void btnUserProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfilesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnUserProfiles4ActionPerformed
+    }//GEN-LAST:event_btnUserProfilesActionPerformed
 
     private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
         // TODO add your handling code here:
@@ -730,6 +757,19 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBrowseImageActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // Validate empty fields before parsing.
+        if (txtTitle.getText().trim().isEmpty() ||
+            txtGenre.getText().trim().isEmpty() ||
+            txtaSynopsis.getText().trim().isEmpty() ||
+            txtReleaseYear.getText().trim().isEmpty() ||
+            txtDuration.getText().trim().isEmpty() ||
+            txtCopies.getText().trim().isEmpty() ||
+            txtPricePerWeek.getText().trim().isEmpty()) {
+
+            Message.error("Please fill in all required fields.");
+            return;
+        }
+        
         try {
             String title = txtTitle.getText().trim();
             String genre = txtGenre.getText().trim();
@@ -750,8 +790,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             populateMovieTable(); // Refresh/Repopulate movie table.
             
 
-        } catch (NumberFormatException e) {
-            Message.show("Please enter valid numeric values for year, duration, copies, and price.");
+        } catch (NumberFormatException e) { // Catch invalid numerical values.
+            Message.show("Please enter valid numeric values for year, duration, copies, and price/week.");
         } catch (Exception e) {
             e.printStackTrace();
             Message.error("Error adding movie: " + e.getMessage());
@@ -759,11 +799,63 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+        if (selectedMovieID == -1) {
+        Message.error("Please select a movie to update."); // If there's no data/row that is being selected, throw this error.
+        return;
+        }
+
+        try { // Gets all the infos.
+            String title = txtTitle.getText().trim();
+            String genre = txtGenre.getText().trim();
+            String synopsis = txtaSynopsis.getText().trim();
+            int releaseYear = Integer.parseInt(txtReleaseYear.getText().trim());
+            int duration = Integer.parseInt(txtDuration.getText().trim());
+            int copies = Integer.parseInt(txtCopies.getText().trim());
+            double pricePerWeek = Double.parseDouble(txtPricePerWeek.getText().trim());
+            String imagePath = selectedImagePath;
+
+            Movie updatedMovie = new Movie(
+                selectedMovieID, title, genre, synopsis,
+                releaseYear, duration, copies, pricePerWeek, imagePath
+            );
+
+            
+            movieDAO.updateMovie(updatedMovie); // Updates the data inside the DB using ID as a unique reference.
+            Message.show("Movie updated successfully!");
+
+            clearForm();           // Reset form
+            populateMovieTable();  // Refresh table
+
+        } catch (NumberFormatException e) {
+            Message.error("Please enter valid numeric values.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Message.error("Error updating movie: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+        if (selectedMovieID == -1) {
+        Message.error("Please select a movie to delete."); // If there's no data/row that is being selected, throw this error.
+        return;
+        }
+
+        if (!Message.confirm("Are you sure you want to delete this movie?", "Confirm Deletion")) {
+            return; // If user cancels, do nothing.
+        } // False error.
+
+        try {
+            MovieDAO dao = new MovieDAO(conn); // Pass the Connection to perform deletion (deleteMovie method).
+            dao.deleteMovie(selectedMovieID);  // Deletes the movie using its unique ID.
+
+            Message.show("Movie deleted successfully!");
+            clearForm();           // Reset form
+            populateMovieTable();  // Refresh table
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Message.error("Error deleting movie: " + e.getMessage());
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -785,6 +877,39 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void tblMovieRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMovieRecordMouseClicked
+        tblMovieRecord.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = tblMovieRecord.getSelectedRow();
+                if (row >= 0) {
+                    selectedMovieID = Integer.parseInt(tblMovieRecord.getValueAt(row, 0).toString()); // Stores the selected ID
+                    
+                    txtTitle.setText(tblMovieRecord.getValueAt(row, 1).toString());       // Title
+                    txtaSynopsis.setText(tblMovieRecord.getValueAt(row, 2).toString());   // Synopsis
+                    txtGenre.setText(tblMovieRecord.getValueAt(row, 3).toString());       // Genre
+                    txtReleaseYear.setText(tblMovieRecord.getValueAt(row, 4).toString()); // Year
+                    txtDuration.setText(tblMovieRecord.getValueAt(row, 5).toString());    // Duration
+                    txtCopies.setText(tblMovieRecord.getValueAt(row, 6).toString());      // Copies
+                    txtPricePerWeek.setText(tblMovieRecord.getValueAt(row, 7).toString());// Price
+                    selectedImagePath = tblMovieRecord.getValueAt(row, 8).toString();     // Image path
+
+                    // Display cover image in lblImagePath.
+                    ImageIcon icon = new ImageIcon(selectedImagePath);
+                    Image scaled = icon.getImage().getScaledInstance(
+                        lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);
+                    lblImagePath.setIcon(new ImageIcon(scaled));
+                }
+            }
+        });
+    }//GEN-LAST:event_tblMovieRecordMouseClicked
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clearForm(); // Clear all inputs back to default.
+        tblMovieRecord.clearSelection(); // Clear movie table selection visually.
+        selectedMovieID = -1; // Deselects the clicked ID just in case.
+    }//GEN-LAST:event_btnClearActionPerformed
 
     /**
      * @param args the command line arguments
@@ -824,14 +949,15 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBrowseImage;
+    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnLogout4;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMovieInventory;
     private javax.swing.JButton btnPaymentReview;
-    private javax.swing.JButton btnRentalLogs4;
+    private javax.swing.JButton btnRentalLogs;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JButton btnUserProfiles4;
+    private javax.swing.JButton btnUserProfiles;
     private javax.swing.JComboBox<String> cmbSort;
     private javax.swing.JLabel lblCopies;
     private javax.swing.JLabel lblCoverImage;
@@ -853,7 +979,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     private javax.swing.JPanel pnlSideNav;
     private javax.swing.JScrollPane scrlMovie;
     private javax.swing.JScrollPane scrlSynopsis;
-    private javax.swing.JTable tblMovie;
+    private javax.swing.JTable tblMovieRecord;
     private javax.swing.JToggleButton tglSort;
     private javax.swing.JTextField txtCopies;
     private javax.swing.JTextField txtDuration;
