@@ -359,6 +359,12 @@ public class Signup extends javax.swing.JFrame {
             Message.show("Username already exists. Please choose another.");
             return;
         }
+        
+        // Check if email already exists.
+        if (infoDAO.isEmailExist(email)) {
+            Message.show("Email already exists. Please use a different one.");
+            return;
+        }
 
         // Inserts an account and get generated accountID; will be used for tblPersonalInfo.
         int accountID = accountDAO.insertAccount(username, password);

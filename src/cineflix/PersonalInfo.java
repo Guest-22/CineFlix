@@ -3,7 +3,7 @@ package cineflix;
 // Personal Info Model.
 public class PersonalInfo {
     private int infoID, accountID; // PK & FK.
-    private String fullName, sex, email, contactNum, address; // Other user details.
+    private String username, fullName, sex, email, contactNum, address; // Other user details.
 
     
     public PersonalInfo() {}
@@ -24,6 +24,9 @@ public class PersonalInfo {
     }
     public int getAccountID() {
         return accountID;
+    }
+    public String getUsername() {
+        return username;
     }
     public String getFullName() {
         return fullName;
@@ -47,6 +50,9 @@ public class PersonalInfo {
     }
     public void setAccountID(int accountID) {
         this.accountID = accountID;
+    }
+    public void setUsername(String username) {
+        this.username = username;
     }
     public void setFullName(String fullName) {
         this.fullName = fullName;

@@ -18,7 +18,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     private MovieDAO movieDAO;
     
     private String selectedImagePath = "src/images/default.png"; // Default cover image of a movie.
-    private int selectedMovieID = -1; // Stores the ID of the selected movie
+    private int selectedMovieID = -1; // Stores the ID of selected movie; defaukt -1.
     
     public AdminMovieInventory() {
         initComponents();
@@ -71,6 +71,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         txtCopies.setText("");
         txtPricePerWeek.setText("");
         setDefaultCoverImage();
+        selectedMovieID = -1; // Reset selected ID from movie table.
     }
     
     // Populates the movie table with data from our tblMovies.
@@ -154,7 +155,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         tblMovieRecord = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CineFlix: MovieInventory");
+        setTitle("CineFlix: Movie Inventory");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -442,7 +443,6 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblManageMovieRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlFormLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -497,6 +497,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                             .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(4, 4, 4)))
                 .addContainerGap(17, Short.MAX_VALUE))
+            .addComponent(lblManageMovieRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlFormLayout.setVerticalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -667,8 +668,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                     .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tglSort))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(85, 85, 85))
+                .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(97, 97, 97))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -692,15 +693,18 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed
-        // TODO add your handling code here:
+        new AdminPaymentReview().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnPaymentReviewActionPerformed
 
     private void btnRentalLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogsActionPerformed
-        // TODO add your handling code here:
+        new AdminRentalLogs().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRentalLogsActionPerformed
 
     private void btnUserProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfilesActionPerformed
-        // TODO add your handling code here:
+        new AdminUserProfiles().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnUserProfilesActionPerformed
 
     private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
@@ -780,6 +784,12 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             double pricePerWeek = Double.parseDouble(txtPricePerWeek.getText().trim());
             String imagePath = selectedImagePath;
 
+            // Validates the connection before continuing.
+            if (conn == null) {
+                Message.show("Database connection failed.");
+                return;
+            }
+            
             Movie movie = new Movie(title, genre, synopsis, releaseYear, duration, copies, pricePerWeek, imagePath);
 
             MovieDAO dao = new MovieDAO(conn); // Pass the Connection to perform an insertion (insertMovie method).
@@ -818,14 +828,13 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 selectedMovieID, title, genre, synopsis,
                 releaseYear, duration, copies, pricePerWeek, imagePath
             );
-
+            
             
             movieDAO.updateMovie(updatedMovie); // Updates the data inside the DB using ID as a unique reference.
             Message.show("Movie updated successfully!");
 
             clearForm();           // Reset form
             populateMovieTable();  // Refresh table
-
         } catch (NumberFormatException e) {
             Message.error("Please enter valid numeric values.");
         } catch (Exception e) {
@@ -906,9 +915,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_tblMovieRecordMouseClicked
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        clearForm(); // Clear all inputs back to default.
+        clearForm(); // Clear all inputs back to default; deselect clicked ID just in case.
         tblMovieRecord.clearSelection(); // Clear movie table selection visually.
-        selectedMovieID = -1; // Deselects the clicked ID just in case.
     }//GEN-LAST:event_btnClearActionPerformed
 
     /**

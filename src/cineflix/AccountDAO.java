@@ -65,8 +65,8 @@ public class AccountDAO {
     public boolean verifyAccount(String username, String password) {
         // Read query; looks for an existing account inside DB.
         String sql = 
-                "SELECT * FROM " + TABLE_ACCOUNT
-                + " WHERE " + COL_USERNAME + " = ?" + " AND " + COL_PASSWORD + " = ?";
+                "SELECT * FROM " + TABLE_ACCOUNT + 
+                " WHERE " + COL_USERNAME + " = ?" + " AND " + COL_PASSWORD + " = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -83,8 +83,8 @@ public class AccountDAO {
     // Get role of a user by username; returns role as a String or null if not found.
     public String getRole(String username) {
         String sql = 
-                "SELECT " + COL_ROLE + " FROM " + TABLE_ACCOUNT
-                + " WHERE " + COL_USERNAME + " = ?";
+                "SELECT " + COL_ROLE + " FROM " + TABLE_ACCOUNT + 
+                " WHERE " + COL_USERNAME + " = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -117,4 +117,56 @@ public class AccountDAO {
         }
         return -1; // Not found.
     }
+    
+    // Gets the password via accountID (FK in tblPersonalInfo).
+    public String getPasswordByAccountID(int accountID) {
+        String sql = 
+                "SELECT " + COL_PASSWORD + " FROM " + TABLE_ACCOUNT +
+                " WHERE " + COL_ID + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    // Update account details; role not included.
+    public boolean updateAccount(int accountID, String username, String password) {
+        String sql = 
+                "UPDATE " + TABLE_ACCOUNT + 
+                " SET " + COL_USERNAME + " = ?, " + COL_PASSWORD + " = ? "
+                + "WHERE " + COL_ID + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setInt(3, accountID); // WHERE clause target; update this specific ID.
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+        return false;
+    }
+    
+    // Deletes account data.
+    public boolean deleteAccount(int accountID) {
+        String sql = 
+                "DELETE FROM " + TABLE_ACCOUNT + 
+                " WHERE " + COL_ID + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID); // Target row
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Database error: " + e.getMessage());
+        }
+        return false;
+    }
+    
 }
