@@ -70,12 +70,13 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         lblHeader1 = new javax.swing.JLabel();
         lblHeader3 = new javax.swing.JLabel();
         lblHeader2 = new javax.swing.JLabel();
+        btnHome = new javax.swing.JButton();
         btnMovieInventory = new javax.swing.JButton();
         btnUserProfiles = new javax.swing.JButton();
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
-        btnLogout = new javax.swing.JButton();
         lblHeader4 = new javax.swing.JLabel();
+        btnLogout1 = new javax.swing.JButton();
         pnlForm = new javax.swing.JPanel();
         lblManageUserProfiles = new javax.swing.JLabel();
         lblFullName = new javax.swing.JLabel();
@@ -109,6 +110,9 @@ public class AdminUserProfiles extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: User Profiles");
+        setMinimumSize(new java.awt.Dimension(1315, 675));
+        setPreferredSize(new java.awt.Dimension(1315, 675));
+        setResizable(false);
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
         pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
@@ -129,6 +133,17 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         lblHeader2.setForeground(new java.awt.Color(255, 255, 255));
         lblHeader2.setText("Admin");
         lblHeader2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        btnHome.setBackground(new java.awt.Color(0, 0, 0));
+        btnHome.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnHome.setForeground(new java.awt.Color(255, 255, 255));
+        btnHome.setText("Home");
+        btnHome.setFocusable(false);
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeActionPerformed(evt);
+            }
+        });
 
         btnMovieInventory.setBackground(new java.awt.Color(0, 0, 0));
         btnMovieInventory.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -174,21 +189,21 @@ public class AdminUserProfiles extends javax.swing.JFrame {
             }
         });
 
-        btnLogout.setBackground(new java.awt.Color(0, 0, 0));
-        btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogout.setText("Logout");
-        btnLogout.setFocusable(false);
-        btnLogout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogoutActionPerformed(evt);
-            }
-        });
-
         lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
         lblHeader4.setText("Welcome, Admin");
         lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        btnLogout1.setBackground(new java.awt.Color(0, 0, 0));
+        btnLogout1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnLogout1.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout1.setText("Logout");
+        btnLogout1.setFocusable(false);
+        btnLogout1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogout1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
@@ -202,11 +217,12 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                     .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+            .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+            .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnLogout1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,6 +236,8 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader4)
                 .addGap(44, 44, 44)
+                .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMovieInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnUserProfiles, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,7 +246,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLogout1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -447,7 +465,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                                     .addComponent(txtContactNum)
                                     .addComponent(scrlAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
                                     .addComponent(txtEmail))))))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
             .addComponent(lblManageUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlFormLayout.setVerticalGroup(
@@ -485,7 +503,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chkShowPassword)
-                .addGap(41, 41, 41)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -593,8 +611,8 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblUserProfiles)
                     .addComponent(scrpAccountRecord))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -628,6 +646,11 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+        new AdminDashboard().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnHomeActionPerformed
+
     private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
         new AdminMovieInventory().setVisible(true);
         this.dispose();
@@ -646,12 +669,6 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         new AdminPaymentReview().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPaymentReviewActionPerformed
-
-    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        ActiveSession.clearSession(); // Clears active session.
-        new Login().setVisible(true); // Returns to login frame.
-        this.dispose();
-    }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void txtFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFullNameActionPerformed
         // TODO add your handling code here:
@@ -842,10 +859,10 @@ public class AdminUserProfiles extends javax.swing.JFrame {
 
     private void chkShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkShowPasswordActionPerformed
         if (chkShowPassword.isSelected()) {
-        txtPassword.setEchoChar((char) 0); // Show characters.
-    } else {
-        txtPassword.setEchoChar('•'); // Mask again (you can use '*', '•', etc.)    
-    }
+            txtPassword.setEchoChar((char) 0); // Show characters.
+        } else {
+            txtPassword.setEchoChar('•'); // Mask again (you can use '*', '•', etc.)    
+        }
     }//GEN-LAST:event_chkShowPasswordActionPerformed
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
@@ -893,6 +910,12 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_tblInfoRecordMouseClicked
 
+    private void btnLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout1ActionPerformed
+        ActiveSession.clearSession(); // Clears active session.
+        new Login().setVisible(true); // Returns to login frame.
+        this.dispose();
+    }//GEN-LAST:event_btnLogout1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -933,7 +956,8 @@ public class AdminUserProfiles extends javax.swing.JFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
     private javax.swing.ButtonGroup btnGrpSex;
-    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnHome;
+    private javax.swing.JButton btnLogout1;
     private javax.swing.JButton btnMovieInventory;
     private javax.swing.JButton btnPaymentReview;
     private javax.swing.JButton btnRentalLogs;

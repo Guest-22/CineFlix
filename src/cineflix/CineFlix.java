@@ -16,7 +16,7 @@ public class CineFlix {
             new Login().setVisible(true);    
         }); */
         
-        new AdminUserProfiles().setVisible(true);
+        new Login().setVisible(true);
         
         /*
         // You can check the database connection first by uncommenting the ff. code below & the java.sql import above.

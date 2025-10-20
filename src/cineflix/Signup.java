@@ -41,6 +41,7 @@ public class Signup extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         txtEmail = new javax.swing.JTextField();
         lblEmail = new javax.swing.JLabel();
+        chkShowPassword = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Singup");
@@ -164,6 +165,7 @@ public class Signup extends javax.swing.JFrame {
             }
         });
 
+        radMale.setBackground(new java.awt.Color(255, 255, 255));
         btnGrpSex.add(radMale);
         radMale.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         radMale.setForeground(new java.awt.Color(0, 0, 0));
@@ -175,6 +177,7 @@ public class Signup extends javax.swing.JFrame {
             }
         });
 
+        radFemale.setBackground(new java.awt.Color(255, 255, 255));
         btnGrpSex.add(radFemale);
         radFemale.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         radFemale.setForeground(new java.awt.Color(0, 0, 0));
@@ -211,6 +214,16 @@ public class Signup extends javax.swing.JFrame {
         lblEmail.setForeground(new java.awt.Color(0, 0, 0));
         lblEmail.setText("Email:");
 
+        chkShowPassword.setBackground(new java.awt.Color(255, 255, 255));
+        chkShowPassword.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        chkShowPassword.setForeground(new java.awt.Color(0, 0, 0));
+        chkShowPassword.setText("Show Password");
+        chkShowPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkShowPasswordActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSignupLayout = new javax.swing.GroupLayout(pnlSignup);
         pnlSignup.setLayout(pnlSignupLayout);
         pnlSignupLayout.setHorizontalGroup(
@@ -240,18 +253,17 @@ public class Signup extends javax.swing.JFrame {
                                 .addComponent(txtContactNum, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(txtAddress)
                                 .addComponent(txtUsername)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(32, 32, 32))
+                                .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(chkShowPassword))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE))
                     .addGroup(pnlSignupLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignupLayout.createSequentialGroup()
-                                .addComponent(btnSignup, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(122, 122, 122))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignupLayout.createSequentialGroup()
-                                .addComponent(lblSignup)
-                                .addGap(102, 102, 102)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblSignup)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 200, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignupLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSignup, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(114, 114, 114)))
                 .addComponent(pnlLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlSignupLayout.setVerticalGroup(
@@ -293,9 +305,11 @@ public class Signup extends javax.swing.JFrame {
                 .addGroup(pnlSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPassword))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkShowPassword)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSignup, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62))
+                .addGap(51, 51, 51))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -405,6 +419,14 @@ public class Signup extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtContactNumActionPerformed
 
+    private void chkShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkShowPasswordActionPerformed
+        if (chkShowPassword.isSelected()) {
+            txtPassword.setEchoChar((char) 0); // Show characters.
+        } else {
+            txtPassword.setEchoChar('•'); // Mask again (you can use '*', '•', etc.)    
+        }
+    }//GEN-LAST:event_chkShowPasswordActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -444,6 +466,7 @@ public class Signup extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGrpSex;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnSignup;
+    private javax.swing.JCheckBox chkShowPassword;
     private javax.swing.JLabel lblAddress;
     private javax.swing.JLabel lblContactNum;
     private javax.swing.JLabel lblEmail;

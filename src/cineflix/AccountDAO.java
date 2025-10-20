@@ -8,9 +8,9 @@ public class AccountDAO {
     // Database variables.
     private final static String TABLE_ACCOUNT = "tblAccounts";
     private final static String COL_ID = "accountID"; // PRIMARY KEY.
-    private final static String COL_USERNAME = "username";
+    private final static String COL_USERNAME = "username"; // UNIQUE.
     private final static String COL_PASSWORD = "password";
-    private final static String COL_ROLE = "role";
+    private final static String COL_ROLE = "role"; // ENUM ('User,'Admin') DEFAULT 'User'.
     
     // Default constructor.
     public AccountDAO (){}
@@ -32,9 +32,9 @@ public class AccountDAO {
             return rs.next(); // returns true if the username exists.
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Username validation failed:\n" + e.getMessage());
         }
-        return false; //Error or not found.
+        return false; // Error or not found.
     }
 
     // Inserts a new account with default role 'User'; returns the generated accountID if successful, else -1.
@@ -56,7 +56,7 @@ public class AccountDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Account insertion failed:\n" + e.getMessage());
         }
         return -1; // Insertion failed.
     }
@@ -75,7 +75,7 @@ public class AccountDAO {
             return rs.next(); // return true if match has been found.
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Verify account failed:\n" + e.getMessage());
         }
         return false; // Else, return false; account not found.
     }
@@ -94,7 +94,7 @@ public class AccountDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Get role failed:\n" + e.getMessage());
         }
         return null; // Not found/error.
     }
@@ -113,7 +113,7 @@ public class AccountDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Retrieve account ID failed:\n" + e.getMessage());
         }
         return -1; // Not found.
     }
@@ -131,7 +131,7 @@ public class AccountDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Password retrieval failed:\n" + e.getMessage());
         }
         return null;
     }
@@ -149,7 +149,7 @@ public class AccountDAO {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Account update failed:\n" + e.getMessage());
         }
         return false;
     }
@@ -164,9 +164,8 @@ public class AccountDAO {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Account deletion failed:\n" + e.getMessage());
         }
         return false;
     }
-    
 }

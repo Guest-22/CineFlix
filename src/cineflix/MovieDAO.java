@@ -6,6 +6,7 @@ import java.util.List;
 
 public class MovieDAO {
     private Connection conn;
+    
     public static final String TABLE_MOVIES = "tblMovies";
     public static final String COL_ID = "movieID"; // PRIMARY KEY.
     public static final String COL_TITLE = "title";
@@ -25,7 +26,7 @@ public class MovieDAO {
         this.conn = conn;
     }
     
-    // Inserts the movie infor to the DB; exclude PK, createdAt;
+    // Inserts the movie infos to the DB; exclude PK, createdAt;
     public void insertMovie(Movie movie) {
         String sql = 
                 "INSERT INTO " + TABLE_MOVIES + " (" +
@@ -46,7 +47,7 @@ public class MovieDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Movie insertion failed:\n" + e.getMessage());
         }
     }
     
@@ -75,11 +76,88 @@ public class MovieDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Error retrieving all movies:\n" + e.getMessage());
         }
         return list;
     }
+    
+    public List<Movie> getAllMoviesForUsers() {
+        List<Movie> movies = new ArrayList<>();
 
+        String sql = 
+                "SELECT " + COL_ID + ", " + COL_TITLE + ", " + COL_GENRE + ", " + 
+                COL_YEAR + ", " + COL_DURATION + ", " + COL_PRICE + ", " + COL_COPIES + 
+                " FROM " + TABLE_MOVIES +
+                " ORDER BY " + COL_TITLE + " ASC";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                Movie m = new Movie();
+                m.setMovieID(rs.getInt(COL_ID));
+                m.setTitle(rs.getString(COL_TITLE));
+                m.setGenre(rs.getString(COL_GENRE));
+                m.setReleaseYear(rs.getInt(COL_YEAR));
+                m.setDuration(rs.getInt(COL_DURATION));
+                m.setPricePerWeek(rs.getDouble(COL_PRICE));
+                m.setCopies(rs.getInt(COL_COPIES));
+                movies.add(m);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Error retrieving all Movies for Users:\n" + e.getMessage());
+        }
+
+        return movies;
+    }
+
+    // Retrieves imagepath directory from local folder by referencing its movie ID.
+    public String getImagePathByMovieID(int movieID) {
+        String imagePath = null;
+        String sql = 
+                "SELECT " + COL_IMAGEPATH + 
+                " FROM " + TABLE_MOVIES + 
+                " WHERE " + COL_ID + " = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, movieID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                imagePath = rs.getString(COL_IMAGEPATH);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Error retrieving imagepath:\n" + e.getMessage());
+        }
+
+        return imagePath;
+    }
+
+    // Retrieve movie's synopsis inide the database by referencing its movie ID.
+    public String getSynopsisByMovieID(int movieID) {
+        String synopsis = null;
+        String sql = 
+                "SELECT " + COL_SYNOPSIS + 
+                " FROM " + TABLE_MOVIES + 
+                " WHERE " + COL_ID + " = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, movieID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                synopsis = rs.getString(COL_SYNOPSIS);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Error retrieving synopsis:\n" + e.getMessage());
+        }
+
+        return synopsis;
+    }
+
+    // Updates existing movie information via a new movie model.
     public void updateMovie(Movie movie)  {
         String sql = 
                 "UPDATE " + TABLE_MOVIES + 
@@ -102,11 +180,11 @@ public class MovieDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Movie update failed:\n" + e.getMessage());
         }
     }
     
-    // Deletes a movie from the DB using its primary key (movieID).
+    // Deletes an exising movie data from the database by referencing its primary key (movieID).
     public void deleteMovie(int movieID) {
         String sql = 
                 "DELETE FROM " + TABLE_MOVIES + 
@@ -117,7 +195,24 @@ public class MovieDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Movie deletion failed:\n" + e.getMessage());
         }
+    }
+    
+    // Decrement value of col copies by referencing its movieID.
+    public boolean decrementMovieCopies(int movieID) {
+        String sql = 
+                "UPDATE " + TABLE_MOVIES + 
+                " SET " + COL_COPIES + " = " + COL_COPIES + " - 1 "
+                + "WHERE " + COL_ID + " = ? AND " + COL_COPIES + " > 0";
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, movieID);
+            int affected = pst.executeUpdate();
+            return affected > 0;
+        } catch (SQLException e) {
+            Message.error("Movie copy decremental failed:\n" + e.getMessage());
+        }
+        return false;
     }
 }

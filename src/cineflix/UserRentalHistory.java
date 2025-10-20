@@ -1,13 +1,20 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package cineflix;
 
-public class UserDashboard extends javax.swing.JFrame {
+/**
+ *
+ * @author Erickson Miguel
+ */
+public class UserRentalHistory extends javax.swing.JFrame {
 
     /**
-     * Creates new form UserDashboard
+     * Creates new form UserRentalHistory
      */
-    public UserDashboard() {
+    public UserRentalHistory() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
     }
 
     /**
@@ -29,17 +36,21 @@ public class UserDashboard extends javax.swing.JFrame {
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
         btnMyProfile = new javax.swing.JButton();
-        btnHeader4 = new javax.swing.JLabel();
-        btnLogout = new javax.swing.JButton();
-        lblUserDashboard = new javax.swing.JLabel();
+        lblHeader4 = new javax.swing.JLabel();
+        btnLogout1 = new javax.swing.JButton();
+        lblUserProfiles = new javax.swing.JLabel();
+        btnSearch = new javax.swing.JButton();
+        cmbSort = new javax.swing.JComboBox<>();
+        tglSort = new javax.swing.JToggleButton();
+        txtSearch = new javax.swing.JTextField();
+        scrpAccountRecord = new javax.swing.JScrollPane();
+        tblInfoRecord = new javax.swing.JTable();
+        lblUserProfiles1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CineFlix: User Dashboard");
-        setPreferredSize(new java.awt.Dimension(1315, 675));
-        setResizable(false);
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMain.setPreferredSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
 
         pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -55,7 +66,7 @@ public class UserDashboard extends javax.swing.JFrame {
 
         lblHeader2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblHeader2.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader2.setText("User");
+        lblHeader2.setText("Admin");
         lblHeader2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         btnHome.setBackground(new java.awt.Color(0, 0, 0));
@@ -113,19 +124,19 @@ public class UserDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        btnHeader4.setForeground(new java.awt.Color(255, 255, 255));
-        btnHeader4.setText("Welcome, User");
-        btnHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader4.setText("Welcome, User");
+        lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnLogout.setBackground(new java.awt.Color(0, 0, 0));
-        btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogout.setText("Logout");
-        btnLogout.setFocusable(false);
-        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+        btnLogout1.setBackground(new java.awt.Color(0, 0, 0));
+        btnLogout1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnLogout1.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout1.setText("Logout");
+        btnLogout1.setFocusable(false);
+        btnLogout1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogoutActionPerformed(evt);
+                btnLogout1ActionPerformed(evt);
             }
         });
 
@@ -139,14 +150,14 @@ public class UserDashboard extends javax.swing.JFrame {
                     .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
             .addComponent(btnBrowseMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMyPayments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMyProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnLogout1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,7 +169,7 @@ public class UserDashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnHeader4)
+                .addComponent(lblHeader4)
                 .addGap(44, 44, 44)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -170,14 +181,93 @@ public class UserDashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMyProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLogout1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        lblUserDashboard.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblUserDashboard.setForeground(new java.awt.Color(0, 0, 0));
-        lblUserDashboard.setText("User Dashboard");
-        lblUserDashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblUserProfiles.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblUserProfiles.setForeground(new java.awt.Color(0, 0, 0));
+        lblUserProfiles.setText("Rental History");
+        lblUserProfiles.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        btnSearch.setBackground(new java.awt.Color(0, 0, 0));
+        btnSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.setFocusable(false);
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        cmbSort.setBackground(new java.awt.Color(0, 0, 0));
+        cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cmbSort.setForeground(new java.awt.Color(255, 255, 255));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
+        cmbSort.setFocusable(false);
+        cmbSort.setRequestFocusEnabled(false);
+        cmbSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSortActionPerformed(evt);
+            }
+        });
+
+        tglSort.setBackground(new java.awt.Color(0, 0, 0));
+        tglSort.setFont(new java.awt.Font("SansSerif", 1, 10)); // NOI18N
+        tglSort.setForeground(new java.awt.Color(255, 255, 255));
+        tglSort.setText("ASC");
+        tglSort.setBorderPainted(false);
+        tglSort.setFocusPainted(false);
+        tglSort.setFocusable(false);
+        tglSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tglSortActionPerformed(evt);
+            }
+        });
+
+        txtSearch.setBackground(new java.awt.Color(0, 0, 0));
+        txtSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtSearch.setForeground(new java.awt.Color(255, 255, 255));
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        tblInfoRecord.setBackground(new java.awt.Color(0, 0, 0));
+        tblInfoRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblInfoRecord.setForeground(new java.awt.Color(255, 255, 255));
+        tblInfoRecord.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "InfoID", "Username", "Full Name", "Sex", "Email", "Contact", "Address"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblInfoRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblInfoRecordMouseClicked(evt);
+            }
+        });
+        scrpAccountRecord.setViewportView(tblInfoRecord);
+
+        lblUserProfiles1.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblUserProfiles1.setForeground(new java.awt.Color(0, 0, 0));
+        lblUserProfiles1.setText("Movie Catalog");
+        lblUserProfiles1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -186,38 +276,60 @@ public class UserDashboard extends javax.swing.JFrame {
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(lblUserDashboard)
-                .addContainerGap(981, Short.MAX_VALUE))
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblUserProfiles)
+                    .addComponent(scrpAccountRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 1140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblUserProfiles1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblUserDashboard)
-                .addGap(660, 660, 660))
+                .addComponent(lblUserProfiles)
+                .addGap(4, 4, 4)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch)
+                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tglSort))
+                .addGap(12, 12, 12)
+                .addComponent(lblUserProfiles1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrpAccountRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(84, 84, 84))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1294, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 675, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
-        // TODO add your handling code here:
+        new AdminDashboard().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnBrowseMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseMoviesActionPerformed
-        new UserBrowseMovies().setVisible(true);
+        new AdminMovieInventory().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBrowseMoviesActionPerformed
 
@@ -226,18 +338,40 @@ public class UserDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRentalHistoryActionPerformed
 
     private void btnMyPaymentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyPaymentsActionPerformed
-        // TODO add your handling code here:
+        new AdminRentalLogs().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMyPaymentsActionPerformed
 
     private void btnMyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyProfileActionPerformed
-       // TODO add your handling code here:
+        new AdminPaymentReview().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMyProfileActionPerformed
 
-    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+    private void btnLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout1ActionPerformed
         ActiveSession.clearSession(); // Clears active session.
         new Login().setVisible(true); // Returns to login frame.
         this.dispose();
-    }//GEN-LAST:event_btnLogoutActionPerformed
+    }//GEN-LAST:event_btnLogout1ActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSortActionPerformed
+
+    private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
+
+    }//GEN-LAST:event_tglSortActionPerformed
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void tblInfoRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInfoRecordMouseClicked
+
+    }//GEN-LAST:event_tblInfoRecordMouseClicked
 
     /**
      * @param args the command line arguments
@@ -256,37 +390,44 @@ public class UserDashboard extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UserDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserRentalHistory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UserDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserRentalHistory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UserDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserRentalHistory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UserDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserRentalHistory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UserDashboard().setVisible(true);
+                new UserRentalHistory().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseMovies;
-    private javax.swing.JLabel btnHeader4;
     private javax.swing.JButton btnHome;
-    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnLogout1;
     private javax.swing.JButton btnMyPayments;
     private javax.swing.JButton btnMyProfile;
     private javax.swing.JButton btnRentalHistory;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> cmbSort;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
-    private javax.swing.JLabel lblUserDashboard;
+    private javax.swing.JLabel lblHeader4;
+    private javax.swing.JLabel lblUserProfiles;
+    private javax.swing.JLabel lblUserProfiles1;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
+    private javax.swing.JScrollPane scrpAccountRecord;
+    private javax.swing.JTable tblInfoRecord;
+    private javax.swing.JToggleButton tglSort;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

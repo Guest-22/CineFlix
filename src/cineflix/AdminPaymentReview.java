@@ -18,37 +18,52 @@ public class AdminPaymentReview extends javax.swing.JFrame {
 
         pnlMain = new javax.swing.JPanel();
         pnlSideNav = new javax.swing.JPanel();
-        lblTitle = new javax.swing.JLabel();
-        lblHeader2 = new javax.swing.JLabel();
         lblHeader1 = new javax.swing.JLabel();
+        lblHeader3 = new javax.swing.JLabel();
+        lblHeader2 = new javax.swing.JLabel();
+        btnHome = new javax.swing.JButton();
         btnMovieInventory = new javax.swing.JButton();
         btnUserProfiles = new javax.swing.JButton();
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
+        lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
-        lblHeader3 = new javax.swing.JLabel();
+        lblPaymentReview = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Payment Review");
+        setPreferredSize(new java.awt.Dimension(1315, 675));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
 
         pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
 
-        lblTitle.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("CineFlix");
-        lblTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblHeader1.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblHeader1.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader1.setText("CineFlix");
+        lblHeader1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblHeader3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblHeader3.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader3.setText("Dashboard");
+        lblHeader3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         lblHeader2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblHeader2.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader2.setText("Dashboard");
+        lblHeader2.setText("Admin");
         lblHeader2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        lblHeader1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        lblHeader1.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader1.setText("Admin");
-        lblHeader1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnHome.setBackground(new java.awt.Color(0, 0, 0));
+        btnHome.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnHome.setForeground(new java.awt.Color(255, 255, 255));
+        btnHome.setText("Home");
+        btnHome.setFocusable(false);
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeActionPerformed(evt);
+            }
+        });
 
         btnMovieInventory.setBackground(new java.awt.Color(0, 0, 0));
         btnMovieInventory.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -94,6 +109,11 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             }
         });
 
+        lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader4.setText("Welcome, Admin");
+        lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
         btnLogout.setBackground(new java.awt.Color(0, 0, 0));
         btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -105,11 +125,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             }
         });
 
-        lblHeader3.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblHeader3.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader3.setText("Welcome, Admin");
-        lblHeader3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
         pnlSideNavLayout.setHorizontalGroup(
@@ -117,29 +132,32 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHeader3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(lblTitle)
+                .addComponent(lblHeader1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader2)
+                .addComponent(lblHeader2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblHeader4)
                 .addGap(44, 44, 44)
+                .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMovieInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnUserProfiles, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -149,8 +167,13 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        lblPaymentReview.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblPaymentReview.setForeground(new java.awt.Color(0, 0, 0));
+        lblPaymentReview.setText("Payment Review");
+        lblPaymentReview.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -158,41 +181,56 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 731, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(lblPaymentReview)
+                .addContainerGap(931, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblPaymentReview)
+                .addGap(660, 660, 660))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1269, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+        new AdminDashboard().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnHomeActionPerformed
+
     private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
-        // TODO add your handling code here:
+        new AdminUserProfiles().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMovieInventoryActionPerformed
 
     private void btnUserProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfilesActionPerformed
-        // TODO add your handling code here:
+        new AdminRentalLogs().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnUserProfilesActionPerformed
 
     private void btnRentalLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogsActionPerformed
-        // TODO add your handling code here:
+        new AdminPaymentReview().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRentalLogsActionPerformed
 
     private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed
-        // TODO add your handling code here:
+        new AdminPaymentReview().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnPaymentReviewActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -237,6 +275,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHome;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMovieInventory;
     private javax.swing.JButton btnPaymentReview;
@@ -245,7 +284,8 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
-    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblHeader4;
+    private javax.swing.JLabel lblPaymentReview;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
     // End of variables declaration//GEN-END:variables

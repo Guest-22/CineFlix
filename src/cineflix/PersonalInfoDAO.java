@@ -12,8 +12,8 @@ public class PersonalInfoDAO {
     private final static String COL_ID = "infoID"; // PRIMARY KEY.
     private final static String COL_ACCOUNT_ID = "accountID"; // FOREIGN KEY
     private final static String COL_FULLNAME = "fullName";
-    private final static String COL_SEX = "sex";
-    private final static String COL_EMAIL = "email";
+    private final static String COL_SEX = "sex"; // ENUM ('Male,'Female').
+    private final static String COL_EMAIL = "email"; // UNIQUE.
     private final static String COL_CONTACT = "contactNum";
     private final static String COL_ADDRESS = "address";
     
@@ -25,6 +25,7 @@ public class PersonalInfoDAO {
         this.conn = conn;
     }
     
+    // Validates existing emails.
     public boolean isEmailExist(String email) {
         String sql = 
                 "SELECT " + COL_EMAIL + " FROM " + TABLE_INFO + 
@@ -35,7 +36,7 @@ public class PersonalInfoDAO {
             return rs.next(); // Returns true if email already exists
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Email checker failed:\n" + e.getMessage());
         }
         return false;
     }
@@ -59,7 +60,7 @@ public class PersonalInfoDAO {
             return stmt.executeUpdate() > 0; // Return true if insert succeeded.
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Personal info insertion failed:\n" + e.getMessage());
         }
         return false; // Insert failed; return false.
     }
@@ -77,7 +78,7 @@ public class PersonalInfoDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Account ID retrieval failed:\n" + e.getMessage());
         }
         return -1;
     }
@@ -106,7 +107,7 @@ public class PersonalInfoDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Retrieval of all personal infos & username failed:\n" + e.getMessage());
         }
         return list;
     }
@@ -127,7 +128,7 @@ public class PersonalInfoDAO {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Personal info update failed:\n" + e.getMessage());
         }
         return false;
     }
@@ -142,7 +143,7 @@ public class PersonalInfoDAO {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Database error: " + e.getMessage());
+            Message.error("Personal info deletion failed:\n" + e.getMessage());
         }
         return false;
     }
