@@ -6,6 +6,7 @@
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[1315, 675]"/>
     </Property>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -164,7 +165,6 @@
                   <Component id="btnBrowseMovies" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnRentalHistory" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnMyPayments" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnMyProfile" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnLogout" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
@@ -187,8 +187,6 @@
                       <Component id="btnRentalHistory" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnMyPayments" min="-2" pref="40" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="btnMyProfile" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnLogout" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
@@ -309,24 +307,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMyPaymentsActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnMyProfile">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="My Profile"/>
-                <Property name="focusable" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMyProfileActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblHeader4">
@@ -488,6 +468,12 @@
                     <Column editable="false" title="Copies" type="java.lang.Object"/>
                   </Table>
                 </Property>
+                <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="e2" green="90" red="4a" type="rgb"/>
+                </Property>
+                <Property name="selectionForeground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblMovieRecordMouseClicked"/>
@@ -503,7 +489,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder thickness="4">
-                  <Color PropertyName="color" blue="99" green="0" red="99" type="rgb"/>
+                  <Color PropertyName="color" blue="e2" green="90" red="4a" type="rgb"/>
                 </LineBorder>
               </Border>
             </Property>
@@ -573,13 +559,15 @@
                                           <Component id="lblPricePerWeek" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="lblYear" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblYear1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="lblDuration1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblCopies1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblCopies" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblDuration" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="lblYear" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblYear1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblCopies1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblCopies" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblDuration" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
@@ -677,6 +665,7 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="rows" type="int" value="5"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -723,7 +712,7 @@
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                     <LineBorder thickness="2">
-                      <Color PropertyName="color" blue="ff" green="33" red="cc" type="rgb"/>
+                      <Color PropertyName="color" blue="e2" green="90" red="4a" type="rgb"/>
                     </LineBorder>
                   </Border>
                 </Property>
@@ -1109,8 +1098,12 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="&#x20b1;0.00"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTotalOrderPriceActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

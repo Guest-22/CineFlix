@@ -28,14 +28,12 @@ public class UserDashboard extends javax.swing.JFrame {
         btnBrowseMovies = new javax.swing.JButton();
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
-        btnMyProfile = new javax.swing.JButton();
         btnHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
         lblUserDashboard = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: User Dashboard");
-        setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -102,17 +100,6 @@ public class UserDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnMyProfile.setBackground(new java.awt.Color(0, 0, 0));
-        btnMyProfile.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnMyProfile.setForeground(new java.awt.Color(255, 255, 255));
-        btnMyProfile.setText("My Profile");
-        btnMyProfile.setFocusable(false);
-        btnMyProfile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMyProfileActionPerformed(evt);
-            }
-        });
-
         btnHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnHeader4.setForeground(new java.awt.Color(255, 255, 255));
         btnHeader4.setText("Welcome, User");
@@ -145,7 +132,6 @@ public class UserDashboard extends javax.swing.JFrame {
             .addComponent(btnBrowseMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMyPayments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnMyProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlSideNavLayout.setVerticalGroup(
@@ -167,8 +153,6 @@ public class UserDashboard extends javax.swing.JFrame {
                 .addComponent(btnRentalHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMyPayments, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnMyProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -206,7 +190,7 @@ public class UserDashboard extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 675, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
         );
 
         pack();
@@ -228,10 +212,6 @@ public class UserDashboard extends javax.swing.JFrame {
     private void btnMyPaymentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyPaymentsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMyPaymentsActionPerformed
-
-    private void btnMyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyProfileActionPerformed
-       // TODO add your handling code here:
-    }//GEN-LAST:event_btnMyProfileActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         ActiveSession.clearSession(); // Clears active session.
@@ -280,7 +260,6 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMyPayments;
-    private javax.swing.JButton btnMyProfile;
     private javax.swing.JButton btnRentalHistory;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;

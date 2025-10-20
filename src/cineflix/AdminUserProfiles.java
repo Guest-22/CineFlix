@@ -815,6 +815,10 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         try {
             int accountID = infoDAO.getAccountIDByInfoID(selectedInfoID); // Get the linked accountID using infoID.
 
+             if (accountID == -1) { // Handles error in missing accountid.
+                Message.error("Linked account not found. Deletion aborted.");
+                return;
+            }
             // Pass the connection for both account for delete operation/method.
             accountDAO = new AccountDAO(conn); 
             infoDAO = new PersonalInfoDAO(conn);

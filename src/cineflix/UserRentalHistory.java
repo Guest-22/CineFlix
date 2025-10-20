@@ -35,19 +35,18 @@ public class UserRentalHistory extends javax.swing.JFrame {
         btnBrowseMovies = new javax.swing.JButton();
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
-        btnMyProfile = new javax.swing.JButton();
         lblHeader4 = new javax.swing.JLabel();
-        btnLogout1 = new javax.swing.JButton();
-        lblUserProfiles = new javax.swing.JLabel();
-        btnSearch = new javax.swing.JButton();
-        cmbSort = new javax.swing.JComboBox<>();
-        tglSort = new javax.swing.JToggleButton();
-        txtSearch = new javax.swing.JTextField();
+        btnLogout = new javax.swing.JButton();
+        lblRentalHistory = new javax.swing.JLabel();
         scrpAccountRecord = new javax.swing.JScrollPane();
-        tblInfoRecord = new javax.swing.JTable();
-        lblUserProfiles1 = new javax.swing.JLabel();
+        tblRentalRecord = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("CineFlix: Rental History");
+        setMinimumSize(new java.awt.Dimension(1315, 675));
+        setPreferredSize(new java.awt.Dimension(1315, 675));
+        setResizable(false);
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
         pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
@@ -113,30 +112,19 @@ public class UserRentalHistory extends javax.swing.JFrame {
             }
         });
 
-        btnMyProfile.setBackground(new java.awt.Color(0, 0, 0));
-        btnMyProfile.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnMyProfile.setForeground(new java.awt.Color(255, 255, 255));
-        btnMyProfile.setText("My Profile");
-        btnMyProfile.setFocusable(false);
-        btnMyProfile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMyProfileActionPerformed(evt);
-            }
-        });
-
         lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
         lblHeader4.setText("Welcome, User");
         lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnLogout1.setBackground(new java.awt.Color(0, 0, 0));
-        btnLogout1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnLogout1.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogout1.setText("Logout");
-        btnLogout1.setFocusable(false);
-        btnLogout1.addActionListener(new java.awt.event.ActionListener() {
+        btnLogout.setBackground(new java.awt.Color(0, 0, 0));
+        btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout.setText("Logout");
+        btnLogout.setFocusable(false);
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogout1ActionPerformed(evt);
+                btnLogoutActionPerformed(evt);
             }
         });
 
@@ -156,8 +144,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
             .addComponent(btnBrowseMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMyPayments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnMyProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnLogout1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,95 +166,56 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMyPayments, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnMyProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLogout1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        lblUserProfiles.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblUserProfiles.setForeground(new java.awt.Color(0, 0, 0));
-        lblUserProfiles.setText("Rental History");
-        lblUserProfiles.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblRentalHistory.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblRentalHistory.setForeground(new java.awt.Color(0, 0, 0));
+        lblRentalHistory.setText("Rental History");
+        lblRentalHistory.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnSearch.setBackground(new java.awt.Color(0, 0, 0));
-        btnSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
-        btnSearch.setText("Search");
-        btnSearch.setFocusable(false);
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
-
-        cmbSort.setBackground(new java.awt.Color(0, 0, 0));
-        cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cmbSort.setForeground(new java.awt.Color(255, 255, 255));
-        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
-        cmbSort.setFocusable(false);
-        cmbSort.setRequestFocusEnabled(false);
-        cmbSort.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbSortActionPerformed(evt);
-            }
-        });
-
-        tglSort.setBackground(new java.awt.Color(0, 0, 0));
-        tglSort.setFont(new java.awt.Font("SansSerif", 1, 10)); // NOI18N
-        tglSort.setForeground(new java.awt.Color(255, 255, 255));
-        tglSort.setText("ASC");
-        tglSort.setBorderPainted(false);
-        tglSort.setFocusPainted(false);
-        tglSort.setFocusable(false);
-        tglSort.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tglSortActionPerformed(evt);
-            }
-        });
-
-        txtSearch.setBackground(new java.awt.Color(0, 0, 0));
-        txtSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtSearch.setForeground(new java.awt.Color(255, 255, 255));
-        txtSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSearchActionPerformed(evt);
-            }
-        });
-
-        tblInfoRecord.setBackground(new java.awt.Color(0, 0, 0));
-        tblInfoRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblInfoRecord.setForeground(new java.awt.Color(255, 255, 255));
-        tblInfoRecord.setModel(new javax.swing.table.DefaultTableModel(
+        tblRentalRecord.setBackground(new java.awt.Color(0, 0, 0));
+        tblRentalRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblRentalRecord.setForeground(new java.awt.Color(255, 255, 255));
+        tblRentalRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "InfoID", "Username", "Full Name", "Sex", "Email", "Contact", "Address"
+                "Movie Title", "Rental Date", "Return Date", "Rental Status", "Payment Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tblInfoRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblRentalRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblInfoRecordMouseClicked(evt);
+                tblRentalRecordMouseClicked(evt);
             }
         });
-        scrpAccountRecord.setViewportView(tblInfoRecord);
+        scrpAccountRecord.setViewportView(tblRentalRecord);
 
-        lblUserProfiles1.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblUserProfiles1.setForeground(new java.awt.Color(0, 0, 0));
-        lblUserProfiles1.setText("Movie Catalog");
-        lblUserProfiles1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 309, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -277,36 +225,21 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblUserProfiles)
-                    .addComponent(scrpAccountRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 1140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblUserProfiles1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblRentalHistory)
+                    .addComponent(scrpAccountRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 819, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblUserProfiles)
-                .addGap(4, 4, 4)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch)
-                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tglSort))
-                .addGap(12, 12, 12)
-                .addComponent(lblUserProfiles1)
+                .addComponent(lblRentalHistory)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrpAccountRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrpAccountRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(84, 84, 84))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -342,36 +275,15 @@ public class UserRentalHistory extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnMyPaymentsActionPerformed
 
-    private void btnMyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyProfileActionPerformed
-        new AdminPaymentReview().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnMyProfileActionPerformed
-
-    private void btnLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout1ActionPerformed
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         ActiveSession.clearSession(); // Clears active session.
         new Login().setVisible(true); // Returns to login frame.
         this.dispose();
-    }//GEN-LAST:event_btnLogout1ActionPerformed
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSearchActionPerformed
+    private void tblRentalRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalRecordMouseClicked
 
-    private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbSortActionPerformed
-
-    private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
-
-    }//GEN-LAST:event_tglSortActionPerformed
-
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchActionPerformed
-
-    private void tblInfoRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblInfoRecordMouseClicked
-
-    }//GEN-LAST:event_tblInfoRecordMouseClicked
+    }//GEN-LAST:event_tblRentalRecordMouseClicked
 
     /**
      * @param args the command line arguments
@@ -411,23 +323,18 @@ public class UserRentalHistory extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseMovies;
     private javax.swing.JButton btnHome;
-    private javax.swing.JButton btnLogout1;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMyPayments;
-    private javax.swing.JButton btnMyProfile;
     private javax.swing.JButton btnRentalHistory;
-    private javax.swing.JButton btnSearch;
-    private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
     private javax.swing.JLabel lblHeader4;
-    private javax.swing.JLabel lblUserProfiles;
-    private javax.swing.JLabel lblUserProfiles1;
+    private javax.swing.JLabel lblRentalHistory;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
     private javax.swing.JScrollPane scrpAccountRecord;
-    private javax.swing.JTable tblInfoRecord;
-    private javax.swing.JToggleButton tglSort;
-    private javax.swing.JTextField txtSearch;
+    private javax.swing.JTable tblRentalRecord;
     // End of variables declaration//GEN-END:variables
 }

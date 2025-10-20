@@ -137,7 +137,6 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         btnBrowseMovies = new javax.swing.JButton();
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
-        btnMyProfile = new javax.swing.JButton();
         lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
         lblBrowseMovies = new javax.swing.JLabel();
@@ -179,6 +178,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1315, 675));
+        setResizable(false);
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
         pnlMain.setPreferredSize(new java.awt.Dimension(1315, 675));
@@ -244,17 +244,6 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             }
         });
 
-        btnMyProfile.setBackground(new java.awt.Color(0, 0, 0));
-        btnMyProfile.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnMyProfile.setForeground(new java.awt.Color(255, 255, 255));
-        btnMyProfile.setText("My Profile");
-        btnMyProfile.setFocusable(false);
-        btnMyProfile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMyProfileActionPerformed(evt);
-            }
-        });
-
         lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
         lblHeader4.setText("Welcome, User");
@@ -287,7 +276,6 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             .addComponent(btnBrowseMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMyPayments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnMyProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlSideNavLayout.setVerticalGroup(
@@ -309,8 +297,6 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                 .addComponent(btnRentalHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMyPayments, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnMyProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -388,6 +374,8 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblMovieRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblMovieRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
         tblMovieRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblMovieRecordMouseClicked(evt);
@@ -396,7 +384,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         scrlMovie.setViewportView(tblMovieRecord);
 
         pnlMoviePreview.setBackground(new java.awt.Color(0, 0, 0));
-        pnlMoviePreview.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 0, 153), 4));
+        pnlMoviePreview.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(74, 144, 226), 4));
 
         lblImagePath.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
@@ -423,6 +411,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         txtaSynopsis.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtaSynopsis.setForeground(new java.awt.Color(255, 255, 255));
         txtaSynopsis.setRows(5);
+        txtaSynopsis.setEnabled(false);
         scrlSynopsis.setViewportView(txtaSynopsis);
 
         lblDuration.setBackground(new java.awt.Color(0, 0, 0));
@@ -438,7 +427,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         lblPricePerWeek.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         pnlRent.setBackground(new java.awt.Color(0, 0, 0));
-        pnlRent.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 51, 255), 2));
+        pnlRent.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(74, 144, 226), 2));
 
         lblRentalDetails.setBackground(new java.awt.Color(0, 0, 0));
         lblRentalDetails.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -610,13 +599,14 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                                     .addComponent(lblTitle)
                                     .addComponent(lblPricePerWeek))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlMoviePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblYear)
-                                    .addComponent(lblYear1)
+                                .addGroup(pnlMoviePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblDuration1)
-                                    .addComponent(lblCopies1)
-                                    .addComponent(lblCopies)
-                                    .addComponent(lblDuration))
+                                    .addGroup(pnlMoviePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblYear)
+                                        .addComponent(lblYear1)
+                                        .addComponent(lblCopies1)
+                                        .addComponent(lblCopies)
+                                        .addComponent(lblDuration)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlMoviePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(lblGenre)
@@ -697,7 +687,13 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         txtTotalOrderPrice.setBackground(new java.awt.Color(204, 204, 204));
         txtTotalOrderPrice.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         txtTotalOrderPrice.setForeground(new java.awt.Color(0, 0, 0));
+        txtTotalOrderPrice.setText("₱0.00");
         txtTotalOrderPrice.setFocusable(false);
+        txtTotalOrderPrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTotalOrderPriceActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -849,10 +845,6 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void btnMyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyProfileActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMyProfileActionPerformed
-
     private void btnMyPaymentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyPaymentsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMyPaymentsActionPerformed
@@ -987,6 +979,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         }
 
         // Clear cart and reset UI
+        populateMovieTable(); // Repopulate tblMovieRecord with updated values.
         tblCartRecord.setRowCount(0);
         selectedCartRow = -1; // Clears cart row tracking.
         clearMovieSelection(); // Clears movie preview.
@@ -1011,6 +1004,10 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             Message.show("Please select an item to delete.", "Warning");
         }
     }//GEN-LAST:event_btnRemoveItemActionPerformed
+
+    private void txtTotalOrderPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalOrderPriceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotalOrderPriceActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1054,7 +1051,6 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMyPayments;
-    private javax.swing.JButton btnMyProfile;
     private javax.swing.JButton btnRemoveItem;
     private javax.swing.JButton btnRentalHistory;
     private javax.swing.JButton btnSearch;
