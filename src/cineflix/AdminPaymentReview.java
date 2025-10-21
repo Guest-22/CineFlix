@@ -1,11 +1,43 @@
 package cineflix;
 
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import java.sql.Connection;
+
 public class AdminPaymentReview extends javax.swing.JFrame {
 
     public AdminPaymentReview() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the frame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        
+        populateReviewRecord();
+    }
+    
+    private void populateReviewRecord() {
+        DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
+        model.setRowCount(0); // Clear existing rows.
+
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) return;
+        PaymentDAO paymentDAO = new PaymentDAO(conn);
+        List<AdminPaymentEntry> payments = paymentDAO.getAdminPaymentReview();
+
+        for (AdminPaymentEntry entry : payments) {
+            model.addRow(new Object[] {
+                entry.getPaymentID(),
+                entry.getFullName(),
+                entry.getMovieTitle(),
+                entry.getRentalDate(),
+                entry.getReturnDate(),
+                entry.getRentalStatus(),
+                String.format("₱%.2f", entry.getAmount()),
+                String.format("₱%.2f", entry.getOverdueAmount()),
+                entry.getPaymentDate(),
+                entry.getPaymentStatus()
+            });
+        }
     }
 
     /**
@@ -30,13 +62,26 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
         lblPaymentReview = new javax.swing.JLabel();
+        scrlRental2 = new javax.swing.JScrollPane();
+        tblPaymentRecord = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        cmbSort = new javax.swing.JComboBox<>();
+        tglSort = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Payment Review");
+        setMaximumSize(new java.awt.Dimension(1315, 675));
+        setMinimumSize(new java.awt.Dimension(1315, 675));
         setPreferredSize(new java.awt.Dimension(1315, 675));
+        setResizable(false);
+        setSize(new java.awt.Dimension(1315, 675));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
+        pnlMain.setMaximumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setMinimumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1315, 675));
 
         pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -176,6 +221,95 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblPaymentReview.setText("Payment Review");
         lblPaymentReview.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        tblPaymentRecord.setBackground(new java.awt.Color(0, 0, 0));
+        tblPaymentRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblPaymentRecord.setForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Rental ID", "Account Name", "Movie Title", "Rental Date", "Return Date", "Rental Status", "Payment Status", "Total Fee"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblPaymentRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblPaymentRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPaymentRecordMouseClicked(evt);
+            }
+        });
+        scrlRental2.setViewportView(tblPaymentRecord);
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 430, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        txtSearch.setBackground(new java.awt.Color(0, 0, 0));
+        txtSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtSearch.setForeground(new java.awt.Color(255, 255, 255));
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(0, 0, 0));
+        btnSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.setFocusable(false);
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        cmbSort.setBackground(new java.awt.Color(0, 0, 0));
+        cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cmbSort.setForeground(new java.awt.Color(255, 255, 255));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
+        cmbSort.setFocusable(false);
+        cmbSort.setRequestFocusEnabled(false);
+        cmbSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSortActionPerformed(evt);
+            }
+        });
+
+        tglSort.setBackground(new java.awt.Color(0, 0, 0));
+        tglSort.setFont(new java.awt.Font("SansSerif", 1, 10)); // NOI18N
+        tglSort.setForeground(new java.awt.Color(255, 255, 255));
+        tglSort.setText("ASC");
+        tglSort.setBorderPainted(false);
+        tglSort.setFocusPainted(false);
+        tglSort.setFocusable(false);
+        tglSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tglSortActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
@@ -183,8 +317,19 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(lblPaymentReview)
-                .addContainerGap(931, Short.MAX_VALUE))
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPaymentReview)
+                    .addComponent(scrlRental2, javax.swing.GroupLayout.PREFERRED_SIZE, 788, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,18 +337,27 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblPaymentReview)
-                .addGap(660, 660, 660))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch)
+                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tglSort))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scrlRental2, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(152, 152, 152))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1269, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -238,6 +392,26 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         new Login().setVisible(true); // Returns to login frame.
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void tblPaymentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentRecordMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblPaymentRecordMouseClicked
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSortActionPerformed
+
+    private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
+
+    }//GEN-LAST:event_tglSortActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,7 +454,10 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     private javax.swing.JButton btnMovieInventory;
     private javax.swing.JButton btnPaymentReview;
     private javax.swing.JButton btnRentalLogs;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUserProfiles;
+    private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
@@ -288,5 +465,13 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     private javax.swing.JLabel lblPaymentReview;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
+    private javax.swing.JScrollPane scrlRental;
+    private javax.swing.JScrollPane scrlRental1;
+    private javax.swing.JScrollPane scrlRental2;
+    private javax.swing.JTable tblPaymentRecord;
+    private javax.swing.JTable tblRentalRecord;
+    private javax.swing.JTable tblRentalRecord1;
+    private javax.swing.JToggleButton tglSort;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

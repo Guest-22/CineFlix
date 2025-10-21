@@ -38,6 +38,7 @@ public class PaymentDAO {
         return false;
     }
     
+    // For populating user my payments table.
     public List<Payment> getPaymentRecordsByAccountID(int accountID) {
         List<Payment> records = new ArrayList<>();
 
@@ -73,5 +74,45 @@ public class PaymentDAO {
             Message.error("Failed to load payment records:\n" + e.getMessage());
         }
         return records;
+    }
+    
+    // For populating admin payment review table.
+    public List<AdminPaymentEntry> getAdminPaymentReview() {
+        List<AdminPaymentEntry> payments = new ArrayList<>();
+
+        String sql = 
+            "SELECT p.paymentID, pi.fullName, m.title AS movieTitle, " +
+            "r.rentalDate, r.returnDate, r.rentalStatus, " +
+            "p.amount, p.overdueAmount, p.paymentDate, p.paymentStatus " +
+            "FROM tblPayments p " +
+            "JOIN tblRentals r ON p.rentalID = r.rentalID " +
+            "JOIN tblAccounts a ON r.accountID = a.accountID " +
+            "JOIN tblPersonalInfo pi ON a.accountID = pi.accountID " +
+            "JOIN tblMovies m ON r.movieID = m.movieID " +
+            "ORDER BY p.paymentDate DESC";
+
+        try (PreparedStatement pst = conn.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                AdminPaymentEntry entry = new AdminPaymentEntry(
+                    rs.getInt("paymentID"),
+                    rs.getString("fullName"),
+                    rs.getString("movieTitle"),
+                    rs.getTimestamp("rentalDate"),
+                    rs.getTimestamp("returnDate"),
+                    rs.getString("rentalStatus"),
+                    rs.getDouble("amount"),
+                    rs.getDouble("overdueAmount"),
+                    rs.getTimestamp("paymentDate"),
+                    rs.getString("paymentStatus")
+                );
+                payments.add(entry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Failed to retrieve admin payment review:\n" + e.getMessage());
+        }
+        return payments;
     }
 }

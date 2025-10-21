@@ -4,7 +4,9 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     public AdminDashboard() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the frame
+         
         lblHeader3.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message to admin.
     }
 
@@ -34,10 +36,15 @@ public class AdminDashboard extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Admin Dashboard");
         setBackground(new java.awt.Color(255, 255, 255));
+        setMaximumSize(new java.awt.Dimension(1315, 675));
+        setMinimumSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
+        setSize(new java.awt.Dimension(1315, 675));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
+        pnlMain.setMaximumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setMinimumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1315, 675));
 
         pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -169,7 +176,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addContainerGap(206, Short.MAX_VALUE))
         );
 
         lblAdminDashboard.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
@@ -185,7 +192,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblAdminDashboard)
-                .addContainerGap(916, Short.MAX_VALUE))
+                .addContainerGap(962, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,11 +207,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1269, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -226,7 +233,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUserProfilesActionPerformed
 
     private void btnRentalLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogsActionPerformed
-        // TODO add your handling code here:
+        new AdminRentalLogs().setVisible(true);
     }//GEN-LAST:event_btnRentalLogsActionPerformed
 
     private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed

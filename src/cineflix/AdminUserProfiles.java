@@ -16,7 +16,8 @@ public class AdminUserProfiles extends javax.swing.JFrame {
     
     public AdminUserProfiles() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the frame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         
         // Attemps to get a DB Connection.
@@ -111,11 +112,15 @@ public class AdminUserProfiles extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: User Profiles");
+        setMaximumSize(new java.awt.Dimension(1315, 675));
         setMinimumSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
+        setSize(new java.awt.Dimension(1315, 675));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
+        pnlMain.setMaximumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setMinimumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1315, 675));
 
         pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -586,6 +591,8 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblInfoRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblInfoRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
         tblInfoRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblInfoRecordMouseClicked(evt);
@@ -611,7 +618,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblUserProfiles)
                     .addComponent(scrlInfo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
@@ -636,11 +643,11 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1312, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 672, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();

@@ -17,6 +17,7 @@ public class Rental {
     
     // Constructors
     public Rental() {}
+    
     // Constructor that exclude cols w/ default value.
     public Rental(int accountID, int movieID, Timestamp rentalDate, Timestamp returnDate, double rentalCost) {
         this.accountID = accountID;
@@ -25,15 +26,6 @@ public class Rental {
         this.returnDate = returnDate;
         this.rentalCost = rentalCost;   
     }
-    /*
-    // Consrtuctor
-    public Rental(int accountID, int movieID, Timestamp rentalDate, Timestamp returnDate, String rentalStatus) {
-        this.accountID = accountID;
-        this.movieID = movieID;
-        this.rentalDate = rentalDate;
-        this.returnDate = returnDate;
-        this.rentalStatus = rentalStatus;
-    }*/
 
     // Constructor for user payments table.
     public Rental(String movieTitle, Timestamp rentalDate, Timestamp returnDate, String rentalStatus, String paymentStatus) {

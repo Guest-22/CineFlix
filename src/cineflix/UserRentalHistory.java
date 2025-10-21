@@ -9,7 +9,8 @@ public class UserRentalHistory extends javax.swing.JFrame {
 
     public UserRentalHistory() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the JFrame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         
         populateRentalTable(); // Populates the rental table with only the necessary details.
@@ -68,9 +69,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Rental History");
-        setMaximumSize(new java.awt.Dimension(1315, 675));
         setMinimumSize(new java.awt.Dimension(1315, 675));
-        setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
         setSize(new java.awt.Dimension(1315, 675));
 
@@ -118,9 +117,9 @@ public class UserRentalHistory extends javax.swing.JFrame {
             }
         });
 
-        btnRentalHistory.setBackground(new java.awt.Color(0, 0, 0));
-        btnRentalHistory.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnRentalHistory.setForeground(new java.awt.Color(255, 255, 255));
+        btnRentalHistory.setBackground(new java.awt.Color(255, 255, 255));
+        btnRentalHistory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnRentalHistory.setForeground(new java.awt.Color(0, 0, 0));
         btnRentalHistory.setText("Rental History");
         btnRentalHistory.setFocusable(false);
         btnRentalHistory.addActionListener(new java.awt.event.ActionListener() {
@@ -225,6 +224,8 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblRentalRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblRentalRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
         tblRentalRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblRentalRecordMouseClicked(evt);

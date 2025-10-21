@@ -84,4 +84,42 @@ public class RentalDAO {
         }
         return rentalLogs;
     }
+    
+    // For populating admin rental logs table.
+    public List<AdminRentalEntry> getAdminRentalLogs() {
+        List<AdminRentalEntry> logs = new ArrayList<>();
+
+        String sql = 
+            "SELECT r.rentalID, pi.fullName, m.title AS movieTitle, " +
+            "r.rentalDate, r.returnDate, r.rentalStatus, " +
+            "p.paymentStatus, (r.rentalCost + IFNULL(p.overdueAmount, 0)) AS totalFee " +
+            "FROM tblRentals r " +
+            "JOIN tblAccounts a ON r.accountID = a.accountID " +
+            "JOIN tblPersonalInfo pi ON a.accountID = pi.accountID " +
+            "JOIN tblMovies m ON r.movieID = m.movieID " +
+            "LEFT JOIN tblPayments p ON r.rentalID = p.rentalID " +
+            "ORDER BY r.rentalDate DESC";
+
+        try (PreparedStatement pst = conn.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                AdminRentalEntry entry = new AdminRentalEntry(
+                    rs.getInt("rentalID"),
+                    rs.getString("fullName"),
+                    rs.getString("movieTitle"),
+                    rs.getTimestamp("rentalDate"),
+                    rs.getTimestamp("returnDate"),
+                    rs.getString("rentalStatus"),
+                    rs.getString("paymentStatus"),
+                    rs.getDouble("totalFee")
+                );
+                logs.add(entry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Failed to retrieve admin rental logs:\n" + e.getMessage());
+        }
+        return logs;
+    }
 }

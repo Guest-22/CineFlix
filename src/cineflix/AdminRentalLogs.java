@@ -1,11 +1,43 @@
 package cineflix;
 
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import java.sql.Connection;
+
 public class AdminRentalLogs extends javax.swing.JFrame {
 
     public AdminRentalLogs() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the frame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        
+        populateRentalRecord();
+    }
+
+    // Populates the rental record.
+    private void populateRentalRecord() {
+        DefaultTableModel rentalModel = (DefaultTableModel) tblRentalRecord.getModel();
+        rentalModel.setRowCount(0); // Clear existing rows.
+
+        Connection conn = DBConnection.getConnection(); // Attempts to get the DB connection.
+        if (conn == null) return; // Not found.
+        
+        RentalDAO dao = new RentalDAO(conn); // Pass the connection to query joins.
+        List<AdminRentalEntry> rentals = dao.getAdminRentalLogs();
+
+        for (AdminRentalEntry entry : rentals) {
+            rentalModel.addRow(new Object[] {
+                entry.getRentalID(),
+                entry.getFullName(),
+                entry.getMovieTitle(),
+                entry.getRentalDate(),
+                entry.getReturnDate(),
+                entry.getRentalStatus(),
+                entry.getPaymentStatus(),
+                String.format("₱%.2f", entry.getTotalFee())
+            });
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -30,14 +62,20 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         tglSort = new javax.swing.JToggleButton();
         txtSearch = new javax.swing.JTextField();
         scrlRental = new javax.swing.JScrollPane();
-        tlbRentalRecord = new javax.swing.JTable();
+        tblRentalRecord = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Rental Logs");
+        setMaximumSize(new java.awt.Dimension(1315, 675));
+        setMinimumSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
+        setSize(new java.awt.Dimension(1315, 675));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
+        pnlMain.setMaximumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setMinimumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1315, 675));
 
         pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -222,34 +260,49 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             }
         });
 
-        tlbRentalRecord.setBackground(new java.awt.Color(0, 0, 0));
-        tlbRentalRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tlbRentalRecord.setForeground(new java.awt.Color(255, 255, 255));
-        tlbRentalRecord.setModel(new javax.swing.table.DefaultTableModel(
+        tblRentalRecord.setBackground(new java.awt.Color(0, 0, 0));
+        tblRentalRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblRentalRecord.setForeground(new java.awt.Color(255, 255, 255));
+        tblRentalRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "InfoID", "Username", "Full Name", "Sex", "Email", "Contact", "Address"
+                "Rental ID", "Account Name", "Movie Title", "Rental Date", "Return Date", "Rental Status", "Payment Status", "Total Fee"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tlbRentalRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblRentalRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblRentalRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tblRentalRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tlbRentalRecordMouseClicked(evt);
+                tblRentalRecordMouseClicked(evt);
             }
         });
-        scrlRental.setViewportView(tlbRentalRecord);
+        scrlRental.setViewportView(tblRentalRecord);
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 430, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -258,7 +311,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlMainLayout.createSequentialGroup()
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -268,8 +321,9 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblRentalLogs)
-                    .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 1115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addComponent(scrlRental))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,19 +338,20 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                     .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tglSort))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52))
+                .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(92, 92, 92))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1284, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 672, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -342,9 +397,9 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void tlbRentalRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tlbRentalRecordMouseClicked
+    private void tblRentalRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalRecordMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tlbRentalRecordMouseClicked
+    }//GEN-LAST:event_tblRentalRecordMouseClicked
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         ActiveSession.clearSession(); // Clears active session.
@@ -396,6 +451,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUserProfiles;
     private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
@@ -404,8 +460,8 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
     private javax.swing.JScrollPane scrlRental;
+    private javax.swing.JTable tblRentalRecord;
     private javax.swing.JToggleButton tglSort;
-    private javax.swing.JTable tlbRentalRecord;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

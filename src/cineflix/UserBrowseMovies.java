@@ -31,8 +31,10 @@ public class UserBrowseMovies extends javax.swing.JFrame {
 
     public UserBrowseMovies() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the JFrame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        
         setDefaultCoverImage(); // Sets default cover image for a movie.
         setDefaultSynopsisTxta(); // Wraps synopsis TextArea; continue in new line if characters exceed.
         clearCartTable(); // Clears cart default record.
@@ -178,7 +180,6 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Browse Movies");
         setMinimumSize(new java.awt.Dimension(1315, 675));
-        setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
         setSize(new java.awt.Dimension(1315, 675));
 
@@ -215,9 +216,9 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             }
         });
 
-        btnBrowseMovies.setBackground(new java.awt.Color(0, 0, 0));
-        btnBrowseMovies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnBrowseMovies.setForeground(new java.awt.Color(255, 255, 255));
+        btnBrowseMovies.setBackground(new java.awt.Color(255, 255, 255));
+        btnBrowseMovies.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnBrowseMovies.setForeground(new java.awt.Color(0, 0, 0));
         btnBrowseMovies.setText("Browse Movies");
         btnBrowseMovies.setFocusable(false);
         btnBrowseMovies.addActionListener(new java.awt.event.ActionListener() {
@@ -653,6 +654,8 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblCart.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblCart.setSelectionForeground(new java.awt.Color(255, 255, 255));
         tblCart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblCartMouseClicked(evt);

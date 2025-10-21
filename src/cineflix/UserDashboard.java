@@ -4,7 +4,8 @@ public class UserDashboard extends javax.swing.JFrame {
 
     public UserDashboard() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the JFrame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
     }
     
@@ -27,9 +28,7 @@ public class UserDashboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: User Dashboard");
-        setMaximumSize(new java.awt.Dimension(1315, 675));
         setMinimumSize(new java.awt.Dimension(1315, 675));
-        setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -54,9 +53,9 @@ public class UserDashboard extends javax.swing.JFrame {
         lblHeader2.setText("User");
         lblHeader2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnHome.setBackground(new java.awt.Color(0, 0, 0));
-        btnHome.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnHome.setForeground(new java.awt.Color(255, 255, 255));
+        btnHome.setBackground(new java.awt.Color(255, 255, 255));
+        btnHome.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnHome.setForeground(new java.awt.Color(0, 0, 0));
         btnHome.setText("Home");
         btnHome.setFocusable(false);
         btnHome.addActionListener(new java.awt.event.ActionListener() {

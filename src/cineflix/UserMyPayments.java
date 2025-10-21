@@ -5,11 +5,12 @@ import java.sql.Connection;
 import java.util.List;
 
 public class UserMyPayments extends javax.swing.JFrame {
-    private List<Payment> paymentRecords; 
+    private List<Payment> paymentRecords; // Used in generate receipts and populate payment table.
     
     public UserMyPayments() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the JFrame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         setDefaultReceiptTxta();
         
@@ -23,50 +24,50 @@ public class UserMyPayments extends javax.swing.JFrame {
         txtaReceipt.setEditable(false);
     }
     
-        private void populatePaymentTable() {
-            DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
-            model.setRowCount(0); // Clear existing rows
+    private void populatePaymentTable() {
+        DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
+        model.setRowCount(0); // Clear existing rows
 
-            Connection conn = DBConnection.getConnection(); // Get database connection.
-            if (conn == null) return; // DBConnection already shows error message
+        Connection conn = DBConnection.getConnection(); // Get database connection.
+        if (conn == null) return; // DBConnection already shows error message
 
-            try {
-                PaymentDAO paymentDAO = new PaymentDAO(conn); // Pass the DB connection.
-                // Retrieve payment records for current user.
-                paymentRecords = paymentDAO.getPaymentRecordsByAccountID(ActiveSession.loggedInAccountID); 
+        try {
+            PaymentDAO paymentDAO = new PaymentDAO(conn); // Pass the DB connection.
+            // Retrieve payment records for the current user.
+            paymentRecords = paymentDAO.getPaymentRecordsByAccountID(ActiveSession.loggedInAccountID); 
 
-                for (Payment p : paymentRecords) {
-                    double totalDue = p.getRentalCost() + p.getOverdueAmount() - p.getAmount(); // Compute total amount due.
+            for (Payment p : paymentRecords) {
+                double totalDue = p.getRentalCost() + p.getOverdueAmount() - p.getAmount(); // Compute total amount due.
 
-                    /*Object[] row = {
-                    p.getRentalID(),
-                    p.getMovieTitle(),
-                    p.getRentalDate(),
-                    p.getReturnDate(),
-                    p.getRentalStatus(),
-                    p.getPaymentStatus(),
-                    "₱" + formatAmount(p.getRentalCost()),
-                    "₱" + formatAmount(p.getAmount()),
-                    "₱" + formatAmount(p.getOverdueAmount()),
-                    "₱" + formatAmount(totalDue)
-                    };*/
-                    
-                    // Only shows the necessary table data to user.
-                    Object[] row = {
-                    p.getRentalID(),
-                    p.getMovieTitle(),
-                    p.getReturnDate(),
-                    p.getPaymentStatus(),
-                    "₱" + formatAmount(totalDue)
-                };
+                /*Object[] row = {
+                p.getRentalID(),
+                p.getMovieTitle(),
+                p.getRentalDate(),
+                p.getReturnDate(),
+                p.getRentalStatus(),
+                p.getPaymentStatus(),
+                "₱" + formatAmount(p.getRentalCost()),
+                "₱" + formatAmount(p.getAmount()),
+                "₱" + formatAmount(p.getOverdueAmount()),
+                "₱" + formatAmount(totalDue)
+                };*/
 
-                    model.addRow(row); // Add row to table
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Message.error("Error loading payment table: " + e.getMessage());
+                // Only shows the necessary table data to user.
+                Object[] row = {
+                p.getRentalID(),
+                p.getMovieTitle(),
+                p.getReturnDate(),
+                p.getPaymentStatus(),
+                "₱" + formatAmount(totalDue)
+            };
+
+                model.addRow(row); // Add row to table
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Message.error("Error loading payment table: " + e.getMessage());
         }
+    }
 
     // Formats the amount with two decimals.
     private String formatAmount(double amount) {
@@ -100,7 +101,6 @@ public class UserMyPayments extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: My Payments");
-        setMaximumSize(new java.awt.Dimension(1315, 675));
         setMinimumSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
         setSize(new java.awt.Dimension(1315, 675));
@@ -161,9 +161,9 @@ public class UserMyPayments extends javax.swing.JFrame {
             }
         });
 
-        btnMyPayments.setBackground(new java.awt.Color(0, 0, 0));
-        btnMyPayments.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnMyPayments.setForeground(new java.awt.Color(255, 255, 255));
+        btnMyPayments.setBackground(new java.awt.Color(255, 255, 255));
+        btnMyPayments.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnMyPayments.setForeground(new java.awt.Color(0, 0, 0));
         btnMyPayments.setText("My Payments");
         btnMyPayments.setFocusable(false);
         btnMyPayments.addActionListener(new java.awt.event.ActionListener() {
@@ -257,6 +257,8 @@ public class UserMyPayments extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblPaymentRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblPaymentRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
         tblPaymentRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblPaymentRecordMouseClicked(evt);

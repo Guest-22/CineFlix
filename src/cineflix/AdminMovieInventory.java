@@ -22,7 +22,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     
     public AdminMovieInventory() {
         initComponents();
-        this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(1315, 675);
+        this.setLocationRelativeTo(null); // Center the frame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         setDefaultCoverImage(); // Sets default cover for new movie.
         setDefaultTglSort();
@@ -77,8 +78,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     
     // Populates the movie table with data from our tblMovies.
     private void populateMovieTable() {
-        DefaultTableModel model = (DefaultTableModel) tblMovieRecord.getModel();
-        model.setRowCount(0); // Clear existing rows
+        DefaultTableModel movieModel = (DefaultTableModel) tblMovieRecord.getModel();
+        movieModel.setRowCount(0); // Clear existing rows
 
         try {
             List<Movie> movies = movieDAO.getAllMovies(); // Gets all the movies and store it inside a list.
@@ -95,7 +96,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                     m.getImagePath(),
                     m.getCreatedAt()
                 };
-                model.addRow(row); // Adds the movie one-by-one.
+                movieModel.addRow(row); // Adds the movie one-by-one.
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,12 +160,16 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Movie Inventory");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMaximumSize(new java.awt.Dimension(1315, 675));
         setMinimumSize(new java.awt.Dimension(1315, 675));
         setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
+        setSize(new java.awt.Dimension(1315, 675));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMain.setPreferredSize(new java.awt.Dimension(1000, 600));
+        pnlMain.setMaximumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setMinimumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setPreferredSize(new java.awt.Dimension(1315, 675));
 
         pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -645,6 +650,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblMovieRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblMovieRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
         tblMovieRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblMovieRecordMouseClicked(evt);
@@ -670,7 +677,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblMovieInventory)
                     .addComponent(scrlMovie))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
@@ -678,7 +685,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(8, Short.MAX_VALUE)
                 .addComponent(lblMovieInventory)
                 .addGap(4, 4, 4)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -695,11 +702,11 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 1310, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -720,8 +727,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUserProfilesActionPerformed
 
     private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
-        new AdminMovieInventory().setVisible(true);
-        this.dispose();
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnMovieInventoryActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
@@ -847,12 +853,11 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 releaseYear, duration, copies, pricePerWeek, imagePath
             );
             
-            
             movieDAO.updateMovie(updatedMovie); // Updates the data inside the DB using ID as a unique reference.
             Message.show("Movie updated successfully!");
 
-            clearForm();           // Reset form
-            populateMovieTable();  // Refresh table
+            clearForm(); // Reset form
+            populateMovieTable(); // Refresh table
         } catch (NumberFormatException e) {
             Message.error("Please enter valid numeric values.");
         } catch (Exception e) {
@@ -911,16 +916,16 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int row = tblMovieRecord.getSelectedRow();
                 if (row >= 0) {
-                    selectedMovieID = Integer.parseInt(tblMovieRecord.getValueAt(row, 0).toString()); // Stores the selected ID
+                    selectedMovieID = Integer.parseInt(tblMovieRecord.getValueAt(row, 0).toString()); // Stores the selected ID.
                     
-                    txtTitle.setText(tblMovieRecord.getValueAt(row, 1).toString());       // Title
-                    txtaSynopsis.setText(tblMovieRecord.getValueAt(row, 2).toString());   // Synopsis
-                    txtGenre.setText(tblMovieRecord.getValueAt(row, 3).toString());       // Genre
+                    txtTitle.setText(tblMovieRecord.getValueAt(row, 1).toString()); // Title
+                    txtaSynopsis.setText(tblMovieRecord.getValueAt(row, 2).toString()); // Synopsis
+                    txtGenre.setText(tblMovieRecord.getValueAt(row, 3).toString()); // Genre
                     txtReleaseYear.setText(tblMovieRecord.getValueAt(row, 4).toString()); // Year
-                    txtDuration.setText(tblMovieRecord.getValueAt(row, 5).toString());    // Duration
-                    txtCopies.setText(tblMovieRecord.getValueAt(row, 6).toString());      // Copies
-                    txtPricePerWeek.setText(tblMovieRecord.getValueAt(row, 7).toString());// Price
-                    selectedImagePath = tblMovieRecord.getValueAt(row, 8).toString();     // Image path
+                    txtDuration.setText(tblMovieRecord.getValueAt(row, 5).toString()); // Duration
+                    txtCopies.setText(tblMovieRecord.getValueAt(row, 6).toString()); // Copies
+                    txtPricePerWeek.setText(tblMovieRecord.getValueAt(row, 7).toString()); // Price
+                    selectedImagePath = tblMovieRecord.getValueAt(row, 8).toString(); // Image path
 
                     // Display cover image in lblImagePath.
                     ImageIcon icon = new ImageIcon(selectedImagePath);

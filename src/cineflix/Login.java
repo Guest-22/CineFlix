@@ -6,6 +6,7 @@ public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
+        this.setSize(900, 500);
         this.setLocationRelativeTo(null); // Centers the JFrame.
     }
 
@@ -33,6 +34,8 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Login");
+        setMaximumSize(new java.awt.Dimension(900, 500));
+        setMinimumSize(new java.awt.Dimension(900, 500));
         setResizable(false);
 
         pnlLogin.setBackground(new java.awt.Color(0, 0, 0));

@@ -7,6 +7,8 @@ public class Signup extends javax.swing.JFrame {
     public Signup() {
         initComponents();
         this.setLocationRelativeTo(null); // Centers the JFrame.
+        this.setSize(900, 500);
+        this.setLocationRelativeTo(null); // Centers the JFrame.
     }
 
     /**
