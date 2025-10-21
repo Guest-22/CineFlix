@@ -17,6 +17,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
     public AdminUserProfiles() {
         initComponents();
         this.setLocationRelativeTo(null); // Centers the JFrame.
+        lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         
         // Attemps to get a DB Connection.
         conn = DBConnection.getConnection();
@@ -76,7 +77,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
         lblHeader4 = new javax.swing.JLabel();
-        btnLogout1 = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         pnlForm = new javax.swing.JPanel();
         lblManageUserProfiles = new javax.swing.JLabel();
         lblFullName = new javax.swing.JLabel();
@@ -105,13 +106,12 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         cmbSort = new javax.swing.JComboBox<>();
         tglSort = new javax.swing.JToggleButton();
         txtSearch = new javax.swing.JTextField();
-        scrpAccountRecord = new javax.swing.JScrollPane();
+        scrlInfo = new javax.swing.JScrollPane();
         tblInfoRecord = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: User Profiles");
         setMinimumSize(new java.awt.Dimension(1315, 675));
-        setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -194,14 +194,14 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         lblHeader4.setText("Welcome, Admin");
         lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnLogout1.setBackground(new java.awt.Color(0, 0, 0));
-        btnLogout1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnLogout1.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogout1.setText("Logout");
-        btnLogout1.setFocusable(false);
-        btnLogout1.addActionListener(new java.awt.event.ActionListener() {
+        btnLogout.setBackground(new java.awt.Color(0, 0, 0));
+        btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout.setText("Logout");
+        btnLogout.setFocusable(false);
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogout1ActionPerformed(evt);
+                btnLogoutActionPerformed(evt);
             }
         });
 
@@ -222,7 +222,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnLogout1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,7 +246,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLogout1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -591,7 +591,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                 tblInfoRecordMouseClicked(evt);
             }
         });
-        scrpAccountRecord.setViewportView(tblInfoRecord);
+        scrlInfo.setViewportView(tblInfoRecord);
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -610,7 +610,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblUserProfiles)
-                    .addComponent(scrpAccountRecord))
+                    .addComponent(scrlInfo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -628,7 +628,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                     .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tglSort))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrpAccountRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(122, 122, 122))
         );
 
@@ -914,11 +914,11 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_tblInfoRecordMouseClicked
 
-    private void btnLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout1ActionPerformed
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         ActiveSession.clearSession(); // Clears active session.
         new Login().setVisible(true); // Returns to login frame.
         this.dispose();
-    }//GEN-LAST:event_btnLogout1ActionPerformed
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -961,7 +961,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.ButtonGroup btnGrpSex;
     private javax.swing.JButton btnHome;
-    private javax.swing.JButton btnLogout1;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMovieInventory;
     private javax.swing.JButton btnPaymentReview;
     private javax.swing.JButton btnRentalLogs;
@@ -989,7 +989,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
     private javax.swing.JRadioButton radFemale;
     private javax.swing.JRadioButton radMale;
     private javax.swing.JScrollPane scrlAddress;
-    private javax.swing.JScrollPane scrpAccountRecord;
+    private javax.swing.JScrollPane scrlInfo;
     private javax.swing.JTable tblInfoRecord;
     private javax.swing.JToggleButton tglSort;
     private javax.swing.JTextField txtContactNum;

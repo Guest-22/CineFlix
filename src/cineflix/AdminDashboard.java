@@ -34,7 +34,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Admin Dashboard");
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
@@ -57,9 +56,9 @@ public class AdminDashboard extends javax.swing.JFrame {
         lblHeader2.setText("Admin");
         lblHeader2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        btnHome.setBackground(new java.awt.Color(0, 0, 0));
-        btnHome.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnHome.setForeground(new java.awt.Color(255, 255, 255));
+        btnHome.setBackground(new java.awt.Color(255, 255, 255));
+        btnHome.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnHome.setForeground(new java.awt.Color(0, 0, 0));
         btnHome.setText("Home");
         btnHome.setFocusable(false);
         btnHome.addActionListener(new java.awt.event.ActionListener() {
@@ -170,7 +169,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(203, Short.MAX_VALUE))
         );
 
         lblAdminDashboard.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
@@ -191,10 +190,10 @@ public class AdminDashboard extends javax.swing.JFrame {
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(lblAdminDashboard)
-                .addGap(660, 660, 660))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -205,14 +204,15 @@ public class AdminDashboard extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 672, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
-        // TODO
+        new AdminDashboard().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
@@ -226,8 +226,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUserProfilesActionPerformed
 
     private void btnRentalLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogsActionPerformed
-        new AdminRentalLogs().setVisible(true);
-        this.dispose();
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnRentalLogsActionPerformed
 
     private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed

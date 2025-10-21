@@ -5,6 +5,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     public AdminPaymentReview() {
         initComponents();
         this.setLocationRelativeTo(null); // Centers the JFrame.
+        lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
     }
 
     /**
@@ -214,23 +215,22 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnMovieInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovieInventoryActionPerformed
-        new AdminUserProfiles().setVisible(true);
+        new AdminMovieInventory().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnMovieInventoryActionPerformed
 
     private void btnUserProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserProfilesActionPerformed
-        new AdminRentalLogs().setVisible(true);
+        new AdminUserProfiles().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnUserProfilesActionPerformed
 
     private void btnRentalLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalLogsActionPerformed
-        new AdminPaymentReview().setVisible(true);
+        new AdminRentalLogs().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRentalLogsActionPerformed
 
     private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed
-        new AdminPaymentReview().setVisible(true);
-        this.dispose();
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnPaymentReviewActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed

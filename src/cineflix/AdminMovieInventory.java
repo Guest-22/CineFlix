@@ -23,6 +23,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     public AdminMovieInventory() {
         initComponents();
         this.setLocationRelativeTo(null); // Centers the JFrame.
+        lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         setDefaultCoverImage(); // Sets default cover for new movie.
         setDefaultTglSort();
         setDefaultSynopsisTxta();

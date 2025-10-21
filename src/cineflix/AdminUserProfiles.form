@@ -69,7 +69,7 @@
                           <Component id="tglSort" min="-2" pref="68" max="-2" attributes="0"/>
                       </Group>
                       <Component id="lblUserProfiles" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="scrpAccountRecord" alignment="0" max="32767" attributes="0"/>
+                      <Component id="scrlInfo" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="34" max="32767" attributes="0"/>
                   <Component id="pnlForm" min="-2" pref="420" max="-2" attributes="0"/>
@@ -91,7 +91,7 @@
                       <Component id="tglSort" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="scrpAccountRecord" min="-2" pref="500" max="-2" attributes="0"/>
+                  <Component id="scrlInfo" min="-2" pref="500" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -123,7 +123,7 @@
                   <Component id="btnUserProfiles" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnRentalLogs" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnPaymentReview" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnLogout1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnLogout" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -148,7 +148,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnPaymentReview" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="btnLogout1" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="btnLogout" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -301,7 +301,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnLogout1">
+            <Component class="javax.swing.JButton" name="btnLogout">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
@@ -316,7 +316,7 @@
                 <Property name="focusable" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogout1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogoutActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -886,7 +886,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSearchActionPerformed"/>
           </Events>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="scrpAccountRecord">
+        <Container class="javax.swing.JScrollPane" name="scrlInfo">
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>

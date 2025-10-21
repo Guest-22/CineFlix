@@ -1,15 +1,26 @@
 package cineflix;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class Payment {
     private int paymentID; // PRIMARY KEY
-    private int rentalID; // FOREIGN KEY references tblRentals (includes accountID & movieID)
+    private int rentalID; // FOREIGN KEY references tblRentals (includes accountID & movieID).
     private double amount;
     private double overdueAmount; // Default 0.00.
     private Timestamp paymentDate; // Default NULL.
     private String paymentStatus; // Defaullt 'Pending'.
 
+    // Extra variable for displaying for joined queries.
+    private String movieTitle; // from tblMovies 
+
+    // Extra var for rental joined queries.
+    private LocalDate rentalDate;
+    private LocalDate returnDate;
+    private Double rentalCost;
+    private String rentalStatus;
+    
     // Constructors
     public Payment() {}
     
@@ -21,6 +32,20 @@ public class Payment {
     public Payment(int rentalID, double amount) {
         this.rentalID = rentalID;
         this.amount = amount;
+    }
+
+    // Constructor for joined rental, movie, and payment data.
+    public Payment(int rentalID, String movieTitle, LocalDate rentalDate, LocalDate returnDate,  BigDecimal rentalCost,
+               String rentalStatus, String paymentStatus, BigDecimal amount, BigDecimal overdueAmount) {
+        this.rentalID = rentalID;
+        this.movieTitle = movieTitle;
+        this.rentalDate = rentalDate;
+        this.returnDate = returnDate;
+        this.rentalCost = rentalCost.doubleValue();
+        this.rentalStatus = rentalStatus;
+        this.paymentStatus = paymentStatus;
+        this.amount = amount.doubleValue();
+        this.overdueAmount = overdueAmount.doubleValue();
     }
 
     public Payment(int rentalID, double amount, double overdueAmount, String paymentStatus) {
@@ -50,6 +75,21 @@ public class Payment {
     public String getPaymentStatus() {
         return paymentStatus;
     }
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+    public LocalDate getRentalDate() {
+        return rentalDate;
+    }
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+    public Double getRentalCost() {
+        return rentalCost;
+    }
+    public String getRentalStatus() {
+        return rentalStatus;
+    }
 
     // Setter method.
     public void setPaymentID(int paymentID) {
@@ -69,5 +109,20 @@ public class Payment {
     }
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
+    }
+    public void setRentalDate(LocalDate rentalDate) {
+        this.rentalDate = rentalDate;
+    }
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
+    }
+    public void setRentalCost(Double rentalCost) {
+        this.rentalCost = rentalCost;
+    }
+    public void setRentalStatus(String rentalStatus) {
+        this.rentalStatus = rentalStatus;
     }
 }

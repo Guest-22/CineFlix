@@ -10,12 +10,13 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.Timestamp;
 
 public class UserBrowseMovies extends javax.swing.JFrame {
+    // Declaring DB-related variables.
     Connection conn;
     MovieDAO movieDAO;
     RentalDAO rentalDAO;
     PaymentDAO paymentDAO;
     
-    private DefaultTableModel tblCartRecord;
+    private DefaultTableModel tblCartRecord; // For cart model.
     
     String defaultImage = "src/images/default_cover.png"; // Set movie cover image to default; using local directory.
     private int selectedMovieID = -1; // Stored the ID of the selected movie; used for renting purposes.
@@ -31,20 +32,20 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     public UserBrowseMovies() {
         initComponents();
         this.setLocationRelativeTo(null); // Centers the JFrame.
-        setDefaultCoverImage(); // Sets defualt cover image for a movie.
-        setDefaultSynopsisTxta(); // Wraps synopsis TextArea; continue in new line if character exceed.
-        clearCartTable(); // Clears cart record.
+        lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        setDefaultCoverImage(); // Sets default cover image for a movie.
+        setDefaultSynopsisTxta(); // Wraps synopsis TextArea; continue in new line if characters exceed.
+        clearCartTable(); // Clears cart default record.
         
         // Attemps to get a DB Connection.
         conn = DBConnection.getConnection();
         if (conn == null) return; // Validates the connection before continuing; Error already handled inside DBConnection.
-        movieDAO = new MovieDAO(conn); // Pass the connection as an argument inside MovieDAO class for methods that performs CRUD.
-        rentalDAO = new RentalDAO(conn);
-        paymentDAO = new PaymentDAO(conn);
+        movieDAO = new MovieDAO(conn); // To usee Movie CRUD methods.
+        rentalDAO = new RentalDAO(conn); // To use Rental CRUD methods.
+        paymentDAO = new PaymentDAO(conn); // To use Payment CRUD methods.
         
         populateMovieTable();
     }
-
     
     // Sets the default cover image of a movie.
     private void setDefaultCoverImage() {
@@ -54,7 +55,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         lblImagePath.setIcon(new ImageIcon(scaled));
     }
     
-    // Wraps the synopsys; proceed to new line when it exceed the length space.
+    // Wraps the synopsis; proceed to new line when it exceed the width space.
     private void setDefaultSynopsisTxta(){
         txtaSynopsis.setLineWrap(true); 
         txtaSynopsis.setWrapStyleWord(true);
@@ -92,19 +93,18 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             try {
                 total += Double.parseDouble(totalText);
             } catch (NumberFormatException e) {
-                // Skip invalid entries
+                // Skip invalid entries.
             }
         }
-
         txtTotalOrderPrice.setText("₱" + String.format("%.2f", total));
     }
 
     private void populateMovieTable() {
         DefaultTableModel model = (DefaultTableModel) tblMovieRecord.getModel();
-        model.setRowCount(0); // Clear existing rows
+        model.setRowCount(0); // Clear existing rows.
 
         try {
-            List<Movie> movies = movieDAO.getAllMoviesForUsers(); // DAO call
+            List<Movie> movies = movieDAO.getAllMoviesForUsers(); // Get all the basic movie info for user table.
             for (Movie m : movies) {
                 Object[] row = {
                     m.getMovieID(),
@@ -117,7 +117,6 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                 };
                 model.addRow(row);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             Message.error("Error loading movie table: " + e.getMessage());
@@ -177,10 +176,15 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         txtTotalOrderPrice = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("CineFlix: Browse Movies");
         setMinimumSize(new java.awt.Dimension(1315, 675));
+        setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
+        setSize(new java.awt.Dimension(1315, 675));
 
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMain.setMaximumSize(new java.awt.Dimension(1315, 675));
+        pnlMain.setMinimumSize(new java.awt.Dimension(1315, 675));
         pnlMain.setPreferredSize(new java.awt.Dimension(1315, 675));
 
         pnlSideNav.setBackground(new java.awt.Color(0, 0, 0));
@@ -197,7 +201,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
 
         lblHeader2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblHeader2.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader2.setText("Admin");
+        lblHeader2.setText("User");
         lblHeader2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         btnHome.setBackground(new java.awt.Color(0, 0, 0));
@@ -737,7 +741,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlMainLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(10, Short.MAX_VALUE)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBrowseMovies)
                     .addComponent(lblMovieCart))
@@ -766,7 +770,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                         .addComponent(btnConfirmOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlMoviePreview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -777,7 +781,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
         );
 
         pack();
@@ -842,15 +846,17 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         ActiveSession.clearSession(); // Clears active session.
         new Login().setVisible(true); // Returns to login frame.
-        
+        this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnMyPaymentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMyPaymentsActionPerformed
-        // TODO add your handling code here:
+        new UserMyPayments().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMyPaymentsActionPerformed
 
     private void btnRentalHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentalHistoryActionPerformed
-        // TODO add your handling code here:
+        new UserRentalHistory().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRentalHistoryActionPerformed
 
     private void btnBrowseMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseMoviesActionPerformed
@@ -953,14 +959,16 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         for (int i = 0; i < tblCartRecord.getRowCount(); i++) {
             int movieID = Integer.parseInt(tblCartRecord.getValueAt(i, 0).toString()); // column 0 = movieID.
             int weeks = Integer.parseInt(tblCartRecord.getValueAt(i, 2).toString()); // column 2 = rental duration in weeks.
-
+            String rawCost = tblCartRecord.getValueAt(i, 4).toString().replace("₱", "").replace("?", "").trim();
+            double rentalCost = Double.parseDouble(rawCost); // column 4 = total price.
+            
             Timestamp rentalDate = new Timestamp(System.currentTimeMillis()); // Get current timestamp.
             Timestamp returnDate = Timestamp.valueOf(
                 rentalDate.toLocalDateTime().plusDays(weeks * 7) // returnDate = rentalDate + (weeks + 7 days).
             );
 
             // Inserts new rental record that references both the current user and their chosen movie from tblCartRecord.
-            Rental rental = new Rental(accountID, movieID, rentalDate, returnDate);
+            Rental rental = new Rental(accountID, movieID, rentalDate, returnDate, rentalCost);
             int rentalID = rentalDAO.insertRental(rental);
 
             if (rentalID == -1) {
@@ -971,7 +979,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             // Insert default payment record (visible in My Payments).
             paymentDAO.insertPayment(rentalID);
 
-            // Decrement available copies
+            // Decrement available copies.
             boolean updated = movieDAO.decrementMovieCopies(movieID);
             if (!updated) {
                 Message.error("Warning: Could not update copies for movie ID: " + movieID);

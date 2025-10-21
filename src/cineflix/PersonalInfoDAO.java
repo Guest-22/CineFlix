@@ -87,9 +87,11 @@ public class PersonalInfoDAO {
     // Returns a list of data from tblPersonalInfo with username.
     public List<PersonalInfo> getAllInfoWithUsername() {
         List<PersonalInfo> list = new ArrayList<>();
-        String sql = 
-                "SELECT p.infoID, p.accountID, p.fullName, p.sex, p.email, p.contactNum, p.address, a.username " +
-                "FROM tblPersonalInfo p JOIN tblAccounts a ON p.accountID = a.accountID";
+        String sql = // Joins two tables by referencing the FK on tblPersonalInfo.
+                "SELECT info." + COL_ID +", info." + COL_ACCOUNT_ID + ", info." + 
+                COL_FULLNAME +", info." + COL_SEX +", info." + COL_EMAIL+ ", " + 
+                "info." + COL_CONTACT + ", info." + COL_ADDRESS + ", account.username " +
+                "FROM " + TABLE_INFO + " info JOIN tblAccounts account ON info.accountID = account.accountID";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
