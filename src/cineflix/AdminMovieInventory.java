@@ -13,57 +13,57 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 public class AdminMovieInventory extends javax.swing.JFrame {
-    // Declaring variables.
+    // Declaring global variables.
     private Connection conn;
     private MovieDAO movieDAO;
     
     private String selectedImagePath = "src/images/default.png"; // Default cover image of a movie.
-    private int selectedMovieID = -1; // Stores the ID of selected movie; defaukt -1.
+    private int selectedMovieID = -1; // Stores the ID of selected movie; default -1.
     
     public AdminMovieInventory() {
         initComponents();
         this.setSize(1315, 675);
-        this.setLocationRelativeTo(null); // Center the frame
+        this.setLocationRelativeTo(null); // Center the JFrame.
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        
         setDefaultCoverImage(); // Sets default cover for new movie.
         setDefaultTglSort();
         setDefaultSynopsisTxta();
         
-        // Attemps to get a DB Connection.
-        conn = DBConnection.getConnection();
-        if (conn == null) return; // Validates the connection before continuing; Error already handled inside DBConnection.
-        movieDAO = new MovieDAO(conn); // Pass the connection as an argument inside MovieDAO class for methods that performs CRUD.
+        conn = DBConnection.getConnection(); // Attemps to get a DB Connection.
+        if (conn == null) return; // Validates the connection before continuing.
+        movieDAO = new MovieDAO(conn); // Pass the connection as an argument inside MovieDAO class for CRUD operations.
         
         populateMovieTable(); // Populates the movie table.
     }
 
     // Sets the default cover image of a movie.
     private void setDefaultCoverImage() {
-    selectedImagePath = "src/images/default_cover.png"; // Set movie image path back to default.
+    selectedImagePath = "src/images/default_cover.png"; // Default movie image path poster.
     
     ImageIcon defaultIcon = new ImageIcon(selectedImagePath); // Use the default movie cover image.
     Image scaled = defaultIcon.getImage().getScaledInstance(
     lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);
-    lblImagePath.setIcon(new ImageIcon(scaled));
+    lblImagePath.setIcon(new ImageIcon(scaled)); // Sets the cover back to default (scaled).
     }
 
     // Sets the default toggle button style.
     private void setDefaultTglSort(){
-        tglSort.setFocusPainted(false);         // Removes dotted focus ring
-        tglSort.setContentAreaFilled(false);    // Removes default background fill
-        tglSort.setBorderPainted(false);        // Removes border highlight
-        tglSort.setOpaque(true);                // Ensures custom background shows
-        tglSort.setBackground(Color.BLACK);     // Constant black background
-        tglSort.setForeground(Color.WHITE);     // White text for contrast
+        tglSort.setFocusPainted(false);
+        tglSort.setContentAreaFilled(false);
+        tglSort.setBorderPainted(false);
+        tglSort.setOpaque(true);
+        tglSort.setBackground(Color.BLACK);
+        tglSort.setForeground(Color.WHITE);
     }
     
-    // Wraps the synopsys; proceed to new line when it exceed the length space.
+    // Wraps the synopsis textarea; proceed to new line when it exceed the width space.
     private void setDefaultSynopsisTxta(){
         txtaSynopsis.setLineWrap(true); 
         txtaSynopsis.setWrapStyleWord(true);
     }
     
-    // Clears all inputs.
+    // Clears all inputs and set all things back to its default value.
     private void clearForm() {
         txtTitle.setText("");
         txtGenre.setText("");
@@ -73,17 +73,18 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         txtCopies.setText("");
         txtPricePerWeek.setText("");
         setDefaultCoverImage();
+        tblMovieRecord.clearSelection();
         selectedMovieID = -1; // Reset selected ID from movie table.
     }
     
-    // Populates the movie table with data from our tblMovies.
+    // Populates movie table with data from our tblMovies.
     private void populateMovieTable() {
         DefaultTableModel movieModel = (DefaultTableModel) tblMovieRecord.getModel();
-        movieModel.setRowCount(0); // Clear existing rows
+        movieModel.setRowCount(0); // Clear existing rows.
 
         try {
             List<Movie> movies = movieDAO.getAllMovies(); // Gets all the movies and store it inside a list.
-            for (Movie m : movies) { // Enhance for loop; loops thru the list of movies.
+            for (Movie m : movies) { // Enhance for loop; loops thru the list of movies and adds the record per row.
                 Object[] row = {
                     m.getMovieID(),
                     m.getTitle(),
@@ -104,11 +105,6 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         }
     }
     
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -160,9 +156,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Movie Inventory");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMaximumSize(new java.awt.Dimension(1315, 675));
         setMinimumSize(new java.awt.Dimension(1315, 675));
-        setPreferredSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
         setSize(new java.awt.Dimension(1315, 675));
 
@@ -763,7 +757,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         JFileChooser fileChooser = new JFileChooser(); // Create an instance of JFileChooser; for cover image selection.
         fileChooser.setDialogTitle("Select Cover Image"); // Sets the dialog title.
 
-        fileChooser.setCurrentDirectory(new File("src/images")); // Sets the default directory inside the project.
+        fileChooser.setCurrentDirectory(new File("src/images")); // Sets the default directory inside the src project.
 
         // Creates a filtered selection.
         FileNameExtensionFilter imageFilter = new FileNameExtensionFilter(
@@ -785,7 +779,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBrowseImageActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // Validate empty fields before parsing.
+        // Validate empty fields before inserting.
         if (txtTitle.getText().trim().isEmpty() ||
             txtGenre.getText().trim().isEmpty() ||
             txtaSynopsis.getText().trim().isEmpty() ||
@@ -793,7 +787,6 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             txtDuration.getText().trim().isEmpty() ||
             txtCopies.getText().trim().isEmpty() ||
             txtPricePerWeek.getText().trim().isEmpty()) {
-
             Message.error("Please fill in all required fields.");
             return;
         }
@@ -809,21 +802,17 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             String imagePath = selectedImagePath;
 
             // Validates the connection before continuing.
-            if (conn == null) {
-                Message.show("Database connection failed.");
-                return;
-            }
-            
+            if (conn == null) return;
+                           
+            // Pass the values inside our movie model.
             Movie movie = new Movie(title, genre, synopsis, releaseYear, duration, copies, pricePerWeek, imagePath);
 
             MovieDAO dao = new MovieDAO(conn); // Pass the Connection to perform an insertion (insertMovie method).
-            dao.insertMovie(movie);
+            dao.insertMovie(movie); // Pass the recently created model object.
 
             Message.show("Movie added successfully!");
             clearForm(); // Clear all inputs.
             populateMovieTable(); // Refresh/Repopulate movie table.
-            
-
         } catch (NumberFormatException e) { // Catch invalid numerical values.
             Message.show("Please enter valid numeric values for year, duration, copies, and price/week.");
         } catch (Exception e) {
@@ -833,12 +822,12 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (selectedMovieID == -1) {
-        Message.error("Please select a movie to update."); // If there's no data/row that is being selected, throw this error.
+        if (selectedMovieID == -1) { // Handles no selected rows.
+        Message.error("Please select a movie to update."); // Throw error message.
         return;
         }
 
-        try { // Gets all the infos.
+        try { // Gets all the movie infos.
             String title = txtTitle.getText().trim();
             String genre = txtGenre.getText().trim();
             String synopsis = txtaSynopsis.getText().trim();
@@ -853,12 +842,12 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 releaseYear, duration, copies, pricePerWeek, imagePath
             );
             
-            movieDAO.updateMovie(updatedMovie); // Updates the data inside the DB using ID as a unique reference.
+            movieDAO.updateMovie(updatedMovie); // Updates movie details.
             Message.show("Movie updated successfully!");
 
             clearForm(); // Reset form
-            populateMovieTable(); // Refresh table
-        } catch (NumberFormatException e) {
+            populateMovieTable(); // Refresh/Repopulate movie table.
+        } catch (NumberFormatException e) { 
             Message.error("Please enter valid numeric values.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -868,22 +857,23 @@ public class AdminMovieInventory extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (selectedMovieID == -1) {
-        Message.error("Please select a movie to delete."); // If there's no data/row that is being selected, throw this error.
+        Message.error("Please select a movie to delete."); // If there's no record/row that is being selected, throw this error.
         return;
         }
 
+        // Confirm option dialog.
         if (!Message.confirm("Are you sure you want to delete this movie?", "Confirm Deletion")) {
             return; // If user cancels, do nothing.
-        } // False error.
+        }
 
+        if (conn == null) return; // Test the connection.
         try {
             MovieDAO dao = new MovieDAO(conn); // Pass the Connection to perform deletion (deleteMovie method).
-            dao.deleteMovie(selectedMovieID);  // Deletes the movie using its unique ID.
+            dao.deleteMovie(selectedMovieID); // Deletes the movie using its unique ID.
 
             Message.show("Movie deleted successfully!");
-            clearForm();           // Reset form
-            populateMovieTable();  // Refresh table
-
+            clearForm(); // Reset form.
+            populateMovieTable(); // Refresh/Repopulate movie table.
         } catch (Exception e) {
             e.printStackTrace();
             Message.error("Error deleting movie: " + e.getMessage());
@@ -913,21 +903,21 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     private void tblMovieRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMovieRecordMouseClicked
         tblMovieRecord.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) { // Handles tblMovieRecord click.
                 int row = tblMovieRecord.getSelectedRow();
                 if (row >= 0) {
-                    selectedMovieID = Integer.parseInt(tblMovieRecord.getValueAt(row, 0).toString()); // Stores the selected ID.
-                    
-                    txtTitle.setText(tblMovieRecord.getValueAt(row, 1).toString()); // Title
-                    txtaSynopsis.setText(tblMovieRecord.getValueAt(row, 2).toString()); // Synopsis
-                    txtGenre.setText(tblMovieRecord.getValueAt(row, 3).toString()); // Genre
-                    txtReleaseYear.setText(tblMovieRecord.getValueAt(row, 4).toString()); // Year
-                    txtDuration.setText(tblMovieRecord.getValueAt(row, 5).toString()); // Duration
-                    txtCopies.setText(tblMovieRecord.getValueAt(row, 6).toString()); // Copies
-                    txtPricePerWeek.setText(tblMovieRecord.getValueAt(row, 7).toString()); // Price
-                    selectedImagePath = tblMovieRecord.getValueAt(row, 8).toString(); // Image path
+                    selectedMovieID = Integer.parseInt(tblMovieRecord.getValueAt(row, 0).toString()); // Stores the selected ID as reference.
+                    // Populate forms with the value from selected row.
+                    txtTitle.setText(tblMovieRecord.getValueAt(row, 1).toString()); 
+                    txtaSynopsis.setText(tblMovieRecord.getValueAt(row, 2).toString()); 
+                    txtGenre.setText(tblMovieRecord.getValueAt(row, 3).toString()); 
+                    txtReleaseYear.setText(tblMovieRecord.getValueAt(row, 4).toString()); 
+                    txtDuration.setText(tblMovieRecord.getValueAt(row, 5).toString()); 
+                    txtCopies.setText(tblMovieRecord.getValueAt(row, 6).toString()); 
+                    txtPricePerWeek.setText(tblMovieRecord.getValueAt(row, 7).toString()); 
+                    selectedImagePath = tblMovieRecord.getValueAt(row, 8).toString(); 
 
-                    // Display cover image in lblImagePath.
+                    // Display movie cover image in lblImagePath.
                     ImageIcon icon = new ImageIcon(selectedImagePath);
                     Image scaled = icon.getImage().getScaledInstance(
                         lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);

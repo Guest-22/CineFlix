@@ -435,6 +435,7 @@ public class UserMyPayments extends javax.swing.JFrame {
         // Displays the receipts inside the text area.
         txtaReceipt.append(br +"\n");
         txtaReceipt.append("CINEFLIX: PAYMENT RECEIPT\n");
+        txtaReceipt.append("Generated on: " + generatedDate + "\n");
         txtaReceipt.append(br + "\n");
         txtaReceipt.append("Rental ID: " + rentalID + "\n");
         txtaReceipt.append("Movie Title: " + movieTitle + "\n");
@@ -456,7 +457,6 @@ public class UserMyPayments extends javax.swing.JFrame {
         txtaReceipt.append(br +"\n");
         txtaReceipt.append("Please proceed to the front desk and say:\n");
         txtaReceipt.append("“Payment for Rental ID: " + rentalID + "”\n");
-        txtaReceipt.append("Generated on: " + generatedDate + "\n");
         txtaReceipt.append(br +"\n");
         txtaReceipt.append(br +"\n");
     }//GEN-LAST:event_btnGenerateReceiptActionPerformed

@@ -9,21 +9,23 @@ public class AdminRentalEntry {
     private String movieTitle;
     private Timestamp rentalDate;
     private Timestamp returnDate;
+     private String rentalStage;
     private String rentalStatus;
     private String paymentStatus;
-    private double totalFee;
+    private double totalCost;
 
     public AdminRentalEntry(int rentalID, String fullName, String movieTitle,
-            Timestamp rentalDate, Timestamp returnDate, String rentalStatus,
-            String paymentStatus, double totalFee) {
+            Timestamp rentalDate, Timestamp returnDate, String rentalStage, String rentalStatus,
+            String paymentStatus, double totalCost) {
         this.rentalID = rentalID;
         this.fullName = fullName;
         this.movieTitle = movieTitle;
         this.rentalDate = rentalDate;
         this.returnDate = returnDate;
+        this.rentalStage = rentalStage;
         this.rentalStatus = rentalStatus;
         this.paymentStatus = paymentStatus;
-        this.totalFee = totalFee;
+        this.totalCost = totalCost;
     }
 
     // Getter methods.
@@ -32,7 +34,8 @@ public class AdminRentalEntry {
     public String getMovieTitle() { return movieTitle; }
     public Timestamp getRentalDate() { return rentalDate; }
     public Timestamp getReturnDate() { return returnDate; }
+    public String getRentalStage() { return rentalStage; }
     public String getRentalStatus() { return rentalStatus; }
     public String getPaymentStatus() { return paymentStatus; }
-    public double getTotalFee() { return totalFee; }
+    public double getTotalCost() { return totalCost; }
 }

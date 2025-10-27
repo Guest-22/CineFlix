@@ -115,4 +115,22 @@ public class PaymentDAO {
         }
         return payments;
     }
+    
+    // For admin rental logs confirm transaction; updates data to add an upfront payment of 25% in col amount.
+    public boolean updatePaymentStatusAndAmount(int rentalID, double amount, String status) {
+        String sql = 
+                "UPDATE " + TABLE_PAYMENTS + 
+                " SET " + COL_AMOUNT + " = ?, " + COL_STATUS + " = ?, " + COL_DATE + " = NOW() "
+                + "WHERE " + COL_RENTAL_ID + " = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setDouble(1, amount);
+            pst.setString(2, status);
+            pst.setInt(3, rentalID);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Error updating payment status & amount:\n" + e.getMessage());
+            return false;
+        }
+    }
 }

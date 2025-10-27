@@ -214,7 +214,7 @@ public class Login extends javax.swing.JFrame {
         
         // Handles empty inputs from TextFields.
         if (username.isEmpty() || password.isEmpty()) {
-        Message.show("Please enter both username and password.");
+        Message.error("Please enter both username and password.");
         return;
         }
          
@@ -227,19 +227,20 @@ public class Login extends javax.swing.JFrame {
         
         // Verifies credentials.
         if (!accountDAO.verifyAccount(username, password)) { // Account not found inside tblAccounts.
-        Message.show("Invalid credentials. Please try again."); 
-        return;
+            Message.error("Invalid credentials. Please try again."); 
+            return; // Stops here.
         }
         
         // Gets the account role and accountID for storing active sessions; to know whose currently using the system.
         String role = accountDAO.getRole(username);
         int accountID = accountDAO.getAccountID(username, password);
         
-        // Stores the credentials of currently logged-in user; used identifying for active session.
+        // Stores the credentials of currently logged-in user; will be use as reference to retrieve their data.
         ActiveSession.loggedInAccountID = accountID;
         ActiveSession.loggedInUsername = username;
         ActiveSession.role = role;
 
+        // Validates the role
         if (role.equalsIgnoreCase("User")) {  
             Message.show("Login successful!");
             new UserDashboard().setVisible(true);
@@ -247,7 +248,8 @@ public class Login extends javax.swing.JFrame {
             Message.show("Login successful!");
             new AdminDashboard().setVisible(true);
         } else {
-            Message.show("Unknown role. Please contact support."); // Handles manually DB inserted account with no roles.
+            Message.error("Unknown role. Please contact support."); // Handles unknown roles; anomaly.
+            return;
         }
         dispose(); // Close login frame
     }//GEN-LAST:event_btnLoginActionPerformed

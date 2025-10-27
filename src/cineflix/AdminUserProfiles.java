@@ -7,29 +7,28 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class AdminUserProfiles extends javax.swing.JFrame {
-    // Declaring variables.
+    // Declaring global variables.
     private Connection conn;
     private AccountDAO accountDAO;
     private PersonalInfoDAO infoDAO;
 
-    private int selectedInfoID = -1; // Stores the ID of the selected info.
+    private int selectedInfoID = -1; // Stores the ID of the selected row.
     
     public AdminUserProfiles() {
         initComponents();
         this.setSize(1315, 675);
-        this.setLocationRelativeTo(null); // Center the frame
+        this.setLocationRelativeTo(null); // Center the Jframe.
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         
-        // Attemps to get a DB Connection.
-        conn = DBConnection.getConnection();
-        if (conn == null) return; // Validates the connection before continuing; Error already handled inside DBConnection.
+        conn = DBConnection.getConnection(); // Attemps to get a DB Connection.
+        if (conn == null) return; // Validates the connection before continuing.
         infoDAO = new PersonalInfoDAO(conn); // Pass the connection as an argument inside PersonalInfoDAO class for CRUD methods.
         accountDAO = new AccountDAO(conn); // Pass the connection as an argument inside AccountDAO class for CRUD methods.
         
-        populateInfoTable();
+        populateInfoTable(); // Populate info table.
     }
 
-    // Clears all inputs.
+    // Clears all inputs and deselect row.
     public void clearForm() {
         txtFullName.setText("");
         radMale.setSelected(false);
@@ -39,16 +38,17 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         txtaAddress.setText("");
         txtUsername.setText("");
         txtPassword.setText("");
+        tblInfoRecord.clearSelection();
         selectedInfoID = -1; // Deselect ID just in case.
     }
 
     // Populates personal info table.
     public void populateInfoTable() {
-        DefaultTableModel model = (DefaultTableModel) tblInfoRecord.getModel();
-        model.setRowCount(0); // Clear table
+        DefaultTableModel infoModel = (DefaultTableModel) tblInfoRecord.getModel();
+        infoModel.setRowCount(0); // Clear table rows.
 
-        List<PersonalInfo> profiles = infoDAO.getAllInfoWithUsername();
-        for (PersonalInfo p : profiles) {
+        List<PersonalInfo> profiles = infoDAO.getAllInfoWithUsername(); // Retrives a record of PersonalInfo model.
+        for (PersonalInfo p : profiles) { // Loops through profile (List) and get their values.
             Object[] row = {
                 p.getInfoID(),
                 p.getUsername(),
@@ -58,7 +58,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                 p.getContactNum(),
                 p.getAddress()
             };
-            model.addRow(row);
+            infoModel.addRow(row); // Continuously adds the record to our info table.
         }
     }
     
@@ -699,55 +699,52 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         String username = txtUsername.getText().trim();
         String password = String.valueOf(txtPassword.getPassword());
 
-        // Validates all values of TextFields; if any of those are empty display the problem.
+        // Validates all values of inputs; if any of those fields are empty display the problem.
         if (fullName.isEmpty() || sex == null || email.isEmpty() || contactNum.isEmpty() ||
             address.isEmpty() || username.isEmpty() || password.isEmpty()) {
-            Message.show("Please fill in all fields.");
+            Message.error("Please fill in all fields.");
             return;
         }
 
-        // Validates the connection before continuing; Error already handled inside DBConnection.
-        if (conn == null) {
-            Message.show("Database connection failed.");
-            return;
-        }
+        // Validates the connection before continuing.
+        if (conn == null) return;
 
         // Check if username already exists.
         if (accountDAO.isUsernameExist(username)) {
-            Message.show("Username already exists. Please choose another.");
+            Message.error("Username already exists. Please choose another.");
             return;
         }
 
         // Check if email already exists.
         if (infoDAO.isEmailExist(email)) {
-            Message.show("Email already exists. Please use a different one.");
+            Message.error("Email already exists. Please use a different one.");
             return;
         }
         
-        // Inserts an account and get generated accountID; will be used for tblPersonalInfo.
-        int accountID = accountDAO.insertAccount(username, password);
+        // If all fields are filled and both username and email are unique, proceed.
+        // Inserts an account and get generated accountID; will be used as reference for tblPersonalInfo.
+        int accountID = accountDAO.insertAccount(username, password); // Insert new account record and store accountID.
         if (accountID == -1) { // Failed attempt.
-            Message.show("Account creation failed.");
+            Message.error("Account creation failed.");
             return; // Stops here.
         }
 
         // Create PersonalInfo object and link accountID; only runs if the account has been inserted successfully.
         PersonalInfo info = new PersonalInfo();
-        info.setAccountID(accountID); // FK reference
+        info.setAccountID(accountID); // Foreign Key references (tblAccount.accountID).
         info.setFullName(fullName);
         info.setSex(sex);
         info.setEmail(email);
         info.setContactNum(contactNum);
         info.setAddress(address);
 
-        // Inserts personal infos to DB.
-        boolean success = infoDAO.insertInfo(info);
+        boolean success = infoDAO.insertInfo(info); // Inserts the object model inside tblPersonalInfo.
         if (success) { // If the insertion succeed, return to login frame.
             Message.show("Account added successfully!");
             populateInfoTable(); // Refreshes the JTable after insertion.
             clearForm(); // Optional: clears the form fields.
         } else { // Else, insertion failed.
-            Message.show("Failed to save personal information.");
+            Message.error("Failed to save personal information.");
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -757,7 +754,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         return;
         }
 
-        try { // Gets all the infos.
+        try { // Gets all the inputs from textfields and radio button.
             String fullName = txtFullName.getText().trim();
             String sex = radMale.isSelected() ? "Male" : radFemale.isSelected() ? "Female" : null;
             String email = txtEmail.getText().trim();
@@ -766,21 +763,23 @@ public class AdminUserProfiles extends javax.swing.JFrame {
             String username = txtUsername.getText().trim();
             String password = String.valueOf(txtPassword.getPassword());
 
-            // Validates all values of TextFields; if any are empty, display the problem.
+            // Validates all values of TextFields & Radio button; if any are empty, display the problem.
             if (fullName.isEmpty() || sex == null || email.isEmpty() || contactNum.isEmpty() ||
                 address.isEmpty() || username.isEmpty() || password.isEmpty()) {
                 Message.error("Please fill in all fields.");
                 return;
             }
 
-            // Get accountID using selectedInfoID
+            if (conn == null) return; // Validates the connection.
+            
+            // Get accountID using selectedInfoID.
             int accountID = infoDAO.getAccountIDByInfoID(selectedInfoID);
-            if (accountID == -1) {
+            if (accountID == -1) { // Retrieval failed.
                 Message.error("Failed to retrieve account ID.");
-                return;
+                return; // Stops here.
             }
 
-            // Create updated PersonalInfo object
+            // Create updated PersonalInfo object.
             PersonalInfo updatedInfo = new PersonalInfo();
             updatedInfo.setInfoID(selectedInfoID);
             updatedInfo.setAccountID(accountID);
@@ -790,20 +789,18 @@ public class AdminUserProfiles extends javax.swing.JFrame {
             updatedInfo.setContactNum(contactNum);
             updatedInfo.setAddress(address);
 
-            // Update both tables
-            boolean infoUpdated = infoDAO.updateInfo(updatedInfo);
-            boolean accountUpdated = accountDAO.updateAccount(accountID, username, password);
+            // Update both DB tables.
+            boolean infoUpdated = infoDAO.updateInfo(updatedInfo); // Pass the info object model.
+            boolean accountUpdated = accountDAO.updateAccount(accountID, username, password); // Updates username & password.
 
-            if (infoUpdated && accountUpdated) {
+            if (infoUpdated && accountUpdated) { // Update success.
                 Message.show("Account updated successfully!");
-
                 clearForm();           // Reset form
                 populateInfoTable();   // Refresh table
             } else {
                 Message.error("Update failed. Please try again.");
             }
-
-        } catch (Exception e) {
+        } catch (Exception e) { // Catch any errors.
             e.printStackTrace();
             Message.error("Error updating account: " + e.getMessage());
         }
@@ -817,8 +814,10 @@ public class AdminUserProfiles extends javax.swing.JFrame {
 
         if (!Message.confirm("Are you sure you want to delete this account?", "Confirm Deletion")) {
             return; // If user cancels, do nothing.
-        } // False error.
+        }
 
+        if (conn == null) return; // Validates connection.
+        
         try {
             int accountID = infoDAO.getAccountIDByInfoID(selectedInfoID); // Get the linked accountID using infoID.
 
@@ -870,9 +869,9 @@ public class AdminUserProfiles extends javax.swing.JFrame {
 
     private void chkShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkShowPasswordActionPerformed
         if (chkShowPassword.isSelected()) {
-            txtPassword.setEchoChar((char) 0); // Show characters.
+            txtPassword.setEchoChar((char) 0); // Show password characters.
         } else {
-            txtPassword.setEchoChar('•'); // Mask again (you can use '*', '•', etc.)    
+            txtPassword.setEchoChar('•'); // Mask password again.  
         }
     }//GEN-LAST:event_chkShowPasswordActionPerformed
 
@@ -892,18 +891,21 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                 if (row >= 0) {
                     selectedInfoID = Integer.parseInt(tblInfoRecord.getValueAt(row, 0).toString()); // Stores the selected infoID.
 
-                    txtUsername.setText(tblInfoRecord.getValueAt(row, 1).toString());     // Username.
-                    txtFullName.setText(tblInfoRecord.getValueAt(row, 2).toString());     // Full Name.
-                    String sex = tblInfoRecord.getValueAt(row, 3).toString();             // Sex.
-                    txtEmail.setText(tblInfoRecord.getValueAt(row, 4).toString());        // Email.
-                    txtContactNum.setText(tblInfoRecord.getValueAt(row, 5).toString());   // Contact Number.
-                    txtaAddress.setText(tblInfoRecord.getValueAt(row, 6).toString());     // Address.
+                    // Populate the form at the right with the collected row/record values.
+                    txtUsername.setText(tblInfoRecord.getValueAt(row, 1).toString()); 
+                    txtFullName.setText(tblInfoRecord.getValueAt(row, 2).toString());
+                    String sex = tblInfoRecord.getValueAt(row, 3).toString(); 
+                    txtEmail.setText(tblInfoRecord.getValueAt(row, 4).toString());  
+                    txtContactNum.setText(tblInfoRecord.getValueAt(row, 5).toString()); 
+                    txtaAddress.setText(tblInfoRecord.getValueAt(row, 6).toString()); 
 
+                    if (conn == null) return; // Validates connection.
                     int accountID = infoDAO.getAccountIDByInfoID(selectedInfoID); // Gets the account ID via selected info ID.
                     String password = accountDAO.getPasswordByAccountID(accountID); // Gets the password via account ID.
+                    
                     if (password != null) { 
                         txtPassword.setText(password); // Display password.
-}
+                    }
 
                     // Set radio button based on sex.
                     if (sex.equalsIgnoreCase("Male")) {

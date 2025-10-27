@@ -82,6 +82,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         txtaSynopsis.setText("");
         setDefaultCoverImage();
         cmbPricePerWeek.setSelectedIndex(0);
+        tblMovieRecord.clearSelection();
         txtWeeklyPrice.setText("₱0.00");
     }
 
