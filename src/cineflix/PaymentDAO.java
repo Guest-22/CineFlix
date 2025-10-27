@@ -1,6 +1,7 @@
 package cineflix;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,19 +78,18 @@ public class PaymentDAO {
     }
     
     // For populating admin payment review table.
-    public List<AdminPaymentEntry> getAdminPaymentReview() {
-        List<AdminPaymentEntry> payments = new ArrayList<>();
+        public List<AdminPaymentEntry> getAdminPaymentLogs() {
+        List<AdminPaymentEntry> logs = new ArrayList<>();
 
         String sql = 
-            "SELECT p.paymentID, pi.fullName, m.title AS movieTitle, " +
-            "r.rentalDate, r.returnDate, r.rentalStatus, " +
-            "p.amount, p.overdueAmount, p.paymentDate, p.paymentStatus " +
-            "FROM tblPayments p " +
-            "JOIN tblRentals r ON p.rentalID = r.rentalID " +
-            "JOIN tblAccounts a ON r.accountID = a.accountID " +
-            "JOIN tblPersonalInfo pi ON a.accountID = pi.accountID " +
-            "JOIN tblMovies m ON r.movieID = m.movieID " +
-            "ORDER BY p.paymentDate DESC";
+                "SELECT p.paymentID, r.rentalID, pi.fullName, m.title AS movieTitle, " +
+                "r.rentalDate, r.returnDate, r.rentalStage, r.rentalStatus, " +
+                "p.paymentStatus, r.rentalCost AS totalCost, p.amount AS amountPaid, p.overdueAmount, p.paymentDate " +
+                "FROM tblPayments p " +
+                "JOIN tblRentals r ON p.rentalID = r.rentalID " +
+                "JOIN tblAccounts a ON r.accountID = a.accountID " +
+                "JOIN tblPersonalInfo pi ON a.accountID = pi.accountID " +
+                "JOIN tblMovies m ON r.movieID = m.movieID";
 
         try (PreparedStatement pst = conn.prepareStatement(sql);
              ResultSet rs = pst.executeQuery()) {
@@ -97,23 +97,27 @@ public class PaymentDAO {
             while (rs.next()) {
                 AdminPaymentEntry entry = new AdminPaymentEntry(
                     rs.getInt("paymentID"),
+                    rs.getInt("rentalID"),
                     rs.getString("fullName"),
                     rs.getString("movieTitle"),
-                    rs.getTimestamp("rentalDate"),
-                    rs.getTimestamp("returnDate"),
+                    rs.getTimestamp("rentalDate").toLocalDateTime(),
+                    rs.getTimestamp("returnDate").toLocalDateTime(),
+                    rs.getString("rentalStage"),
                     rs.getString("rentalStatus"),
-                    rs.getDouble("amount"),
+                    rs.getString("paymentStatus"),
+                    rs.getDouble("totalCost"),
+                    rs.getDouble("amountPaid"),
                     rs.getDouble("overdueAmount"),
-                    rs.getTimestamp("paymentDate"),
-                    rs.getString("paymentStatus")
+                    rs.getTimestamp("paymentDate") != null ? rs.getTimestamp("paymentDate").toLocalDateTime() : null
                 );
-                payments.add(entry);
+                logs.add(entry);
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
-            Message.error("Failed to retrieve admin payment review:\n" + e.getMessage());
+            Message.error("Failed to load payment records:\n" + e.getMessage());
         }
-        return payments;
+
+        return logs;
     }
     
     // For admin rental logs confirm transaction; updates data to add an upfront payment of 25% in col amount.
@@ -130,6 +134,36 @@ public class PaymentDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             Message.error("Error updating payment status & amount:\n" + e.getMessage());
+            return false;
+        }
+    }
+    
+   public boolean confirmPaymentTransaction(int paymentID, String status, double amountPaid, LocalDateTime paymentDate) {
+        String sql = 
+                "UPDATE " + TABLE_PAYMENTS + 
+                " SET " + COL_STATUS + " = ?, " + COL_AMOUNT + " = ?, " + COL_DATE +" = ? " + 
+                "WHERE " + COL_ID + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setDouble(2, amountPaid);
+            stmt.setTimestamp(3, Timestamp.valueOf(paymentDate));
+            stmt.setInt(4, paymentID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Payment transaction failed:\n" + e.getMessage());
+            return false;
+        }
+    }
+   
+   public boolean deletePaymentTransaction(int paymentID) {
+        String sql = "DELETE FROM tblPayments WHERE paymentID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, paymentID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Payment transaction deletion failed:\n" + e.getMessage());
             return false;
         }
     }

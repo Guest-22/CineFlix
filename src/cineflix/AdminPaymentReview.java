@@ -3,39 +3,78 @@ package cineflix;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.sql.Connection;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class AdminPaymentReview extends javax.swing.JFrame {
-
+    private Connection conn;
+    private PaymentDAO paymentDAO;
+    
+    private int selectedPaymentID = -1;
+    
     public AdminPaymentReview() {
         initComponents();
         this.setSize(1315, 675);
         this.setLocationRelativeTo(null); // Center the JFrame.
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         
-        populateReviewRecord(); // Populates payment table.
+        conn = DBConnection.getConnection();
+        if (conn == null) return;
+        paymentDAO = new PaymentDAO(conn);
+        
+        populatePaymentTable(); // Populates payment table.
     }
     
-    private void populateReviewRecord() {
-        DefaultTableModel paymentModel = (DefaultTableModel) tblPaymentRecord.getModel();
-        paymentModel.setRowCount(0); // Clear existing rows.
+    // Clear all fields and set selectedID back to -1.
+    private void clearForm() {
+        txtPaymentID.setText("");
+        txtRentalID.setText("");
+        txtAccountName.setText("");
+        txtMovieTitle.setText("");
+        txtRentalDate.setText("");
+        txtReturnDate.setText("");
+        lblWeeks.setText("N/A");
+        cmbRentalStage.setSelectedIndex(0); 
+        cmbRentalStatus.setSelectedIndex(0);
+        txtPaymentStatus.setText("");
+        txtTotalCost.setText("");
+        txtOverdue.setText("");
+        txtPaidAmount.setText("");
+        lblRemainingBalance.setText("N/A");
+        lblPaymentDate.setText("N/A");
+        selectedPaymentID = -1;
+        tblPaymentRecord.clearSelection();
+    }
+    
+    // Populates payment table.
+    private void populatePaymentTable() {
+        DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
+        model.setRowCount(0); // Clear existing rows
 
-        Connection conn = DBConnection.getConnection(); // Get DB connection.
-        if (conn == null) return; // Validates the connection before continuing.
-        PaymentDAO paymentDAO = new PaymentDAO(conn); // Passing the connection for populating the table.
-        List<AdminPaymentEntry> payments = paymentDAO.getAdminPaymentReview(); // Use AdminPaymentEntry as the custom model (REASON: JOINS).
+        conn = DBConnection.getConnection();
+        if (conn == null) return;
 
-        for (AdminPaymentEntry p : payments) {
-            paymentModel.addRow(new Object[] {
+        paymentDAO = new PaymentDAO(conn);
+        List<AdminPaymentEntry> logs = paymentDAO.getAdminPaymentLogs();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        for (AdminPaymentEntry p : logs) {
+            model.addRow(new Object[] {
                 p.getPaymentID(),
-                p.getFullName(),
+                p.getRentalID(),
+                p.getAccountName(),
                 p.getMovieTitle(),
-                p.getRentalDate(),
-                p.getReturnDate(),
+                p.getRentalDate().format(formatter),
+                p.getReturnDate().format(formatter),
+                p.getRentalStage(),
                 p.getRentalStatus(),
-                String.format("₱%.2f", p.getAmount()),
+                p.getPaymentStatus(),
+                String.format("₱%.2f", p.getTotalCost()),
+                String.format("₱%.2f", p.getAmountPaid()),
                 String.format("₱%.2f", p.getOverdueAmount()),
-                p.getPaymentDate(),
-                p.getPaymentStatus()
+                p.getPaymentDate() != null ? p.getPaymentDate().format(formatter) : ""
             });
         }
     }
@@ -57,9 +96,46 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
         lblPaymentReview = new javax.swing.JLabel();
-        scrlRental2 = new javax.swing.JScrollPane();
+        scrlPayment = new javax.swing.JScrollPane();
         tblPaymentRecord = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
+        pnlForm = new javax.swing.JPanel();
+        lblManageRentalDetails = new javax.swing.JLabel();
+        txtTotalCost = new javax.swing.JTextField();
+        txtReturnDate = new javax.swing.JTextField();
+        lblTotalCost = new javax.swing.JLabel();
+        lblRentalID = new javax.swing.JLabel();
+        lblOverdue = new javax.swing.JLabel();
+        lblAccountName = new javax.swing.JLabel();
+        lblWeeks = new javax.swing.JLabel();
+        lblMovieTitle = new javax.swing.JLabel();
+        cmbRentalStage = new javax.swing.JComboBox<>();
+        lblRentalDate = new javax.swing.JLabel();
+        cmbRentalStatus = new javax.swing.JComboBox<>();
+        lblReturnDate = new javax.swing.JLabel();
+        lblRentalStage = new javax.swing.JLabel();
+        lblRentalStatus = new javax.swing.JLabel();
+        txtRentalID = new javax.swing.JTextField();
+        txtAccountName = new javax.swing.JTextField();
+        txtMovieTitle = new javax.swing.JTextField();
+        txtRentalDate = new javax.swing.JTextField();
+        txtPaymentID = new javax.swing.JTextField();
+        lblPaymentID = new javax.swing.JLabel();
+        lblPaymentStatus = new javax.swing.JLabel();
+        txtPaymentStatus = new javax.swing.JTextField();
+        txtOverdue = new javax.swing.JTextField();
+        lblPaidAmount = new javax.swing.JLabel();
+        txtPaidAmount = new javax.swing.JTextField();
+        lblPaymentDate = new javax.swing.JLabel();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        btnConfirmTransaction = new javax.swing.JButton();
+        lblRemainingBalance1 = new javax.swing.JLabel();
+        lblSettleBalance = new javax.swing.JLabel();
+        txtSettleBalance = new javax.swing.JTextField();
+        lblRemainingBalance = new javax.swing.JLabel();
+        lblWeekDuration = new javax.swing.JLabel();
+        lblPaymentDate1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         cmbSort = new javax.swing.JComboBox<>();
@@ -219,17 +295,17 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         tblPaymentRecord.setForeground(new java.awt.Color(255, 255, 255));
         tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Payment ID", "Name", "Movie Title", "Rental Date", "Return Date", "Rental Status", "Amount", "Overdue Amount", "Payment Date", "Payment Status"
+                "Payment ID", "Rental ID", "Account Name", "Movie Title", "Rental Date", "Return Date", "Rental Stage", "Rental Status", "Payment Status", "Total Cost", "Paid Amount", "Overdue Amount", "Payment Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -243,19 +319,410 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 tblPaymentRecordMouseClicked(evt);
             }
         });
-        scrlRental2.setViewportView(tblPaymentRecord);
+        scrlPayment.setViewportView(tblPaymentRecord);
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        pnlForm.setBackground(new java.awt.Color(0, 0, 0));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 430, Short.MAX_VALUE)
+        lblManageRentalDetails.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblManageRentalDetails.setForeground(new java.awt.Color(255, 255, 255));
+        lblManageRentalDetails.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManageRentalDetails.setText("Manage Payment Details");
+        lblManageRentalDetails.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        txtTotalCost.setEditable(false);
+        txtTotalCost.setBackground(new java.awt.Color(204, 204, 204));
+        txtTotalCost.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTotalCost.setForeground(new java.awt.Color(0, 0, 0));
+        txtTotalCost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTotalCostActionPerformed(evt);
+            }
+        });
+
+        txtReturnDate.setEditable(false);
+        txtReturnDate.setBackground(new java.awt.Color(204, 204, 204));
+        txtReturnDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtReturnDate.setForeground(new java.awt.Color(0, 0, 0));
+        txtReturnDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtReturnDateActionPerformed(evt);
+            }
+        });
+
+        lblTotalCost.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTotalCost.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCost.setText("Total Cost:");
+
+        lblRentalID.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblRentalID.setForeground(new java.awt.Color(255, 255, 255));
+        lblRentalID.setText("Rental ID:");
+
+        lblOverdue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblOverdue.setForeground(new java.awt.Color(255, 255, 255));
+        lblOverdue.setText("Overdue:");
+
+        lblAccountName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccountName.setForeground(new java.awt.Color(255, 255, 255));
+        lblAccountName.setText("Account Name:");
+
+        lblWeeks.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
+        lblWeeks.setForeground(new java.awt.Color(204, 204, 204));
+        lblWeeks.setText("N/A");
+
+        lblMovieTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblMovieTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblMovieTitle.setText("Movie Title:");
+
+        cmbRentalStage.setBackground(new java.awt.Color(255, 255, 255));
+        cmbRentalStage.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbRentalStage.setForeground(new java.awt.Color(0, 0, 0));
+        cmbRentalStage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Requested", "Approved", "Rejected", "Pickedup" }));
+
+        lblRentalDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblRentalDate.setForeground(new java.awt.Color(255, 255, 255));
+        lblRentalDate.setText("Rental Date:");
+
+        cmbRentalStatus.setBackground(new java.awt.Color(255, 255, 255));
+        cmbRentalStatus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cmbRentalStatus.setForeground(new java.awt.Color(0, 0, 0));
+        cmbRentalStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ongoing", "Returned", "Late" }));
+
+        lblReturnDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblReturnDate.setForeground(new java.awt.Color(255, 255, 255));
+        lblReturnDate.setText("Return Date:");
+
+        lblRentalStage.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblRentalStage.setForeground(new java.awt.Color(255, 255, 255));
+        lblRentalStage.setText("Rental Stage:");
+
+        lblRentalStatus.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblRentalStatus.setForeground(new java.awt.Color(255, 255, 255));
+        lblRentalStatus.setText("Rental Status:");
+
+        txtRentalID.setEditable(false);
+        txtRentalID.setBackground(new java.awt.Color(204, 204, 204));
+        txtRentalID.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtRentalID.setForeground(new java.awt.Color(0, 0, 0));
+        txtRentalID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRentalIDActionPerformed(evt);
+            }
+        });
+
+        txtAccountName.setEditable(false);
+        txtAccountName.setBackground(new java.awt.Color(204, 204, 204));
+        txtAccountName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtAccountName.setForeground(new java.awt.Color(0, 0, 0));
+        txtAccountName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAccountNameActionPerformed(evt);
+            }
+        });
+
+        txtMovieTitle.setEditable(false);
+        txtMovieTitle.setBackground(new java.awt.Color(204, 204, 204));
+        txtMovieTitle.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtMovieTitle.setForeground(new java.awt.Color(0, 0, 0));
+        txtMovieTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMovieTitleActionPerformed(evt);
+            }
+        });
+
+        txtRentalDate.setEditable(false);
+        txtRentalDate.setBackground(new java.awt.Color(204, 204, 204));
+        txtRentalDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtRentalDate.setForeground(new java.awt.Color(0, 0, 0));
+        txtRentalDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRentalDateActionPerformed(evt);
+            }
+        });
+
+        txtPaymentID.setEditable(false);
+        txtPaymentID.setBackground(new java.awt.Color(204, 204, 204));
+        txtPaymentID.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPaymentID.setForeground(new java.awt.Color(0, 0, 0));
+        txtPaymentID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPaymentIDActionPerformed(evt);
+            }
+        });
+
+        lblPaymentID.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPaymentID.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaymentID.setText("Payment ID:");
+
+        lblPaymentStatus.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPaymentStatus.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaymentStatus.setText("Payment Status:");
+
+        txtPaymentStatus.setEditable(false);
+        txtPaymentStatus.setBackground(new java.awt.Color(204, 204, 204));
+        txtPaymentStatus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPaymentStatus.setForeground(new java.awt.Color(0, 0, 0));
+        txtPaymentStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPaymentStatusActionPerformed(evt);
+            }
+        });
+
+        txtOverdue.setEditable(false);
+        txtOverdue.setBackground(new java.awt.Color(204, 204, 204));
+        txtOverdue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtOverdue.setForeground(new java.awt.Color(0, 0, 0));
+        txtOverdue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtOverdueActionPerformed(evt);
+            }
+        });
+
+        lblPaidAmount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPaidAmount.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaidAmount.setText("Paid Amount:");
+
+        txtPaidAmount.setEditable(false);
+        txtPaidAmount.setBackground(new java.awt.Color(204, 204, 204));
+        txtPaidAmount.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPaidAmount.setForeground(new java.awt.Color(0, 0, 0));
+        txtPaidAmount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPaidAmountActionPerformed(evt);
+            }
+        });
+
+        lblPaymentDate.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblPaymentDate.setForeground(new java.awt.Color(204, 204, 204));
+        lblPaymentDate.setText("N/A");
+
+        btnUpdate.setBackground(new java.awt.Color(0, 153, 204));
+        btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Update");
+        btnUpdate.setFocusable(false);
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(255, 51, 0));
+        btnDelete.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.setFocusable(false);
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnClear.setBackground(new java.awt.Color(153, 153, 255));
+        btnClear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(255, 255, 255));
+        btnClear.setText("Clear");
+        btnClear.setFocusable(false);
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        btnConfirmTransaction.setBackground(new java.awt.Color(0, 204, 153));
+        btnConfirmTransaction.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnConfirmTransaction.setForeground(new java.awt.Color(255, 255, 255));
+        btnConfirmTransaction.setText("Confirm Transaction");
+        btnConfirmTransaction.setFocusable(false);
+        btnConfirmTransaction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmTransactionActionPerformed(evt);
+            }
+        });
+
+        lblRemainingBalance1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblRemainingBalance1.setForeground(new java.awt.Color(0, 255, 51));
+        lblRemainingBalance1.setText("Remaining Balance:");
+
+        lblSettleBalance.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblSettleBalance.setForeground(new java.awt.Color(255, 255, 255));
+        lblSettleBalance.setText("Settle Balance:");
+
+        txtSettleBalance.setBackground(new java.awt.Color(255, 255, 255));
+        txtSettleBalance.setForeground(new java.awt.Color(0, 0, 0));
+
+        lblRemainingBalance.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblRemainingBalance.setForeground(new java.awt.Color(0, 255, 51));
+        lblRemainingBalance.setText("N/A");
+
+        lblWeekDuration.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
+        lblWeekDuration.setForeground(new java.awt.Color(204, 204, 204));
+        lblWeekDuration.setText("Week Duration:");
+
+        lblPaymentDate1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblPaymentDate1.setForeground(new java.awt.Color(204, 204, 204));
+        lblPaymentDate1.setText("Last Payment Date:");
+
+        javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
+        pnlForm.setLayout(pnlFormLayout);
+        pnlFormLayout.setHorizontalGroup(
+            pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFormLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblManageRentalDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(pnlFormLayout.createSequentialGroup()
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblPaymentID)
+                                    .addComponent(lblAccountName)
+                                    .addComponent(lblMovieTitle)
+                                    .addComponent(lblRentalDate))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtMovieTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtAccountName, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(txtPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(lblRentalID)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtRentalID))))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addComponent(lblRentalStatus)
+                                .addGap(22, 22, 22)
+                                .addComponent(cmbRentalStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblRentalStage)
+                                    .addComponent(lblReturnDate))
+                                .addGap(26, 26, 26)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(lblWeekDuration)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblWeeks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(txtReturnDate)
+                                        .addGap(2, 2, 2))
+                                    .addComponent(cmbRentalStage, 0, 248, Short.MAX_VALUE)))))
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
+                                    .addComponent(lblSettleBalance)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtSettleBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblPaymentStatus)
+                                        .addComponent(lblTotalCost)
+                                        .addComponent(lblPaidAmount))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(pnlFormLayout.createSequentialGroup()
+                                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(txtTotalCost, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                                                .addComponent(txtPaidAmount))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                                    .addComponent(lblOverdue)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(txtOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                                    .addComponent(lblRemainingBalance1)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(lblRemainingBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(txtPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
+                                    .addComponent(lblPaymentDate1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lblPaymentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(14, 44, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        pnlFormLayout.setVerticalGroup(
+            pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFormLayout.createSequentialGroup()
+                .addComponent(lblManageRentalDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAccountName, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAccountName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtMovieTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMovieTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblWeeks, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblWeekDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cmbRentalStage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRentalStage, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblRentalStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbRentalStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRemainingBalance1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRemainingBalance))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPaymentDate, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPaymentDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSettleBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSettleBalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         txtSearch.setBackground(new java.awt.Color(0, 0, 0));
@@ -310,9 +777,8 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblPaymentReview)
-                    .addComponent(scrlRental2, javax.swing.GroupLayout.PREFERRED_SIZE, 788, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlMainLayout.createSequentialGroup()
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -320,9 +786,10 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scrlPayment))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,9 +804,9 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                     .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tglSort))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrlRental2, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(152, 152, 152))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -387,7 +854,54 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void tblPaymentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentRecordMouseClicked
-        // TODO add your handling code here:
+        int row = tblPaymentRecord.getSelectedRow();
+        if (row >= 0) {
+            // Stores selected payment ID globally for reference.
+            selectedPaymentID = Integer.parseInt(tblPaymentRecord.getValueAt(row, 0).toString());
+
+            // Populate form fields with selected row data.
+            txtPaymentID.setText(tblPaymentRecord.getValueAt(row, 0).toString()); 
+            txtRentalID.setText(tblPaymentRecord.getValueAt(row, 1).toString()); 
+            txtAccountName.setText(tblPaymentRecord.getValueAt(row, 2).toString()); 
+            txtMovieTitle.setText(tblPaymentRecord.getValueAt(row, 3).toString()); 
+            txtRentalDate.setText(tblPaymentRecord.getValueAt(row, 4).toString()); 
+            txtReturnDate.setText(tblPaymentRecord.getValueAt(row, 5).toString()); 
+            cmbRentalStage.setSelectedItem(tblPaymentRecord.getValueAt(row, 6).toString());
+            cmbRentalStatus.setSelectedItem(tblPaymentRecord.getValueAt(row, 7).toString()); 
+            txtPaymentStatus.setText(tblPaymentRecord.getValueAt(row, 8).toString());
+            txtTotalCost.setText(tblPaymentRecord.getValueAt(row, 9).toString());
+            txtPaidAmount.setText(tblPaymentRecord.getValueAt(row, 10).toString());
+            txtOverdue.setText(tblPaymentRecord.getValueAt(row, 11).toString());
+
+            // Null-safe payment date display.
+            Object paymentDateObj = tblPaymentRecord.getValueAt(row, 12);
+            String paymentDateStr = (paymentDateObj != null) ? paymentDateObj.toString() : "";
+            lblPaymentDate.setText("Last Payment Date: " + paymentDateStr);
+
+            // Calculate weeks between rental & return date.
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime rentalDateTime = LocalDateTime.parse(txtRentalDate.getText().trim(), formatter);
+                LocalDateTime returnDateTime = LocalDateTime.parse(txtReturnDate.getText().trim(), formatter);
+
+                long days = ChronoUnit.DAYS.between(rentalDateTime.toLocalDate(), returnDateTime.toLocalDate());
+                long weeks = days / 7;
+                lblWeeks.setText(weeks + " Week/s");
+            } catch (Exception e2) {
+                lblWeeks.setText("Invalid date format");
+            }
+             // ?Calculate Remaining Balance: (totalCost - amountPaid) + overdueAmount
+            try {
+                double totalCost = Double.parseDouble(txtTotalCost.getText().replace("₱", "").trim());
+                double amountPaid = Double.parseDouble(txtPaidAmount.getText().replace("₱", "").trim());
+                double overdue = Double.parseDouble(txtOverdue.getText().replace("₱", "").trim());
+
+                double remainingBalanceBalance = (totalCost - amountPaid) + overdue;
+                lblRemainingBalance.setText(String.format("₱%.2f", remainingBalanceBalance));
+            } catch (Exception e3) {
+                lblRemainingBalance.setText("");
+            }
+        }
     }//GEN-LAST:event_tblPaymentRecordMouseClicked
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
@@ -405,6 +919,121 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
 
     }//GEN-LAST:event_tglSortActionPerformed
+
+    private void txtTotalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalCostActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotalCostActionPerformed
+
+    private void txtReturnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReturnDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtReturnDateActionPerformed
+
+    private void txtRentalIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRentalIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRentalIDActionPerformed
+
+    private void txtAccountNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAccountNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAccountNameActionPerformed
+
+    private void txtMovieTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMovieTitleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMovieTitleActionPerformed
+
+    private void txtRentalDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRentalDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRentalDateActionPerformed
+
+    private void txtPaymentIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaymentIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPaymentIDActionPerformed
+
+    private void txtPaymentStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaymentStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPaymentStatusActionPerformed
+
+    private void txtOverdueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOverdueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtOverdueActionPerformed
+
+    private void txtPaidAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaidAmountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPaidAmountActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        if (selectedPaymentID == -1) {
+            Message.error("No payment selected.");
+            return;
+        }
+
+        boolean confirm = Message.confirm("Are you sure you want to delete this transaction?", "Confirm Delete");
+        if (!confirm) return;
+
+        try {
+            conn = DBConnection.getConnection();
+            if (conn == null) return;
+
+            paymentDAO = new PaymentDAO(conn);
+            boolean success = paymentDAO.deletePaymentTransaction(selectedPaymentID);
+
+            if (success) {
+                Message.show("Transaction deleted successfully.");
+                populatePaymentTable();
+                clearForm();
+            } else {
+                Message.error("Failed to delete transaction.");
+            }
+
+        } catch (Exception e) {
+            Message.error("Error deleting transaction: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clearForm();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnConfirmTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmTransactionActionPerformed
+        if (selectedPaymentID == -1) {
+            Message.error("No payment selected."); // Handles no row selected.
+            return;
+        }
+
+        try {
+            double remainingBalance = Double.parseDouble(lblRemainingBalance.getText().replace("₱", "").trim());
+            double settleAmount = Double.parseDouble(txtSettleBalance.getText().replace("₱", "").trim());
+            double currentPaidAmount = Double.parseDouble(txtPaidAmount.getText().replace("₱", "").trim());
+            double newTotalPaid = currentPaidAmount + settleAmount;
+            
+            if (Math.abs(settleAmount - remainingBalance) > 0.01) {
+                Message.show("Settle amount must match the remaining balance to confirm.", "Mismatch");
+                return;
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+            String status = "Paid Full";
+
+            conn = DBConnection.getConnection();
+            if (conn == null) return;
+
+            paymentDAO = new PaymentDAO(conn);
+            boolean success = paymentDAO.confirmPaymentTransaction(selectedPaymentID, status, newTotalPaid, now);
+
+            if (success) {
+                Message.show("Transaction confirmed successfully.");
+                populatePaymentTable();
+                // clearForm();
+            } else {
+                Message.error("Failed to confirm transaction.");
+            }
+        } catch (Exception e) {
+            Message.error("Error confirming transaction: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnConfirmTransactionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -442,25 +1071,62 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnConfirmTransaction;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMovieInventory;
     private javax.swing.JButton btnPaymentReview;
     private javax.swing.JButton btnRentalLogs;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUserProfiles;
+    private javax.swing.JComboBox<String> cmbRentalStage;
+    private javax.swing.JComboBox<String> cmbRentalStatus;
     private javax.swing.JComboBox<String> cmbSort;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblAccountName;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
     private javax.swing.JLabel lblHeader4;
+    private javax.swing.JLabel lblManageRentalDetails;
+    private javax.swing.JLabel lblMovieTitle;
+    private javax.swing.JLabel lblOverdue;
+    private javax.swing.JLabel lblPaidAmount;
+    private javax.swing.JLabel lblPaymentDate;
+    private javax.swing.JLabel lblPaymentDate1;
+    private javax.swing.JLabel lblPaymentID;
     private javax.swing.JLabel lblPaymentReview;
+    private javax.swing.JLabel lblPaymentStatus;
+    private javax.swing.JLabel lblRemainingBalance;
+    private javax.swing.JLabel lblRemainingBalance1;
+    private javax.swing.JLabel lblRentalDate;
+    private javax.swing.JLabel lblRentalID;
+    private javax.swing.JLabel lblRentalStage;
+    private javax.swing.JLabel lblRentalStatus;
+    private javax.swing.JLabel lblReturnDate;
+    private javax.swing.JLabel lblSettleBalance;
+    private javax.swing.JLabel lblTotalCost;
+    private javax.swing.JLabel lblWeekDuration;
+    private javax.swing.JLabel lblWeeks;
+    private javax.swing.JPanel pnlForm;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
-    private javax.swing.JScrollPane scrlRental2;
+    private javax.swing.JScrollPane scrlPayment;
     private javax.swing.JTable tblPaymentRecord;
     private javax.swing.JToggleButton tglSort;
+    private javax.swing.JTextField txtAccountName;
+    private javax.swing.JTextField txtMovieTitle;
+    private javax.swing.JTextField txtOverdue;
+    private javax.swing.JTextField txtPaidAmount;
+    private javax.swing.JTextField txtPaymentID;
+    private javax.swing.JTextField txtPaymentStatus;
+    private javax.swing.JTextField txtRentalDate;
+    private javax.swing.JTextField txtRentalID;
+    private javax.swing.JTextField txtReturnDate;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtSettleBalance;
+    private javax.swing.JTextField txtTotalCost;
     // End of variables declaration//GEN-END:variables
 }
