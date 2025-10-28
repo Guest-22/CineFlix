@@ -63,20 +63,23 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="pnlSideNav" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="lblPaymentReview" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="scrlPayment" alignment="0" pref="734" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Component id="txtSearch" min="-2" pref="411" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="lblPaymentReview" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="txtSearch" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnSearch" min="-2" pref="92" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="cmbSort" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="tglSort" min="-2" pref="68" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="scrlPayment" alignment="0" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="42" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   <Component id="pnlForm" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -415,17 +418,17 @@
                                           <Component id="lblRentalDate" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="txtMovieTitle" min="-2" pref="248" max="-2" attributes="0"/>
-                                          <Component id="txtAccountName" min="-2" pref="248" max="-2" attributes="0"/>
-                                          <Component id="txtRentalDate" min="-2" pref="248" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="txtPaymentID" min="-2" pref="80" max="-2" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
                                               <Component id="lblRentalID" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtRentalID" max="32767" attributes="0"/>
+                                              <Component id="txtRentalID" min="-2" pref="80" max="-2" attributes="0"/>
                                           </Group>
+                                          <Component id="txtAccountName" max="32767" attributes="0"/>
+                                          <Component id="txtMovieTitle" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="txtRentalDate" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -439,17 +442,14 @@
                                           <Component id="lblReturnDate" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
                                               <Component id="lblWeekDuration" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="lblWeeks" max="32767" attributes="0"/>
                                           </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="txtReturnDate" max="32767" attributes="0"/>
-                                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="cmbRentalStage" alignment="0" pref="248" max="32767" attributes="0"/>
+                                          <Component id="cmbRentalStage" alignment="0" pref="262" max="32767" attributes="0"/>
+                                          <Component id="txtReturnDate" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -457,62 +457,59 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="lblSettleBalance" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="txtSettleBalance" min="-2" pref="249" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="lblSettleBalance" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="txtSettleBalance" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="btnUpdate" min="-2" pref="122" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btnDelete" min="-2" pref="117" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btnClear" min="-2" pref="111" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="lblPaymentStatus" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblTotalCost" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblPaidAmount" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="lblPaymentStatus" min="-2" max="-2" attributes="0"/>
-                                              <Component id="lblTotalCost" min="-2" max="-2" attributes="0"/>
-                                              <Component id="lblPaidAmount" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Group type="102" attributes="0">
-                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="txtTotalCost" pref="78" max="32767" attributes="0"/>
-                                                      <Component id="txtPaidAmount" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="txtTotalCost" min="-2" pref="78" max="-2" attributes="0"/>
+                                                  <Component id="txtPaidAmount" min="-2" pref="78" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" attributes="0">
+                                                      <Component id="lblRemainingBalance1" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="lblRemainingBalance" max="32767" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Group type="102" attributes="0">
-                                                          <Component id="lblOverdue" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="32767" attributes="0"/>
-                                                          <Component id="txtOverdue" min="-2" pref="79" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" attributes="0">
-                                                          <Component id="lblRemainingBalance1" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="lblRemainingBalance" min="-2" pref="65" max="-2" attributes="0"/>
-                                                      </Group>
+                                                  <Group type="102" attributes="0">
+                                                      <Component id="lblOverdue" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="32767" attributes="0"/>
+                                                      <Component id="txtOverdue" min="-2" pref="79" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
-                                              <Component id="txtPaymentStatus" min="-2" pref="251" max="-2" attributes="0"/>
                                           </Group>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="lblPaymentDate1" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="lblPaymentDate" max="32767" attributes="0"/>
+                                          <Component id="txtPaymentStatus" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                      <Component id="btnConfirmTransaction" min="-2" pref="357" max="-2" attributes="0"/>
-                                      <Group type="102" attributes="0">
-                                          <Component id="btnUpdate" min="-2" pref="111" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="btnDelete" min="-2" pref="111" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="btnClear" min="-2" pref="111" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
+                                  <Component id="btnConfirmTransaction" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                              <Component id="lblPaymentDate1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblPaymentDate" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="14" pref="44" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -578,8 +575,8 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblPaidAmount" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
                           <Component id="txtPaidAmount" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblRemainingBalance1" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
                           <Component id="lblRemainingBalance" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblRemainingBalance1" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">

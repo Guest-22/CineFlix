@@ -47,6 +47,11 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         paymentDAO = new PaymentDAO(conn); // To use Payment CRUD methods.
         
         populateMovieTable();
+        
+        // Hides movie ID in cart table.
+        tblCart.getColumnModel().getColumn(0).setMinWidth(0);
+        tblCart.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblCart.getColumnModel().getColumn(0).setWidth(0);
     }
     
     // Sets the default cover image of a movie.
@@ -120,6 +125,11 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                 };
                 model.addRow(row);
             }
+            
+            // Hides movie ID.
+            tblMovieRecord.getColumnModel().getColumn(0).setMinWidth(0);
+            tblMovieRecord.getColumnModel().getColumn(0).setMaxWidth(0);
+            tblMovieRecord.getColumnModel().getColumn(0).setWidth(0);
         } catch (Exception e) {
             e.printStackTrace();
             Message.error("Error loading movie table: " + e.getMessage());
@@ -705,7 +715,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         });
 
         lblTotalOrderPrice.setBackground(new java.awt.Color(0, 0, 0));
-        lblTotalOrderPrice.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblTotalOrderPrice.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         lblTotalOrderPrice.setForeground(new java.awt.Color(0, 0, 0));
         lblTotalOrderPrice.setText("Total Order Price:");
         lblTotalOrderPrice.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -747,16 +757,17 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                         .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(scrlCart, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(pnlMainLayout.createSequentialGroup()
-                                .addComponent(btnRemoveItem, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnConfirmOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(pnlMainLayout.createSequentialGroup()
-                                .addComponent(lblMovieCart)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(pnlMainLayout.createSequentialGroup()
                                 .addComponent(lblTotalOrderPrice)
                                 .addGap(12, 12, 12)
-                                .addComponent(txtTotalOrderPrice)))))
+                                .addComponent(txtTotalOrderPrice))
+                            .addGroup(pnlMainLayout.createSequentialGroup()
+                                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblMovieCart)
+                                    .addGroup(pnlMainLayout.createSequentialGroup()
+                                        .addComponent(btnRemoveItem, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnConfirmOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
@@ -782,7 +793,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                         .addComponent(scrlCart, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblTotalOrderPrice)
+                            .addComponent(lblTotalOrderPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTotalOrderPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -810,19 +821,16 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblMovieRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMovieRecordMouseClicked
-        tblMovieRecord.addMouseListener(new MouseAdapter() {
-          @Override
-    public void mouseClicked(MouseEvent e) {
         int row = tblMovieRecord.getSelectedRow();
         if (row >= 0) {
             selectedMovieID = Integer.parseInt(tblMovieRecord.getValueAt(row, 0).toString()); // movieID
 
-            lblTitle.setText(tblMovieRecord.getValueAt(row, 1).toString());       // Title
-            lblGenre.setText(tblMovieRecord.getValueAt(row, 2).toString());       // Genre
-            lblYear.setText(tblMovieRecord.getValueAt(row, 3).toString());        // Year
-            lblDuration.setText(tblMovieRecord.getValueAt(row, 4).toString());    // Duration
-            lblPricePerWeek.setText(tblMovieRecord.getValueAt(row, 5).toString());// Price
-            lblCopies.setText(tblMovieRecord.getValueAt(row, 6).toString());      // Copies
+            lblTitle.setText(tblMovieRecord.getValueAt(row, 1).toString()); 
+            lblGenre.setText(tblMovieRecord.getValueAt(row, 2).toString()); 
+            lblYear.setText(tblMovieRecord.getValueAt(row, 3).toString()); 
+            lblDuration.setText(tblMovieRecord.getValueAt(row, 4).toString()); 
+            lblPricePerWeek.setText(tblMovieRecord.getValueAt(row, 5).toString());
+            lblCopies.setText(tblMovieRecord.getValueAt(row, 6).toString());
             
             // Retrieve synopsis from DB and display.
             String synopsis = movieDAO.getSynopsisByMovieID(selectedMovieID);
@@ -830,6 +838,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             
             // Retrieve imagepath directory from DB and display.
             String imagePath = movieDAO.getImagePathByMovieID(selectedMovieID);
+            
             if (imagePath != null && !imagePath.isEmpty()) {
                 ImageIcon icon = new ImageIcon(imagePath);
                 Image scaled = icon.getImage().getScaledInstance(
@@ -844,9 +853,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             int selectedWeeks = cmbPricePerWeek.getSelectedIndex() + 1;
             double totalPrice = pricePerWeek * selectedWeeks;
             txtWeeklyPrice.setText("₱" + String.format("%.2f", totalPrice));
-            }
-    }
-});
+        }
     }//GEN-LAST:event_tblMovieRecordMouseClicked
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
@@ -926,7 +933,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             }
         }
 
-        // Add new row
+        // Add new order to cart table.
         tblCartRecord.addRow(new Object[] {
             movieID,
             title,

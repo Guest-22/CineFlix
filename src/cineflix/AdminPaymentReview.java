@@ -77,6 +77,35 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 p.getPaymentDate() != null ? p.getPaymentDate().format(formatter) : ""
             });
         }
+        // Hides payment ID.
+        tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setWidth(0);
+
+        // Hides rental stage.
+        tblPaymentRecord.getColumnModel().getColumn(6).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(6).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(6).setWidth(0);
+        
+        // Hides rental status.
+        tblPaymentRecord.getColumnModel().getColumn(7).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(7).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(7).setWidth(0);
+        
+        // Hides payment status.
+        tblPaymentRecord.getColumnModel().getColumn(8).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(8).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(8).setWidth(0);
+        
+        // Hides overdue amount.
+        tblPaymentRecord.getColumnModel().getColumn(11).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(11).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(11).setWidth(0);
+
+        // Hides payment date.
+        tblPaymentRecord.getColumnModel().getColumn(12).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(12).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(12).setWidth(0);
     }
 
     @SuppressWarnings("unchecked")
@@ -581,16 +610,16 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                                     .addComponent(lblMovieTitle)
                                     .addComponent(lblRentalDate))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtMovieTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtAccountName, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlFormLayout.createSequentialGroup()
                                         .addComponent(txtPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(lblRentalID)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtRentalID))))
+                                        .addComponent(txtRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtAccountName)
+                                    .addComponent(txtMovieTitle)
+                                    .addComponent(txtRentalDate)))
                             .addGroup(pnlFormLayout.createSequentialGroup()
                                 .addComponent(lblRentalStatus)
                                 .addGap(22, 22, 22)
@@ -600,58 +629,55 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                                     .addComponent(lblRentalStage)
                                     .addComponent(lblReturnDate))
                                 .addGap(26, 26, 26)
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlFormLayout.createSequentialGroup()
                                         .addComponent(lblWeekDuration)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(lblWeeks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addComponent(txtReturnDate)
-                                        .addGap(2, 2, 2))
-                                    .addComponent(cmbRentalStage, 0, 248, Short.MAX_VALUE)))))
+                                    .addComponent(cmbRentalStage, 0, 262, Short.MAX_VALUE)
+                                    .addComponent(txtReturnDate)))))
                     .addGroup(pnlFormLayout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
-                                    .addComponent(lblSettleBalance)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtSettleBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblPaymentStatus)
-                                        .addComponent(lblTotalCost)
-                                        .addComponent(lblPaidAmount))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(pnlFormLayout.createSequentialGroup()
-                                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(txtTotalCost, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
-                                                .addComponent(txtPaidAmount))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                                    .addComponent(lblOverdue)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(txtOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                                    .addComponent(lblRemainingBalance1)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(lblRemainingBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addComponent(txtPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
-                                    .addComponent(lblPaymentDate1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(lblPaymentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(14, 44, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
+                                .addComponent(lblSettleBalance)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtSettleBalance))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblPaymentStatus)
+                                    .addComponent(lblTotalCost)
+                                    .addComponent(lblPaidAmount))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtTotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                                .addComponent(lblRemainingBalance1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(lblRemainingBalance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                                .addComponent(lblOverdue)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(txtOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtPaymentStatus)))
+                            .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(lblPaymentDate1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblPaymentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(30, 30, 30))
         );
         pnlFormLayout.setVerticalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -705,8 +731,8 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblRemainingBalance1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblRemainingBalance))
+                    .addComponent(lblRemainingBalance)
+                    .addComponent(lblRemainingBalance1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPaymentDate, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -777,18 +803,20 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblPaymentReview)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrlPayment, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
                     .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblPaymentReview)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addComponent(txtSearch)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(scrlPayment))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
@@ -876,7 +904,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             // Null-safe payment date display.
             Object paymentDateObj = tblPaymentRecord.getValueAt(row, 12);
             String paymentDateStr = (paymentDateObj != null) ? paymentDateObj.toString() : "";
-            lblPaymentDate.setText("Last Payment Date: " + paymentDateStr);
+            lblPaymentDate.setText(paymentDateStr);
 
             // Calculate weeks between rental & return date.
             try {
@@ -961,7 +989,37 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPaidAmountActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if (selectedPaymentID <= 0) { // Handles no row selection
+            Message.error("No payment selected.");
+            return;
+        }
         
+        // Declare and assign selected row.
+        int row = tblPaymentRecord.getSelectedRow();
+        if (row < 0) {
+            Message.error("No row selected in the table.");
+            return;
+        }
+        // Extract rentalID from hidden column (index 1)
+        int rentalID = Integer.parseInt(tblPaymentRecord.getValueAt(row, 1).toString());
+
+        // Get selected rental stage & status from ComboBox
+        String selectedStage = cmbRentalStage.getSelectedItem().toString();
+        String selectedStatus = cmbRentalStatus.getSelectedItem().toString();
+
+        if (conn == null) return; // Validates connection.
+        RentalDAO rentalDAO = new RentalDAO(conn); // Use rentalDAO to update.
+
+        boolean isStageUpdated = rentalDAO.updateRentalStage(rentalID, selectedStage);
+        boolean isStatusUpdated = rentalDAO.updateRentalStatus(rentalID, selectedStatus);
+
+        if (isStageUpdated && isStatusUpdated) {
+            Message.show("Payment record updated: Stage = " + selectedStage + ", Status = " + selectedStatus);
+            populatePaymentTable(); // Refresh table
+            // clearForm(); // Optional: reset right panel
+        } else {
+            Message.error("Failed to update payment record.");
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed

@@ -43,9 +43,9 @@ public class PaymentDAO {
     public List<Payment> getPaymentRecordsByAccountID(int accountID) {
         List<Payment> records = new ArrayList<>();
 
-        String sql = 
-            "SELECT rental.rentalID, movie.title, rental.rentalDate, rental.returnDate, rental.rentalcost, " +
-            "rental.rentalStatus, payment.paymentStatus, payment.amount, payment.overdueAmount " +
+        String sql =
+            "SELECT rental.rentalID, movie.title, rental.rentalDate, rental.returnDate, rental.rentalCost, " +
+            "payment.overdueAmount, payment.amount, rental.rentalStatus, payment.paymentStatus " +
             "FROM tblRentals rental " +
             "JOIN tblMovies movie ON rental.movieID = movie.movieID " +
             "LEFT JOIN tblPayments payment ON rental.rentalID = payment.rentalID " +
@@ -63,10 +63,10 @@ public class PaymentDAO {
                     rs.getDate("rentalDate").toLocalDate(),
                     rs.getDate("returnDate").toLocalDate(),
                     rs.getBigDecimal("rentalCost"),
-                    rs.getString("rentalStatus"),
-                    rs.getString("paymentStatus"),
+                    rs.getBigDecimal("overdueAmount"),
                     rs.getBigDecimal("amount"),
-                    rs.getBigDecimal("overdueAmount")
+                    rs.getString("rentalStatus"),
+                    rs.getString("paymentStatus")
                 );
                 records.add(record);
             }
@@ -138,7 +138,8 @@ public class PaymentDAO {
         }
     }
     
-   public boolean confirmPaymentTransaction(int paymentID, String status, double amountPaid, LocalDateTime paymentDate) {
+    // For admin payment review.
+    public boolean confirmPaymentTransaction(int paymentID, String status, double amountPaid, LocalDateTime paymentDate) {
         String sql = 
                 "UPDATE " + TABLE_PAYMENTS + 
                 " SET " + COL_STATUS + " = ?, " + COL_AMOUNT + " = ?, " + COL_DATE +" = ? " + 
@@ -156,7 +157,8 @@ public class PaymentDAO {
         }
     }
    
-   public boolean deletePaymentTransaction(int paymentID) {
+    // For admin payment review.
+    public boolean deletePaymentTransaction(int paymentID) {
         String sql = "DELETE FROM tblPayments WHERE paymentID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, paymentID);

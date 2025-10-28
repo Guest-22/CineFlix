@@ -37,32 +37,30 @@ public class UserMyPayments extends javax.swing.JFrame {
             paymentRecords = paymentDAO.getPaymentRecordsByAccountID(ActiveSession.loggedInAccountID); 
 
             for (Payment p : paymentRecords) {
-                double totalDue = p.getRentalCost() + p.getOverdueAmount() - p.getAmount(); // Compute total amount due.
+                double rentalCost = p.getRentalCost();
+                double overdue = p.getOverdueAmount();
+                double amountPaid = p.getAmount();
+                double remainingBalance = rentalCost + overdue - amountPaid;
 
-                /*Object[] row = {
-                p.getRentalID(),
-                p.getMovieTitle(),
-                p.getRentalDate(),
-                p.getReturnDate(),
-                p.getRentalStatus(),
-                p.getPaymentStatus(),
-                "₱" + formatAmount(p.getRentalCost()),
-                "₱" + formatAmount(p.getAmount()),
-                "₱" + formatAmount(p.getOverdueAmount()),
-                "₱" + formatAmount(totalDue)
-                };*/
-
-                // Only shows the necessary table data to user.
                 Object[] row = {
-                p.getRentalID(),
-                p.getMovieTitle(),
-                p.getReturnDate(),
-                p.getPaymentStatus(),
-                "₱" + formatAmount(totalDue)
-            };
-
+                    p.getRentalID(),
+                    p.getMovieTitle(),
+                    p.getRentalDate(),
+                    p.getReturnDate(),
+                    p.getRentalStatus(),
+                    p.getPaymentStatus(),
+                    "₱" + formatAmount(rentalCost),
+                    "₱" + formatAmount(overdue),
+                    "₱" + formatAmount(amountPaid),
+                    "₱" + formatAmount(remainingBalance)
+                };
                 model.addRow(row); // Add row to table
             }
+            
+            // Hide rentalID column (index 0).
+            tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
+            tblPaymentRecord.getColumnModel().getColumn(0).setMaxWidth(0);
+            tblPaymentRecord.getColumnModel().getColumn(0).setWidth(0);
         } catch (Exception e) {
             e.printStackTrace();
             Message.error("Error loading payment table: " + e.getMessage());
@@ -240,17 +238,17 @@ public class UserMyPayments extends javax.swing.JFrame {
         tblPaymentRecord.setForeground(new java.awt.Color(255, 255, 255));
         tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Rental ID", "Movie Title", "Return Date", "PaymentStatus", "Total Fee"
+                "Rental ID", "Movie Title", "Rental Date", "Return Date", "Rental Status", "Payment Status", "Rental Cost", "Overdue Amount", "Paid Amount", "Remaining Balance"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -450,7 +448,7 @@ public class UserMyPayments extends javax.swing.JFrame {
         txtaReceipt.append("Amount Paid: ₱" + formatAmount(amount) + "\n");
         txtaReceipt.append("Overdue Amount: ₱" + formatAmount(overdue) + "\n");
         txtaReceipt.append(br +"\n");
-        txtaReceipt.append("TOTAL FEE: ₱" + formatAmount(totalDue) + "\n");
+        txtaReceipt.append("REMAINING BALANCE: ₱" + formatAmount(totalDue) + "\n");
         txtaReceipt.append(br +"\n\n");
 
         txtaReceipt.append(br +"\n");

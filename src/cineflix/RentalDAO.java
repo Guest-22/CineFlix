@@ -50,41 +50,53 @@ public class RentalDAO {
         return -1; // Insert unsuccessful
     }
     
-    // Gets all the rental history of user; use ActiveSession.getGoggedInAccountID as reference.
-    public List<Rental> getRentalLogByAccount(int accountID) {
-        List<Rental> rentalLogs = new ArrayList<>();
-        
-        // Used joins for getting other values from another table; used the FK for reference (unique thats common to both table).
-        String sql = 
-                "SELECT movie.title, rental.rentalDate, rental.returnDate, " + 
-                "rental.rentalStatus, payment.paymentStatus " +
-                "FROM tblRentals rental " +
-                "JOIN tblMovies movie ON rental.movieID = movie.movieID " +
-                "LEFT JOIN tblPayments payment ON rental.rentalID = payment.rentalID " +
-                "WHERE rental.accountID = ? " +
-                "ORDER BY rental.rentalDate DESC";
+    // Gets all the rental history of user; use ActiveSession.getLoggedInAccountID as reference.
+    public List<Rental> getUserRentalHistory(int accountID) {
+        List<Rental> history = new ArrayList<>();
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql =
+            "SELECT r.rentalID, m.title AS movieTitle, r.rentalDate, r.returnDate, " +
+            "r.rentalCost, r.rentalStage, r.rentalStatus, " +
+            "p.amount AS amountPaid, " +
+            "p.paymentStatus " +
+            "FROM tblRentals r " +
+            "JOIN tblMovies m ON r.movieID = m.movieID " +
+            "LEFT JOIN tblPayments p ON r.rentalID = p.rentalID " +
+            "WHERE r.accountID = ? " +
+            "ORDER BY r.rentalDate DESC";
 
-            stmt.setInt(1, accountID);
-            ResultSet rs = stmt.executeQuery();
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, accountID);
+            ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
+                double rentalCost = rs.getDouble("rentalCost");
+                double amountPaid = rs.getDouble("amountPaid");
+                double remainingBalance = rentalCost - amountPaid;
+
                 Rental rental = new Rental(
-                    rs.getString("title"),
+                    rs.getInt("rentalID"),
+                    accountID,
+                    0, // movieID not needed for display, can be 0 or skipped if constructor is overloaded
                     rs.getTimestamp("rentalDate"),
                     rs.getTimestamp("returnDate"),
+                    rentalCost,
+                    amountPaid,
+                    remainingBalance,
+                    rs.getString("rentalStage"),
                     rs.getString("rentalStatus"),
+                    rs.getString("movieTitle"),
                     rs.getString("paymentStatus")
                 );
-                rentalLogs.add(rental);
+
+                history.add(rental);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Message.error("Retrieving rental history failed:\n" + e.getMessage());
+            Message.error("Error retrieving rental history:\n" + e.getMessage());
         }
-        return rentalLogs;
+
+        return history;
     }
     
     // For populating admin rental logs table.
@@ -143,6 +155,22 @@ public class RentalDAO {
         }
     }
     
+    // Updates rental status from tblRentals (AdminRentalLogs).
+    public boolean updateRentalStatus(int rentalID, String newStatus) {
+        String sql = 
+                "UPDATE " + TABLE_RENTALS + 
+                " SET " + COL_STATUS + " = ? WHERE " + COL_ID + " = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, newStatus);
+            pst.setInt(2, rentalID);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Message.error("Error updating rental status:\n" + e.getMessage());
+            return false;
+        }
+    }
+    
     // For admin rental logs delete button; delete existing record if the rentalStage = Requested or Rejected.
     public boolean deleteRental(int rentalID) {
         String deletePayments = 
@@ -172,21 +200,5 @@ public class RentalDAO {
             Message.error("Error deleting rental:\n" + e.getMessage());
         }
         return false;
-    }
-    
-    // Updates renal status from tblRentals (AdminRentalLogs).
-    public boolean updateRentalStatus(int rentalID, String newStatus) {
-        String sql = 
-                "UPDATE " + TABLE_RENTALS + 
-                " SET " + COL_STATUS + " = ? WHERE " + COL_ID + " = ?";
-        try (PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setString(1, newStatus);
-            pst.setInt(2, rentalID);
-            return pst.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Message.error("Error updating rental status:\n" + e.getMessage());
-            return false;
-        }
     }
 }

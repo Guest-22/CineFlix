@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class Payment {
     private int paymentID; // PRIMARY KEY
     private int rentalID; // FOREIGN KEY references tblRentals (includes accountID & movieID).
-    private double amount;
+    private double amount; // Paid amount (either upfront or full).
     private double overdueAmount; // Default 0.00.
     private Timestamp paymentDate; // Default NULL.
     private String paymentStatus; // Defaullt 'Pending'.
@@ -34,18 +34,19 @@ public class Payment {
         this.amount = amount;
     }
 
-    // Constructor for joined rental, movie, and payment data.
-    public Payment(int rentalID, String movieTitle, LocalDate rentalDate, LocalDate returnDate,  BigDecimal rentalCost,
-               String rentalStatus, String paymentStatus, BigDecimal amount, BigDecimal overdueAmount) {
+    // Constructor for joined rental, movie, and payment data (User My Payments).
+    public Payment(int rentalID, String movieTitle, LocalDate rentalDate, LocalDate returnDate,
+            BigDecimal rentalCost, BigDecimal overdueAmount, BigDecimal amount,
+            String rentalStatus, String paymentStatus) {
         this.rentalID = rentalID;
         this.movieTitle = movieTitle;
         this.rentalDate = rentalDate;
         this.returnDate = returnDate;
         this.rentalCost = rentalCost.doubleValue();
+        this.overdueAmount = overdueAmount.doubleValue();
+        this.amount = amount.doubleValue();
         this.rentalStatus = rentalStatus;
         this.paymentStatus = paymentStatus;
-        this.amount = amount.doubleValue();
-        this.overdueAmount = overdueAmount.doubleValue();
     }
 
     public Payment(int rentalID, double amount, double overdueAmount, String paymentStatus) {
@@ -125,4 +126,4 @@ public class Payment {
     public void setRentalStatus(String rentalStatus) {
         this.rentalStatus = rentalStatus;
     }
-}
+}           

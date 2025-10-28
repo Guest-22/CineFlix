@@ -18,33 +18,33 @@ public class UserRentalHistory extends javax.swing.JFrame {
 
     // Populates rental table of current loggedin user.
     private void populateRentalTable() {
-        Connection conn = DBConnection.getConnection();
-        if (conn == null) return;
-        
-        RentalDAO rentalDAO = new RentalDAO(conn);
-        DefaultTableModel model = (DefaultTableModel) tblRentalRecord.getModel();
-        model.setRowCount(0); // Clear existing rows
+            try {
+            DefaultTableModel model = (DefaultTableModel) tblRentalRecord.getModel();
+            model.setRowCount(0); // Clear existing rows
 
-        try {
-            List<Rental> rentals = rentalDAO.getRentalLogByAccount(ActiveSession.loggedInAccountID);
-            for (Rental r : rentals) {
+            Connection conn = DBConnection.getConnection();
+            if (conn == null) return;
+
+            RentalDAO rentalDAO = new RentalDAO(conn);
+            List<Rental> history = rentalDAO.getUserRentalHistory(ActiveSession.loggedInAccountID); 
+
+            for (Rental rental : history) {
                 Object[] row = {
-                    r.getMovieTitle(), // from tblMovies
-                    formatDate(r.getRentalDate()), // from tblRentals
-                    (r.getReturnDate() != null) ? formatDate(r.getReturnDate()) : "—",
-                    r.getRentalStatus(), // from tblRentals
-                    (r.getPaymentStatus() != null) ? r.getPaymentStatus() : "Pending" // from tblPayments
+                    rental.getRentalID(),
+                    rental.getMovieTitle(),
+                    rental.getRentalDate(),
+                    rental.getReturnDate(),
+                    String.format("₱%.2f", rental.getRentalCost()),
+                    String.format("₱%.2f", rental.getAmountPaid()),
+                    String.format("₱%.2f", rental.getRemainingBalance()),
+                    rental.getRentalStage(),
+                    rental.getRentalStatus()
                 };
                 model.addRow(row);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            Message.error("Error loading rental table: " + e.getMessage());
+            Message.error("Error loading rental history:\n" + e.getMessage());
         }
-    }
-    
-    private String formatDate(Timestamp timestamp) {
-        return timestamp.toLocalDateTime().toLocalDate().toString();
     }
 
     @SuppressWarnings("unchecked")
@@ -65,7 +65,6 @@ public class UserRentalHistory extends javax.swing.JFrame {
         lblRentalHistory = new javax.swing.JLabel();
         scrlRental = new javax.swing.JScrollPane();
         tblRentalRecord = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Rental History");
@@ -207,17 +206,17 @@ public class UserRentalHistory extends javax.swing.JFrame {
         tblRentalRecord.setForeground(new java.awt.Color(255, 255, 255));
         tblRentalRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Movie Title", "Rental Date", "Return Date", "Rental Status", "Payment Status"
+                "Rental ID", "Movie Title", "Rental Date", "Return Date", "Rental Cost", "Amount Paid", "Remaining Balance", "Rental Stage", "Rental Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -233,19 +232,6 @@ public class UserRentalHistory extends javax.swing.JFrame {
         });
         scrlRental.setViewportView(tblRentalRecord);
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
@@ -255,9 +241,8 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblRentalHistory)
-                    .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 1132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,7 +253,6 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(84, 84, 84))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -355,7 +339,6 @@ public class UserRentalHistory extends javax.swing.JFrame {
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMyPayments;
     private javax.swing.JButton btnRentalHistory;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;

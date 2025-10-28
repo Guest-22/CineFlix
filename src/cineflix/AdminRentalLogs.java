@@ -75,6 +75,15 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 String.format("₱%.2f", r.getTotalCost())
             });
         }
+        // Hide rentalStatus.
+        tblRentalRecord.getColumnModel().getColumn(6).setMinWidth(0);
+        tblRentalRecord.getColumnModel().getColumn(6).setMaxWidth(0);
+        tblRentalRecord.getColumnModel().getColumn(6).setWidth(0);
+        
+        // Hide paymentStatus.
+        tblRentalRecord.getColumnModel().getColumn(7).setMinWidth(0);
+        tblRentalRecord.getColumnModel().getColumn(7).setMaxWidth(0);
+        tblRentalRecord.getColumnModel().getColumn(7).setWidth(0);
     }
 
     @SuppressWarnings("unchecked")
@@ -536,7 +545,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         cmbRentalStatus.setBackground(new java.awt.Color(255, 255, 255));
         cmbRentalStatus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cmbRentalStatus.setForeground(new java.awt.Color(0, 0, 0));
-        cmbRentalStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ongoing", "Returned", "Late" }));
+        cmbRentalStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ongoing", "Returned", "Late", "Cancelled" }));
 
         lblWeekDuration.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         lblWeekDuration.setForeground(new java.awt.Color(204, 204, 204));
@@ -822,7 +831,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         if (stageUpdated && statusUpdated) {
             Message.show("Rental updated: Stage = " + selectedStage + ", Status = " + selectedStatus);
             populateRentalRecord(); // Refresh table
-            clearForm(); // Reset form
+            // clearForm(); // Reset form
         } else {
             Message.error("Failed to update rental.");
         }

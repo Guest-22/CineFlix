@@ -9,15 +9,18 @@ public class Rental {
     private Timestamp rentalDate;
     private Timestamp returnDate;
     private double rentalCost; // NEW: total rental cost based on weeks × pricePerWeek.
+    private String rentalStage;
     private String rentalStatus;
 
     // Additional variable to populate user rental history/log.
     private String movieTitle; // from tblMovies.
     private String paymentStatus; // from tblPayments.
-    
+    private double amountPaid; // Actual amount paid by the user.
+    private double remainingBalance; // rentalCost - amountPaid.
+
     // Constructors
     public Rental() {}
-    
+
     // Constructor that exclude cols w/ default value.
     public Rental(int accountID, int movieID, Timestamp rentalDate, Timestamp returnDate, double rentalCost) {
         this.accountID = accountID;
@@ -27,7 +30,7 @@ public class Rental {
         this.rentalCost = rentalCost;   
     }
 
-    // Constructor for user payments table.
+    // Model constructor for user my payments.
     public Rental(String movieTitle, Timestamp rentalDate, Timestamp returnDate, String rentalStatus, String paymentStatus) {
         this.movieTitle = movieTitle;
         this.rentalDate = rentalDate;
@@ -36,6 +39,24 @@ public class Rental {
         this.paymentStatus = paymentStatus;
     }
 
+    // Model constructor for user rental history.
+    public Rental(int rentalID, int accountID, int movieID, Timestamp rentalDate, Timestamp returnDate,
+            double rentalCost, double amountPaid, double remainingBalance, String rentalStage, 
+            String rentalStatus, String movieTitle, String paymentStatus) {
+        this.rentalID = rentalID;
+        this.accountID = accountID;
+        this.movieID = movieID;
+        this.rentalDate = rentalDate;
+        this.returnDate = returnDate;
+        this.rentalCost = rentalCost;
+        this.amountPaid = amountPaid;
+        this.remainingBalance = remainingBalance;
+        this.rentalStage = rentalStage;
+        this.rentalStatus = rentalStatus;
+        this.movieTitle = movieTitle;
+        this.paymentStatus = paymentStatus;
+    }
+    
     // Getter method.
     public int getRentalID() {
         return rentalID;
@@ -55,6 +76,9 @@ public class Rental {
     public double getRentalCost() {
         return rentalCost;
     }
+    public String getRentalStage() {
+        return rentalStage;
+    }
     public String getRentalStatus() {
         return rentalStatus;
     }
@@ -64,7 +88,12 @@ public class Rental {
     public String getPaymentStatus() {
         return paymentStatus;
     }
-    
+    public double getAmountPaid() {
+        return amountPaid;
+    }
+    public double getRemainingBalance() {
+        return remainingBalance;
+    }
     
     // Setter method.
     public void setRentalID(int rentalID) {
@@ -85,6 +114,9 @@ public class Rental {
     public void setRentalCost(double rentalCost) {
         this.rentalCost = rentalCost;
     }
+    public void setRentalStage(String rentalStage) {
+        this.rentalStage = rentalStage;
+    }
     public void setRentalStatus(String rentalStatus) {
         this.rentalStatus = rentalStatus;
     }
@@ -93,5 +125,11 @@ public class Rental {
     }
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+    public void setAmountPaid(double amountPaid) {
+        this.amountPaid = amountPaid;
+    }
+    public void setRemainingBalance(double remainingBalance) {
+        this.remainingBalance = remainingBalance;
     }
 }

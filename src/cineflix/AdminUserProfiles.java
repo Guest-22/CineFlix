@@ -60,6 +60,10 @@ public class AdminUserProfiles extends javax.swing.JFrame {
             };
             infoModel.addRow(row); // Continuously adds the record to our info table.
         }
+        // Hides personal info ID.
+        tblInfoRecord.getColumnModel().getColumn(0).setMinWidth(0);
+        tblInfoRecord.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblInfoRecord.getColumnModel().getColumn(0).setWidth(0);
     }
     
     @SuppressWarnings("unchecked")

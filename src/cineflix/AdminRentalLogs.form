@@ -1005,10 +1005,11 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
+                  <StringArray count="4">
                     <StringItem index="0" value="Ongoing"/>
                     <StringItem index="1" value="Returned"/>
                     <StringItem index="2" value="Late"/>
+                    <StringItem index="3" value="Cancelled"/>
                   </StringArray>
                 </Property>
               </Properties>

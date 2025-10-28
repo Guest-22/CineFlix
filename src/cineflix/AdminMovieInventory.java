@@ -73,6 +73,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         txtCopies.setText("");
         txtPricePerWeek.setText("");
         setDefaultCoverImage();
+        lblCreatedAt.setText("N/A");
         tblMovieRecord.clearSelection();
         selectedMovieID = -1; // Reset selected ID from movie table.
     }
@@ -99,6 +100,21 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 };
                 movieModel.addRow(row); // Adds the movie one-by-one.
             }
+            // Hides movie ID.
+            tblMovieRecord.getColumnModel().getColumn(0).setMinWidth(0);
+            tblMovieRecord.getColumnModel().getColumn(0).setMaxWidth(0);
+            tblMovieRecord.getColumnModel().getColumn(0).setWidth(0);
+            
+            // Hides imagepath.
+            tblMovieRecord.getColumnModel().getColumn(8).setMinWidth(0);
+            tblMovieRecord.getColumnModel().getColumn(8).setMaxWidth(0);
+            tblMovieRecord.getColumnModel().getColumn(8).setWidth(0);
+
+            // Hides createdAt.
+            tblMovieRecord.getColumnModel().getColumn(9).setMinWidth(0);
+            tblMovieRecord.getColumnModel().getColumn(9).setMaxWidth(0);
+            tblMovieRecord.getColumnModel().getColumn(9).setWidth(0);
+
         } catch (Exception e) {
             e.printStackTrace();
             Message.error("Error loading movie table: " + e.getMessage());
@@ -145,6 +161,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        lblCreatedAt1 = new javax.swing.JLabel();
+        lblCreatedAt = new javax.swing.JLabel();
         lblMovieInventory = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
         cmbSort = new javax.swing.JComboBox<>();
@@ -457,64 +475,82 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             }
         });
 
+        lblCreatedAt1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblCreatedAt1.setForeground(new java.awt.Color(255, 255, 255));
+        lblCreatedAt1.setText("Created At:");
+
+        lblCreatedAt.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblCreatedAt.setForeground(new java.awt.Color(255, 255, 255));
+        lblCreatedAt.setText("N/A");
+
         javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFormLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlFormLayout.createSequentialGroup()
-                                .addComponent(lblSynopsis)
-                                .addGap(172, 172, 172)
-                                .addComponent(lblCoverImage))
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlFormLayout.createSequentialGroup()
+                                            .addComponent(lblSynopsis)
+                                            .addGap(172, 172, 172)
+                                            .addComponent(lblCoverImage))
+                                        .addComponent(lblTitle)
+                                        .addComponent(lblGenre)
+                                        .addGroup(pnlFormLayout.createSequentialGroup()
+                                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(pnlFormLayout.createSequentialGroup()
+                                                    .addGap(118, 118, 118)
+                                                    .addComponent(btnBrowseImage))
+                                                .addComponent(scrlSynopsis))
+                                            .addGap(18, 18, 18)
+                                            .addComponent(lblImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlFormLayout.createSequentialGroup()
+                                            .addComponent(lblCreatedAt1)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(lblCreatedAt))
+                                        .addGroup(pnlFormLayout.createSequentialGroup()
+                                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                                                .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                                                .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addGap(0, 20, Short.MAX_VALUE))
                             .addGroup(pnlFormLayout.createSequentialGroup()
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblReleaseYear)
                                     .addComponent(lblDuration))
                                 .addGap(18, 18, 18)
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtReleaseYear, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                                    .addComponent(txtDuration))
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addComponent(lblPricePerWeek)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtPricePerWeek, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
-                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(lblCopies)
-                                        .addGap(45, 45, 45)
-                                        .addComponent(txtCopies))))
-                            .addGroup(pnlFormLayout.createSequentialGroup()
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblTitle)
-                                    .addComponent(lblGenre))
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGap(18, 18, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblPricePerWeek)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addGap(17, 17, 17)
-                                        .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtGenre, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGroup(pnlFormLayout.createSequentialGroup()
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(scrlSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnBrowseImage))
-                            .addGap(18, 18, 18)
-                            .addComponent(lblImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                            .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(4, 4, 4)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                                        .addComponent(txtPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(1, 1, 1))))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtGenre, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(20, 20, 20))
             .addComponent(lblManageMovieRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlFormLayout.setVerticalGroup(
@@ -547,7 +583,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                             .addComponent(lblCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCopies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -555,12 +591,19 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                     .addComponent(lblSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCoverImage, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlFormLayout.createSequentialGroup()
                         .addComponent(scrlSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBrowseImage))
-                    .addComponent(lblImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(btnBrowseImage))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblCreatedAt1)
+                                    .addComponent(lblCreatedAt))))))
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -569,7 +612,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         lblMovieInventory.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
@@ -671,8 +714,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblMovieInventory)
                     .addComponent(scrlMovie))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -916,7 +959,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                     txtCopies.setText(tblMovieRecord.getValueAt(row, 6).toString()); 
                     txtPricePerWeek.setText(tblMovieRecord.getValueAt(row, 7).toString()); 
                     selectedImagePath = tblMovieRecord.getValueAt(row, 8).toString(); 
-
+                    lblCreatedAt.setText(tblMovieRecord.getValueAt(row, 9).toString());
+                    
                     // Display movie cover image in lblImagePath.
                     ImageIcon icon = new ImageIcon(selectedImagePath);
                     Image scaled = icon.getImage().getScaledInstance(
@@ -989,6 +1033,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbSort;
     private javax.swing.JLabel lblCopies;
     private javax.swing.JLabel lblCoverImage;
+    private javax.swing.JLabel lblCreatedAt;
+    private javax.swing.JLabel lblCreatedAt1;
     private javax.swing.JLabel lblDuration;
     private javax.swing.JLabel lblGenre;
     private javax.swing.JLabel lblHeader1;
