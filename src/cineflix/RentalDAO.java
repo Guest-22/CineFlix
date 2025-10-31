@@ -95,7 +95,6 @@ public class RentalDAO {
             e.printStackTrace();
             Message.error("Error retrieving rental history:\n" + e.getMessage());
         }
-
         return history;
     }
     
@@ -111,8 +110,7 @@ public class RentalDAO {
             "JOIN tblAccounts a ON r.accountID = a.accountID " +
             "JOIN tblPersonalInfo pi ON a.accountID = pi.accountID " +
             "JOIN tblMovies m ON r.movieID = m.movieID " +
-            "LEFT JOIN tblPayments p ON r.rentalID = p.rentalID " +
-            "ORDER BY r.rentalDate ASC";
+            "LEFT JOIN tblPayments p ON r.rentalID = p.rentalID";
 
         try (PreparedStatement pst = conn.prepareStatement(sql);
              ResultSet rs = pst.executeQuery()) {
@@ -136,7 +134,7 @@ public class RentalDAO {
             Message.error("Failed to retrieve admin rental logs:\n" + e.getMessage());
         }
         return logs;
-    }
+    }   
     
     // For admin rental logs approve and reject button; updates rental stage for validation and order confirmation.
     public boolean updateRentalStage(int rentalID, String newStage) {

@@ -408,53 +408,6 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblPaymentID" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblAccountName" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblMovieTitle" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblRentalDate" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="txtPaymentID" min="-2" pref="80" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Component id="lblRentalID" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtRentalID" min="-2" pref="80" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="txtAccountName" max="32767" attributes="0"/>
-                                          <Component id="txtMovieTitle" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="txtRentalDate" alignment="0" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="lblRentalStatus" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                                      <Component id="cmbRentalStatus" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblRentalStage" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblReturnDate" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Component id="lblWeekDuration" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="lblWeeks" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Component id="cmbRentalStage" alignment="0" pref="262" max="32767" attributes="0"/>
-                                          <Component id="txtReturnDate" alignment="0" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
@@ -501,15 +454,68 @@
                                   </Group>
                                   <Component id="btnConfirmTransaction" alignment="0" max="32767" attributes="0"/>
                               </Group>
+                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                              <Component id="lblPaymentDate1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblPaymentDate" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="lblPaymentID" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="lblAccountName" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="lblMovieTitle" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="lblRentalDate" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="txtPaymentID" min="-2" pref="80" max="-2" attributes="0"/>
+                                                      <EmptySpace max="32767" attributes="0"/>
+                                                      <Component id="lblRentalID" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="txtRentalID" min="-2" pref="80" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <Component id="txtAccountName" max="32767" attributes="0"/>
+                                                  <Component id="txtMovieTitle" alignment="0" max="32767" attributes="0"/>
+                                                  <Component id="txtRentalDate" alignment="0" max="32767" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="lblRentalStatus" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                                              <Component id="cmbRentalStatus" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="lblRentalStage" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="lblReturnDate" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Group type="102" attributes="0">
+                                                      <Component id="lblWeekDuration" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="lblWeeks" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <Component id="cmbRentalStage" alignment="0" pref="262" max="32767" attributes="0"/>
+                                                  <Component id="txtReturnDate" alignment="0" max="32767" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                      <Component id="lblPaymentDate1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="lblPaymentDate" min="-2" pref="271" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -732,8 +738,8 @@
                   <StringArray count="4">
                     <StringItem index="0" value="Requested"/>
                     <StringItem index="1" value="Approved"/>
-                    <StringItem index="2" value="Rejected"/>
-                    <StringItem index="3" value="Pickedup"/>
+                    <StringItem index="2" value="PickedUp"/>
+                    <StringItem index="3" value="Rejected"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -764,10 +770,12 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="Ongoing"/>
-                    <StringItem index="1" value="Returned"/>
-                    <StringItem index="2" value="Late"/>
+                  <StringArray count="5">
+                    <StringItem index="0" value="Pending"/>
+                    <StringItem index="1" value="Ongoing"/>
+                    <StringItem index="2" value="Returned"/>
+                    <StringItem index="3" value="Late"/>
+                    <StringItem index="4" value="Cancelled"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -934,7 +942,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtOverdue">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="cc" red="cc" type="rgb"/>
                 </Property>
@@ -962,7 +969,6 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtPaidAmount">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="cc" red="cc" type="rgb"/>
                 </Property>
@@ -1174,9 +1180,9 @@
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="3">
-                <StringItem index="0" value="Sort by Title"/>
-                <StringItem index="1" value="Sort by Genre"/>
-                <StringItem index="2" value="Sort by Year"/>
+                <StringItem index="0" value="Sort by Return Date"/>
+                <StringItem index="1" value="Sort by Payment Date"/>
+                <StringItem index="2" value="Sort by Payment Status"/>
               </StringArray>
             </Property>
             <Property name="focusable" type="boolean" value="false"/>

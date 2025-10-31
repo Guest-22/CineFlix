@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.sql.Connection;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -34,7 +35,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         if (conn == null) return; // Validates the connection before continuing.
         movieDAO = new MovieDAO(conn); // Pass the connection as an argument inside MovieDAO class for CRUD operations.
         
-        populateMovieTable(); // Populates the movie table.
+        populateMovieTable(""); // Populates the movie table.
     }
 
     // Sets the default cover image of a movie.
@@ -74,18 +75,49 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         txtPricePerWeek.setText("");
         setDefaultCoverImage();
         lblCreatedAt.setText("N/A");
-        tblMovieRecord.clearSelection();
+        tblMovieRecord.clearSelection(); // Clear movie table selection visually.
         selectedMovieID = -1; // Reset selected ID from movie table.
+        
+        // Clear filtered search.
+        txtSearch.setText(""); // lear the search field.
+        populateMovieTable(""); // Reset table to show all movies.
     }
     
     // Populates movie table with data from our tblMovies.
-    private void populateMovieTable() {
+    private void populateMovieTable(String keyword) {
         DefaultTableModel movieModel = (DefaultTableModel) tblMovieRecord.getModel();
         movieModel.setRowCount(0); // Clear existing rows.
 
         try {
             List<Movie> movies = movieDAO.getAllMovies(); // Gets all the movies and store it inside a list.
-            for (Movie m : movies) { // Enhance for loop; loops thru the list of movies and adds the record per row.
+            movies = SearchUtils.searchMoviesByTitle(movies, keyword); // Filters by movie keyword.
+            
+            String selectedSort = cmbSort.getSelectedItem().toString(); // Sort tables by added date, title, genre, & year.
+            String selectedOrder = tglSort.isSelected() ? "DESC" : "ASC";
+            
+            switch (selectedSort) {
+                case "Sort by Date Added":
+                    SortUtils.sortMovieByDateAdded(movies);
+                    break;
+                case "Sort by Title":
+                    SortUtils.sortMovieByTitle(movies);
+                    break;
+                case "Sort by Genre":
+                    SortUtils.sortMovieByGenre(movies);
+                    break;
+                case "Sort by Year":
+                    SortUtils.sortMovieByYear(movies);
+                    break;
+                default:
+                    break;
+            }
+            
+            // Sort by order (ASC or DESC).
+            if (selectedOrder.equals("DESC")) {
+                Collections.reverse(movies);
+            }
+            
+            for (Movie m : movies) { // Loops thru the list of movies and adds all the record per row.
                 Object[] row = {
                     m.getMovieID(),
                     m.getTitle(),
@@ -116,7 +148,6 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             tblMovieRecord.getColumnModel().getColumn(9).setWidth(0);
 
         } catch (Exception e) {
-            e.printStackTrace();
             Message.error("Error loading movie table: " + e.getMessage());
         }
     }
@@ -522,7 +553,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                                             .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                 .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
                                                 .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                                .addGap(0, 20, Short.MAX_VALUE))
+                                .addGap(0, 11, Short.MAX_VALUE))
                             .addGroup(pnlFormLayout.createSequentialGroup()
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblReleaseYear)
@@ -634,7 +665,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         cmbSort.setBackground(new java.awt.Color(0, 0, 0));
         cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cmbSort.setForeground(new java.awt.Color(255, 255, 255));
-        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Date Added", "Sort by Title", "Sort by Genre", "Sort by Release Year" }));
         cmbSort.setFocusable(false);
         cmbSort.setRequestFocusEnabled(false);
         cmbSort.addActionListener(new java.awt.event.ActionListener() {
@@ -659,6 +690,16 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         txtSearch.setBackground(new java.awt.Color(0, 0, 0));
         txtSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtSearch.setForeground(new java.awt.Color(255, 255, 255));
+        txtSearch.setToolTipText("");
+        txtSearch.setName(""); // NOI18N
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSearchFocusLost(evt);
+            }
+        });
         txtSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSearchActionPerformed(evt);
@@ -704,15 +745,15 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblMovieInventory)
                     .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblMovieInventory)
                     .addComponent(scrlMovie))
                 .addGap(18, 18, 18)
                 .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -722,17 +763,18 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
-                .addContainerGap(8, Short.MAX_VALUE)
+                .addGap(7, 7, 7)
                 .addComponent(lblMovieInventory)
                 .addGap(4, 4, 4)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch)
-                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tglSort))
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(97, 97, 97))
+                .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -855,7 +897,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
 
             Message.show("Movie added successfully!");
             clearForm(); // Clear all inputs.
-            populateMovieTable(); // Refresh/Repopulate movie table.
+            populateMovieTable(""); // Refresh/Repopulate movie table.
         } catch (NumberFormatException e) { // Catch invalid numerical values.
             Message.show("Please enter valid numeric values for year, duration, copies, and price/week.");
         } catch (Exception e) {
@@ -889,7 +931,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             Message.show("Movie updated successfully!");
 
             clearForm(); // Reset form
-            populateMovieTable(); // Refresh/Repopulate movie table.
+            populateMovieTable(""); // Refresh/Repopulate movie table.
         } catch (NumberFormatException e) { 
             Message.error("Please enter valid numeric values.");
         } catch (Exception e) {
@@ -916,7 +958,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
 
             Message.show("Movie deleted successfully!");
             clearForm(); // Reset form.
-            populateMovieTable(); // Refresh/Repopulate movie table.
+            populateMovieTable(""); // Refresh/Repopulate movie table.
         } catch (Exception e) {
             e.printStackTrace();
             Message.error("Error deleting movie: " + e.getMessage());
@@ -924,7 +966,12 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
+        String keyword = txtSearch.getText().trim();
+        if (keyword.isEmpty()){
+             Message.error("Please enter a movie title to search.");
+             return;
+        }
+        populateMovieTable(keyword);
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
@@ -933,10 +980,12 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         } else {
             tglSort.setText("ASC");
         }
+        populateMovieTable(txtSearch.getText().trim());
     }//GEN-LAST:event_tglSortActionPerformed
 
     private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
-        // TODO add your handling code here:
+        String sortQuery = txtSearch.getText().trim();
+        populateMovieTable(sortQuery); 
     }//GEN-LAST:event_cmbSortActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
@@ -973,7 +1022,6 @@ public class AdminMovieInventory extends javax.swing.JFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         clearForm(); // Clear all inputs back to default; deselect clicked ID just in case.
-        tblMovieRecord.clearSelection(); // Clear movie table selection visually.
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -981,6 +1029,14 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         new Login().setVisible(true); // Returns to login frame.
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+        
+    }//GEN-LAST:event_txtSearchFocusLost
+
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+        
+    }//GEN-LAST:event_txtSearchFocusGained
 
     /**
      * @param args the command line arguments

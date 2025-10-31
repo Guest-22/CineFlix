@@ -1,5 +1,7 @@
 package cineflix;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.table.DefaultTableModel;
@@ -8,6 +10,9 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class AdminRentalLogs extends javax.swing.JFrame {
     private Connection conn;
@@ -21,14 +26,25 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         this.setSize(1315, 675);
         this.setLocationRelativeTo(null); // Center the JFrame.
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        setDefaultTglSort();
         
         conn = DBConnection.getConnection(); // Attemps to get a DB Connection.
         if (conn == null) return; // Validates the connection before continuing.
         rentalDAO = new RentalDAO (conn);
         paymentDAO = new PaymentDAO (conn);
-        populateRentalRecord(); // Populates rental table.
+        populateRentalRecord(""); // Populates rental table.
     }
 
+    // Sets the default toggle button style.
+    private void setDefaultTglSort(){
+        tglSort.setFocusPainted(false);
+        tglSort.setContentAreaFilled(false);
+        tglSort.setBorderPainted(false);
+        tglSort.setOpaque(true);
+        tglSort.setBackground(Color.BLACK);
+        tglSort.setForeground(Color.WHITE);
+    }
+    
     // Clear all inputs.
     private void clearForm() {
         txtRentalID.setText("");
@@ -44,46 +60,141 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         txtPaidAmount.setText("");
         tblRentalRecord.clearSelection();
         selectedRentalID = -1; // Resets selected row rental id.
+        
+        // Clear filtered search.
+        txtSearch.setText(""); // lear the search field.
+        populateRentalRecord(""); // Reset table to show all movies.
     }
     
     // Populates the rental record.
-    private void populateRentalRecord() {
+    private void populateRentalRecord(String keyword) {
         DefaultTableModel rentalModel = (DefaultTableModel) tblRentalRecord.getModel();
         rentalModel.setRowCount(0); // Clear existing rows.
 
-        Connection conn = DBConnection.getConnection(); // Attempts to get the DB connection.
-        if (conn == null) return; // Validates the connection.
-        
-        rentalDAO = new RentalDAO(conn); // Pass the connection to query joins.
-        List<AdminRentalEntry> rentals = rentalDAO.getAdminRentalLogs(); // Use the AdminRentalEntry as model for this customized cols (REASON: JOINS).
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        for (AdminRentalEntry r : rentals) { // Loops through a List of AdminRentalEntry objects and adds the record to the rental table.
-           // Convert Timestamp to LocalDateTime and format
-            String rentalDateStr = r.getRentalDate().toLocalDateTime().format(formatter);
-            String returnDateStr = r.getReturnDate().toLocalDateTime().format(formatter);
+        try{
+            Connection conn = DBConnection.getConnection(); // Attempts to get the DB connection.
+            if (conn == null) return; // Validates the connection.
+            rentalDAO = new RentalDAO(conn); // Pass the connection to query joins.
             
-            rentalModel.addRow(new Object[] {
-                r.getRentalID(),
-                r.getFullName(),
-                r.getMovieTitle(),
-                rentalDateStr,
-                returnDateStr,
-                r.getRentalStage(), 
-                r.getRentalStatus(),
-                r.getPaymentStatus(),
-                String.format("₱%.2f", r.getTotalCost())
-            });
+            // Use the AdminRentalEntry as model for this customized cols(REASON: JOINS).
+            List<AdminRentalEntry> rentals = rentalDAO.getAdminRentalLogs(); 
+            rentals = SearchUtils.searchRentals(rentals, keyword);
+            
+            String selectedSort = cmbSort.getSelectedItem().toString();
+            String selectedOrder = tglSort.isSelected() ? "DESC" : "ASC";
+            
+            switch (selectedSort) {
+                case "Sort by Rental Date":
+                    SortUtils.sortByRentalDate(rentals);
+                    break;
+                case "Sort by Return Date":
+                    SortUtils.sortByReturnDate(rentals);
+                    break;
+                case "Sort by Stage":
+                    SortUtils.sortByStage(rentals);
+                    break;
+                case "Sort by Status":
+                    SortUtils.sortByStatus(rentals);
+                    break;
+                default:
+                    break;
+            }
+            
+            if ("DESC".equals(selectedOrder)) {
+                Collections.reverse(rentals);
+            }
+            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            for (AdminRentalEntry r : rentals) { // Loops through a List of AdminRentalEntry objects and adds the record to the rental table.
+                // Convert Timestamp to LocalDateTime and format
+                String rentalDateStr = r.getRentalDate().toLocalDateTime().format(formatter);
+                String returnDateStr = r.getReturnDate().toLocalDateTime().format(formatter);
+
+                rentalModel.addRow(new Object[] {
+                    r.getRentalID(),
+                    r.getFullName(),
+                    r.getMovieTitle(),
+                    rentalDateStr,
+                    returnDateStr,
+                    r.getRentalStage(), 
+                    r.getRentalStatus(),
+                    r.getPaymentStatus(),
+                    String.format("₱%.2f", r.getTotalCost())
+                });
+            }
+            // Hide paymentStatus.
+            tblRentalRecord.getColumnModel().getColumn(7).setMinWidth(0);
+            tblRentalRecord.getColumnModel().getColumn(7).setMaxWidth(0);
+            tblRentalRecord.getColumnModel().getColumn(7).setWidth(0);
+            
+        } catch (Exception e){
+            Message.error("Error loading rental table: " + e.getMessage());
         }
-        // Hide rentalStatus.
-        tblRentalRecord.getColumnModel().getColumn(6).setMinWidth(0);
-        tblRentalRecord.getColumnModel().getColumn(6).setMaxWidth(0);
-        tblRentalRecord.getColumnModel().getColumn(6).setWidth(0);
         
-        // Hide paymentStatus.
-        tblRentalRecord.getColumnModel().getColumn(7).setMinWidth(0);
-        tblRentalRecord.getColumnModel().getColumn(7).setMaxWidth(0);
-        tblRentalRecord.getColumnModel().getColumn(7).setWidth(0);
+        // Colors indicators.
+        Color colGray   = new Color(128, 128, 128);   // Neutral
+        Color colGreen  = new Color(88, 199, 138);    // Active
+        Color colPurple = new Color(153, 102, 204);   // Completed
+        Color colRed    = new Color(226, 88, 88);     // Problematic
+        
+        // Apply color renderer to rentalStage col (index 5).
+        tblRentalRecord.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                String rentalStageCol = value.toString();
+
+                switch (rentalStageCol) {
+                    case "Requested": 
+                        cell.setBackground(colGray); 
+                        break;
+                    case "Approved":
+                        cell.setBackground(colGreen); 
+                        break;
+                    case "PickedUp":
+                        cell.setBackground(colPurple);
+                        break;
+                    case "Rejected":
+                        cell.setBackground(colRed); 
+                        break;
+                    default:
+                        cell.setBackground(table.getBackground());
+                }
+                return cell;
+            }
+        });
+        
+        // Apply color renderer to rentalStatus col (index 6).
+        tblRentalRecord.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                String rentalStatusCol = value.toString();
+
+                 switch (rentalStatusCol) {
+                    case "Pending":
+                        cell.setBackground(colGray); 
+                        break;
+                    case "Ongoing":
+                        cell.setBackground(colGreen); 
+                        break;
+                    case "Returned":
+                        cell.setBackground(colPurple); 
+                        break;
+                    case "Late":
+                    case "Cancelled":
+                        cell.setBackground(colRed);
+                        break;
+                    default:
+                        cell.setBackground(table.getBackground());
+                }
+                return cell;
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -302,7 +413,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         cmbSort.setBackground(new java.awt.Color(0, 0, 0));
         cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cmbSort.setForeground(new java.awt.Color(255, 255, 255));
-        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Rental Date", "Sort by Return Date", "Sort by Stage", "Sort by Status" }));
         cmbSort.setFocusable(false);
         cmbSort.setRequestFocusEnabled(false);
         cmbSort.addActionListener(new java.awt.event.ActionListener() {
@@ -540,12 +651,12 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         cmbRentalStage.setBackground(new java.awt.Color(255, 255, 255));
         cmbRentalStage.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cmbRentalStage.setForeground(new java.awt.Color(0, 0, 0));
-        cmbRentalStage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Requested", "Approved", "Rejected", "Pickedup" }));
+        cmbRentalStage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Requested", "Approved", "PickedUp", "Rejected" }));
 
         cmbRentalStatus.setBackground(new java.awt.Color(255, 255, 255));
         cmbRentalStatus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cmbRentalStatus.setForeground(new java.awt.Color(0, 0, 0));
-        cmbRentalStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ongoing", "Returned", "Late", "Cancelled" }));
+        cmbRentalStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Ongoing", "Returned", "Late", "Cancelled" }));
 
         lblWeekDuration.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         lblWeekDuration.setForeground(new java.awt.Color(204, 204, 204));
@@ -688,7 +799,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblRentalLogs)
                     .addComponent(scrlRental))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
@@ -748,15 +859,26 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPaymentReviewActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
+        String keyword = txtSearch.getText().trim();
+        if (keyword.isEmpty()){
+             Message.error("Please enter a keyword to search.");
+             return;
+        }
+        populateRentalRecord(keyword);
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
-        // TODO add your handling code here:
+        String sortQuery = txtSearch.getText().trim();
+        populateRentalRecord(sortQuery); 
     }//GEN-LAST:event_cmbSortActionPerformed
 
     private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
-
+        if (tglSort.isSelected()) {
+        tglSort.setText("DESC");
+        } else {
+            tglSort.setText("ASC");
+        }
+        populateRentalRecord(txtSearch.getText().trim());
     }//GEN-LAST:event_tglSortActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
@@ -830,7 +952,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
 
         if (stageUpdated && statusUpdated) {
             Message.show("Rental updated: Stage = " + selectedStage + ", Status = " + selectedStatus);
-            populateRentalRecord(); // Refresh table
+            populateRentalRecord(""); // Refresh table
             // clearForm(); // Reset form
         } else {
             Message.error("Failed to update rental.");
@@ -854,7 +976,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             return;
         }
 
-        String totalStr = txtTotalCost.getText().trim().replace("₱", "").replace(",", "").trim(); // Remove peso sign and commas
+        String totalStr = txtTotalCost.getText().trim().replace("₱", "").replace(",", "").trim(); // Remove peso sign and commas.
         String paidStr = txtPaidAmount.getText().trim();
         double amountPaid, totalCost;
 
@@ -863,12 +985,8 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             Message.error("Amount paid cannot be empty.");
             return;
         }
-        if (totalStr.isEmpty()) {
-            Message.error("Total cost cannot be empty.");
-            return;
-        }
 
-        // Validates non-int input.
+        // Validates non-int/double input.
         try {
             amountPaid = Double.parseDouble(paidStr);
             totalCost = Double.parseDouble(totalStr);
@@ -878,7 +996,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         }
 
         // Compare the amount whether the user decide to pay the upfront or full.
-        String paymentStatus = (Math.abs(amountPaid - totalCost) < 0.01) ? "Paid Full" : "Paid Upfront";
+        String paymentStatus = (amountPaid == totalCost) ? "Paid Full" : "Paid Upfront";
 
         if (conn == null) return; // Validates the connection before proceeding.
         // Pass the connection to perform col updates.
@@ -887,14 +1005,21 @@ public class AdminRentalLogs extends javax.swing.JFrame {
 
         // Update existing payment record in tblPayments with new updated values.
         boolean updatedPayment = paymentDAO.updatePaymentStatusAndAmount(selectedRentalID, amountPaid, paymentStatus);
+        
+        // Verify if the update went smoothly or an error occured.
+        boolean stageUpdated = false;
+        boolean statusUpdated = false;
 
-        // Update rental stage & status from tblRentals.
-        boolean stageUpdated = rentalDAO.updateRentalStage(selectedRentalID, "Pickedup");
-        boolean statusUpdated = rentalDAO.updateRentalStatus(selectedRentalID, "Ongoing");
+        // Only proceed to update stage/status if payment was successful.
+        if (updatedPayment == true) {
+            stageUpdated = rentalDAO.updateRentalStage(selectedRentalID, "Pickedup");
+            statusUpdated = rentalDAO.updateRentalStatus(selectedRentalID, "Ongoing");
+        }
 
-        if (updatedPayment && stageUpdated && statusUpdated) {
+        // If all went smoothly, we're done.
+        if (updatedPayment == true && stageUpdated == true && statusUpdated == true) {
             Message.show("Transaction confirmed. Rental picked up and payment updated.");
-            populateRentalRecord();
+            populateRentalRecord("");
             // clearForm();
         } else {
             Message.error("Failed to confirm transaction.");
@@ -949,7 +1074,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
 
         if (success) {
             Message.show("Rental deleted successfully.", "Delete Successful");
-            populateRentalRecord(); // Refresh table
+            populateRentalRecord(""); // Refresh table
             clearForm(); // Reset form
         } else {
             Message.error("Failed to delete rental.");

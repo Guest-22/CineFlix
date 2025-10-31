@@ -1,11 +1,13 @@
 package cineflix;
 
+import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 
 public class AdminPaymentReview extends javax.swing.JFrame {
     private Connection conn;
@@ -18,12 +20,23 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         this.setSize(1315, 675);
         this.setLocationRelativeTo(null); // Center the JFrame.
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        setDefaultTglSort();
         
         conn = DBConnection.getConnection();
         if (conn == null) return;
         paymentDAO = new PaymentDAO(conn);
         
-        populatePaymentTable(); // Populates payment table.
+        populatePaymentTable(""); // Populates payment table.
+    }
+    
+    // Sets the default toggle button style.
+    private void setDefaultTglSort(){
+        tglSort.setFocusPainted(false);
+        tglSort.setContentAreaFilled(false);
+        tglSort.setBorderPainted(false);
+        tglSort.setOpaque(true);
+        tglSort.setBackground(Color.BLACK);
+        tglSort.setForeground(Color.WHITE);
     }
     
     // Clear all fields and set selectedID back to -1.
@@ -45,37 +58,67 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblPaymentDate.setText("N/A");
         selectedPaymentID = -1;
         tblPaymentRecord.clearSelection();
+        
+        // Clear filtered search.
+        txtSearch.setText(""); 
+        populatePaymentTable(""); //
     }
     
     // Populates payment table.
-    private void populatePaymentTable() {
+    private void populatePaymentTable(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
         model.setRowCount(0); // Clear existing rows
 
-        conn = DBConnection.getConnection();
-        if (conn == null) return;
+        try{
+            conn = DBConnection.getConnection();
+            if (conn == null) return;
 
-        paymentDAO = new PaymentDAO(conn);
-        List<AdminPaymentEntry> logs = paymentDAO.getAdminPaymentLogs();
+            paymentDAO = new PaymentDAO(conn);
+            List<AdminPaymentEntry> payments = paymentDAO.getAdminPaymentLogs();
+            payments = SearchUtils.searchPayments(payments, keyword); // Filters table by keyword.
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        for (AdminPaymentEntry p : logs) {
-            model.addRow(new Object[] {
-                p.getPaymentID(),
-                p.getRentalID(),
-                p.getAccountName(),
-                p.getMovieTitle(),
-                p.getRentalDate().format(formatter),
-                p.getReturnDate().format(formatter),
-                p.getRentalStage(),
-                p.getRentalStatus(),
-                p.getPaymentStatus(),
-                String.format("₱%.2f", p.getTotalCost()),
-                String.format("₱%.2f", p.getAmountPaid()),
-                String.format("₱%.2f", p.getOverdueAmount()),
-                p.getPaymentDate() != null ? p.getPaymentDate().format(formatter) : ""
-            });
+            String selectedSort = cmbSort.getSelectedItem().toString(); 
+            String selectedOrder = tglSort.isSelected() ? "DESC" : "ASC";
+            
+             switch (selectedSort) {
+                case "Sort by Return Date":
+                    SortUtils.sortPaymentByReturnDate(payments);
+                    break;
+                case "Sort by Payment Date":
+                    SortUtils.sortPaymentByPaymentDate(payments);
+                    break;
+                case "Sort by Payment Status":
+                    SortUtils.sortPaymentByPaymentStatus(payments);
+                    break;
+                default:
+                    break;
+            }
+             
+            // Sort by order (ASC or DESC).
+            if (selectedOrder.equals("DESC")) {
+                Collections.reverse(payments);
+            }
+  
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            for (AdminPaymentEntry p : payments) {
+                model.addRow(new Object[] {
+                    p.getPaymentID(),
+                    p.getRentalID(),
+                    p.getAccountName(),
+                    p.getMovieTitle(),
+                    p.getRentalDate().format(formatter),
+                    p.getReturnDate().format(formatter),
+                    p.getRentalStage(),
+                    p.getRentalStatus(),
+                    p.getPaymentStatus(),
+                    String.format("₱%.2f", p.getTotalCost()),
+                    String.format("₱%.2f", p.getAmountPaid()),
+                    String.format("₱%.2f", p.getOverdueAmount()),
+                    p.getPaymentDate() != null ? p.getPaymentDate().format(formatter) : ""
+                });
+            }
+        } catch (Exception e){
+            Message.error("Error loading payment table:\n" + e.getMessage());
         }
         // Hides payment ID.
         tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
@@ -405,7 +448,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         cmbRentalStage.setBackground(new java.awt.Color(255, 255, 255));
         cmbRentalStage.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cmbRentalStage.setForeground(new java.awt.Color(0, 0, 0));
-        cmbRentalStage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Requested", "Approved", "Rejected", "Pickedup" }));
+        cmbRentalStage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Requested", "Approved", "PickedUp", "Rejected" }));
 
         lblRentalDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblRentalDate.setForeground(new java.awt.Color(255, 255, 255));
@@ -414,7 +457,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         cmbRentalStatus.setBackground(new java.awt.Color(255, 255, 255));
         cmbRentalStatus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cmbRentalStatus.setForeground(new java.awt.Color(0, 0, 0));
-        cmbRentalStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ongoing", "Returned", "Late" }));
+        cmbRentalStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Ongoing", "Returned", "Late", "Cancelled" }));
 
         lblReturnDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblReturnDate.setForeground(new java.awt.Color(255, 255, 255));
@@ -496,7 +539,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             }
         });
 
-        txtOverdue.setEditable(false);
         txtOverdue.setBackground(new java.awt.Color(204, 204, 204));
         txtOverdue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtOverdue.setForeground(new java.awt.Color(0, 0, 0));
@@ -510,7 +552,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblPaidAmount.setForeground(new java.awt.Color(255, 255, 255));
         lblPaidAmount.setText("Paid Amount:");
 
-        txtPaidAmount.setEditable(false);
         txtPaidAmount.setBackground(new java.awt.Color(204, 204, 204));
         txtPaidAmount.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPaidAmount.setForeground(new java.awt.Color(0, 0, 0));
@@ -601,42 +642,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             .addGroup(pnlFormLayout.createSequentialGroup()
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(pnlFormLayout.createSequentialGroup()
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblPaymentID)
-                                    .addComponent(lblAccountName)
-                                    .addComponent(lblMovieTitle)
-                                    .addComponent(lblRentalDate))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addComponent(txtPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblRentalID)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtAccountName)
-                                    .addComponent(txtMovieTitle)
-                                    .addComponent(txtRentalDate)))
-                            .addGroup(pnlFormLayout.createSequentialGroup()
-                                .addComponent(lblRentalStatus)
-                                .addGap(22, 22, 22)
-                                .addComponent(cmbRentalStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(pnlFormLayout.createSequentialGroup()
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblRentalStage)
-                                    .addComponent(lblReturnDate))
-                                .addGap(26, 26, 26)
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addComponent(lblWeekDuration)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblWeeks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(cmbRentalStage, 0, 262, Short.MAX_VALUE)
-                                    .addComponent(txtReturnDate)))))
-                    .addGroup(pnlFormLayout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
@@ -671,13 +676,53 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(txtOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                     .addComponent(txtPaymentStatus)))
-                            .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(6, 6, 6))
                     .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(lblPaymentDate1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblPaymentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(30, 30, 30))
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblPaymentID)
+                                            .addComponent(lblAccountName)
+                                            .addComponent(lblMovieTitle)
+                                            .addComponent(lblRentalDate))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                                .addComponent(txtPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(lblRentalID)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(txtAccountName)
+                                            .addComponent(txtMovieTitle)
+                                            .addComponent(txtRentalDate)))
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(lblRentalStatus)
+                                        .addGap(22, 22, 22)
+                                        .addComponent(cmbRentalStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblRentalStage)
+                                            .addComponent(lblReturnDate))
+                                        .addGap(26, 26, 26)
+                                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                                .addComponent(lblWeekDuration)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(lblWeeks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(cmbRentalStage, 0, 262, Short.MAX_VALUE)
+                                            .addComponent(txtReturnDate)))))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(lblPaymentDate1)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblPaymentDate, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(24, 24, 24))
         );
         pnlFormLayout.setVerticalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -774,7 +819,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         cmbSort.setBackground(new java.awt.Color(0, 0, 0));
         cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cmbSort.setForeground(new java.awt.Color(255, 255, 255));
-        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Return Date", "Sort by Payment Date", "Sort by Payment Status" }));
         cmbSort.setFocusable(false);
         cmbSort.setRequestFocusEnabled(false);
         cmbSort.addActionListener(new java.awt.event.ActionListener() {
@@ -900,7 +945,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             txtTotalCost.setText(tblPaymentRecord.getValueAt(row, 9).toString());
             txtPaidAmount.setText(tblPaymentRecord.getValueAt(row, 10).toString());
             txtOverdue.setText(tblPaymentRecord.getValueAt(row, 11).toString());
-
+            cmbRentalStatus.setSelectedItem(tblPaymentRecord.getValueAt(row, 7).toString());
             // Null-safe payment date display.
             Object paymentDateObj = tblPaymentRecord.getValueAt(row, 12);
             String paymentDateStr = (paymentDateObj != null) ? paymentDateObj.toString() : "";
@@ -937,15 +982,26 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
+        String keyword = txtSearch.getText().trim();
+        if (keyword.isEmpty()){
+             Message.error("Please enter a movie title to search.");
+             return;
+        }
+        populatePaymentTable(keyword);
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
-        // TODO add your handling code here:
+        String sortQuery = txtSearch.getText().trim();
+        populatePaymentTable(sortQuery);
     }//GEN-LAST:event_cmbSortActionPerformed
 
     private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
-
+        if (tglSort.isSelected()) {
+        tglSort.setText("DESC");
+        } else {
+            tglSort.setText("ASC");
+        }
+        populatePaymentTable(txtSearch.getText().trim());
     }//GEN-LAST:event_tglSortActionPerformed
 
     private void txtTotalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalCostActionPerformed
@@ -1015,7 +1071,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
 
         if (isStageUpdated && isStatusUpdated) {
             Message.show("Payment record updated: Stage = " + selectedStage + ", Status = " + selectedStatus);
-            populatePaymentTable(); // Refresh table
+            populatePaymentTable(""); // Refresh table
             // clearForm(); // Optional: reset right panel
         } else {
             Message.error("Failed to update payment record.");
@@ -1040,7 +1096,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
 
             if (success) {
                 Message.show("Transaction deleted successfully.");
-                populatePaymentTable();
+                populatePaymentTable("");
                 clearForm();
             } else {
                 Message.error("Failed to delete transaction.");
@@ -1056,7 +1112,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnConfirmTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmTransactionActionPerformed
-        if (selectedPaymentID == -1) {
+            if (selectedPaymentID == -1) {
             Message.error("No payment selected."); // Handles no row selected.
             return;
         }
@@ -1067,7 +1123,8 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             double currentPaidAmount = Double.parseDouble(txtPaidAmount.getText().replace("₱", "").trim());
             double newTotalPaid = currentPaidAmount + settleAmount;
             
-            if (Math.abs(settleAmount - remainingBalance) > 0.01) {
+            // Payment must be full/equivalent to remaining balance.
+            if (settleAmount != remainingBalance) {
                 Message.show("Settle amount must match the remaining balance to confirm.", "Mismatch");
                 return;
             }
@@ -1079,15 +1136,31 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             if (conn == null) return;
 
             paymentDAO = new PaymentDAO(conn);
+            //Inserts the full payment.
             boolean success = paymentDAO.confirmPaymentTransaction(selectedPaymentID, status, newTotalPaid, now);
 
-            if (success) {
-                Message.show("Transaction confirmed successfully.");
-                populatePaymentTable();
-                // clearForm();
-            } else {
+            if (!success) {
                 Message.error("Failed to confirm transaction.");
+                return;
             }
+
+            // If Transaction is confirmed, proceed with copy increment.
+            int movieID = paymentDAO.getMovieIDByPaymentID(selectedPaymentID);
+            if (movieID == -1) { // Movie copy increment failed.
+                Message.error("Movie ID not found for this payment.");
+                return;
+            }
+
+            MovieDAO movieDAO = new MovieDAO(conn);
+            boolean updated = movieDAO.incrementMovieCopies(movieID);
+            if (!updated) {
+                Message.error("Failed to increment movie copy.");
+                return;
+            }
+
+            Message.show("Transaction confirmed successfully.");
+            populatePaymentTable("");
+            // clearForm();
         } catch (Exception e) {
             Message.error("Error confirming transaction: " + e.getMessage());
         }

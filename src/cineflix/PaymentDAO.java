@@ -78,7 +78,7 @@ public class PaymentDAO {
     }
     
     // For populating admin payment review table.
-        public List<AdminPaymentEntry> getAdminPaymentLogs() {
+    public List<AdminPaymentEntry> getAdminPaymentLogs() {
         List<AdminPaymentEntry> logs = new ArrayList<>();
 
         String sql = 
@@ -124,8 +124,8 @@ public class PaymentDAO {
     public boolean updatePaymentStatusAndAmount(int rentalID, double amount, String status) {
         String sql = 
                 "UPDATE " + TABLE_PAYMENTS + 
-                " SET " + COL_AMOUNT + " = ?, " + COL_STATUS + " = ?, " + COL_DATE + " = NOW() "
-                + "WHERE " + COL_RENTAL_ID + " = ?";
+                " SET " + COL_AMOUNT + " = ?, " + COL_STATUS + " = ?, " + COL_DATE + " = NOW() " + 
+                "WHERE " + COL_RENTAL_ID + " = ?";
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setDouble(1, amount);
             pst.setString(2, status);
@@ -159,7 +159,8 @@ public class PaymentDAO {
    
     // For admin payment review.
     public boolean deletePaymentTransaction(int paymentID) {
-        String sql = "DELETE FROM tblPayments WHERE paymentID = ?";
+        String sql = 
+                "DELETE FROM " + TABLE_PAYMENTS + " WHERE " + COL_ID + " = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, paymentID);
             return stmt.executeUpdate() > 0;
@@ -168,5 +169,26 @@ public class PaymentDAO {
             Message.error("Payment transaction deletion failed:\n" + e.getMessage());
             return false;
         }
+    }
+
+    // For admin payment review; increments movie copy automatically when payments are made w/ the movie.
+    public int getMovieIDByPaymentID(int paymentID) throws SQLException {
+        String sql = 
+                "SELECT r.movieID " +
+                "FROM " + TABLE_PAYMENTS + " p " +
+                "JOIN tblRentals r ON p.rentalID = r.rentalID " +
+                "WHERE p.paymentID = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, paymentID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("movie_id");
+            }
+        } catch (Exception e) {
+            Message.error("Retreival of Movie ID via Payment ID failed:\n" + e.getMessage());
+            e.printStackTrace();
+        }
+        return -1; // Movie ID not found.
     }
 }

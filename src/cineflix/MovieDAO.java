@@ -199,7 +199,7 @@ public class MovieDAO {
         }
     }
     
-    // Decrement value of col copies by referencing its movieID.
+    // Decrement copies by referencing its movieID.
     public boolean decrementMovieCopies(int movieID) {
         String sql = 
                 "UPDATE " + TABLE_MOVIES + 
@@ -212,6 +212,23 @@ public class MovieDAO {
             return affected > 0;
         } catch (SQLException e) {
             Message.error("Movie copy decremental failed:\n" + e.getMessage());
+        }
+        return false;
+    }
+    
+    // Increment copies by referencing its movieID.
+    public boolean incrementMovieCopies(int movieID) {
+        String sql = 
+                "UPDATE " + TABLE_MOVIES + 
+                " SET " + COL_COPIES + " = " + COL_COPIES + " + 1 " +
+                "WHERE " + COL_ID + " = ?";
+
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, movieID);
+            int affected = pst.executeUpdate();
+            return affected > 0;
+        } catch (SQLException e) {
+            Message.error("Movie copy incremental failed:\n" + e.getMessage());
         }
         return false;
     }
