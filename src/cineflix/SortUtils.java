@@ -147,6 +147,76 @@ public class SortUtils {
         }
     }
     
+    public static void sortUserRentalByRentalDate(List<Rental> rentals) {
+        for (int i = 0; i < rentals.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < rentals.size(); j++) {
+                Timestamp a = rentals.get(j).getRentalDate();
+                Timestamp b = rentals.get(minIndex).getRentalDate();
+
+                if (a == null && b == null) continue;
+                else if (a == null) continue; // null = last
+                else if (b == null || a.before(b)) minIndex = j;
+            }
+            Rental temp = rentals.get(minIndex);
+            rentals.set(minIndex, rentals.get(i));
+            rentals.set(i, temp);
+        }
+    }
+
+    public static void sortUserRentalByReturnDate(List<Rental> rentals) {
+        for (int i = 0; i < rentals.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < rentals.size(); j++) {
+                Timestamp a = rentals.get(j).getReturnDate();
+                Timestamp b = rentals.get(minIndex).getReturnDate();
+
+                if (a == null && b == null) continue;
+                else if (a == null) continue;
+                else if (b == null || a.before(b)) minIndex = j;
+            }
+            Rental temp = rentals.get(minIndex);
+            rentals.set(minIndex, rentals.get(i));
+            rentals.set(i, temp);
+        }
+    }
+
+    public static void sortUserRentalByStage(List<Rental> rentals) {
+        for (int i = 0; i < rentals.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < rentals.size(); j++) {
+                String stageJ = rentals.get(j).getRentalStage();
+                String stageMin = rentals.get(minIndex).getRentalStage();
+
+                if (stageJ != null && stageMin != null &&
+                    stageJ.compareToIgnoreCase(stageMin) < 0) {
+                    minIndex = j;
+                }
+            }
+            Rental temp = rentals.get(minIndex);
+            rentals.set(minIndex, rentals.get(i));
+            rentals.set(i, temp);
+        }
+    }
+
+    public static void sortUserRentalByStatus(List<Rental> rentals) {
+        for (int i = 0; i < rentals.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < rentals.size(); j++) {
+                String statusJ = rentals.get(j).getRentalStatus();
+                String statusMin = rentals.get(minIndex).getRentalStatus();
+
+                if (statusJ != null && statusMin != null &&
+                    statusJ.compareToIgnoreCase(statusMin) < 0) {
+                    minIndex = j;
+                }
+            }
+            Rental temp = rentals.get(minIndex);
+            rentals.set(minIndex, rentals.get(i));
+            rentals.set(i, temp);
+        }
+    }
+    
    // Payment: sort by return date.
     public static void sortPaymentByReturnDate(List<AdminPaymentEntry> payments) {
         for (int i = 0; i < payments.size() - 1; i++) {
@@ -209,6 +279,92 @@ public class SortUtils {
                 payments.set(minIndex, payments.get(i));
                 payments.set(i, temp);
             }
+        }
+    }
+    
+    public static void sortUserPaymentsByPaymentDate(List<Payment> payments) {
+        for (int i = 0; i < payments.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < payments.size(); j++) {
+                Timestamp a = payments.get(j).getPaymentDate();
+                Timestamp b = payments.get(minIndex).getPaymentDate();
+
+                if (a == null && b == null) continue;
+                else if (a == null) continue; // null = last
+                else if (b == null || a.before(b)) minIndex = j;
+            }
+            Payment temp = payments.get(minIndex);
+            payments.set(minIndex, payments.get(i));
+            payments.set(i, temp);
+        }
+    }
+    
+    public static void sortUserPaymentsByPaidAmount(List<Payment> payments) {
+        for (int i = 0; i < payments.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < payments.size(); j++) {
+                double amountJ = payments.get(j).getAmount();
+                double amountMin = payments.get(minIndex).getAmount();
+
+                if (amountJ < amountMin) {
+                    minIndex = j;
+                }
+            }
+            Payment temp = payments.get(minIndex);
+            payments.set(minIndex, payments.get(i));
+            payments.set(i, temp);
+        }
+    }
+    
+    public static void sortUserPaymentsByRemainingBalance(List<Payment> payments) {
+        for (int i = 0; i < payments.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < payments.size(); j++) {
+                double balanceJ = payments.get(j).getRentalCost() + payments.get(j).getOverdueAmount() - payments.get(j).getAmount();
+                double balanceMin = payments.get(minIndex).getRentalCost() + payments.get(minIndex).getOverdueAmount() - payments.get(minIndex).getAmount();
+
+                if (balanceJ < balanceMin) {
+                    minIndex = j;
+                }
+            }
+            Payment temp = payments.get(minIndex);
+            payments.set(minIndex, payments.get(i));
+            payments.set(i, temp);
+        }
+    }
+
+    public static void sortUserPaymentsByRentalStatus(List<Payment> payments) {
+        for (int i = 0; i < payments.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < payments.size(); j++) {
+                String statusJ = payments.get(j).getRentalStatus();
+                String statusMin = payments.get(minIndex).getRentalStatus();
+
+                if (statusJ != null && statusMin != null &&
+                    statusJ.compareToIgnoreCase(statusMin) < 0) {
+                    minIndex = j;
+                }
+            }
+            Payment temp = payments.get(minIndex);
+            payments.set(minIndex, payments.get(i));
+            payments.set(i, temp);
+        }
+    }
+    
+    public static void sortUserPaymentsByRentalCost(List<Payment> payments) {
+        for (int i = 0; i < payments.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < payments.size(); j++) {
+                double costJ = payments.get(j).getRentalCost();
+                double costMin = payments.get(minIndex).getRentalCost();
+
+                if (costJ < costMin) {
+                    minIndex = j;
+                }
+            }
+            Payment temp = payments.get(minIndex);
+            payments.set(minIndex, payments.get(i));
+            payments.set(i, temp);
         }
     }
 }

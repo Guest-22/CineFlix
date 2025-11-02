@@ -1,5 +1,6 @@
 package cineflix;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Timestamp;
+import java.util.Collections;
 
 public class UserBrowseMovies extends javax.swing.JFrame {
     // Declaring DB-related variables.
@@ -36,17 +38,18 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         
         setDefaultCoverImage(); // Sets default cover image for a movie.
+        setDefaultTglSort();
         setDefaultSynopsisTxta(); // Wraps synopsis TextArea; continue in new line if characters exceed.
         clearCartTable(); // Clears cart default record.
         
         // Attemps to get a DB Connection.
         conn = DBConnection.getConnection();
         if (conn == null) return; // Validates the connection before continuing; Error already handled inside DBConnection.
-        movieDAO = new MovieDAO(conn); // To usee Movie CRUD methods.
+        movieDAO = new MovieDAO(conn); // To use Movie CRUD methods.
         rentalDAO = new RentalDAO(conn); // To use Rental CRUD methods.
         paymentDAO = new PaymentDAO(conn); // To use Payment CRUD methods.
         
-        populateMovieTable();
+        populateMovieTable("");
         
         // Hides movie ID in cart table.
         tblCart.getColumnModel().getColumn(0).setMinWidth(0);
@@ -60,6 +63,16 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         Image scaled = defaultIcon.getImage().getScaledInstance(
         lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);
         lblImagePath.setIcon(new ImageIcon(scaled));
+    }
+    
+    // Sets the default toggle button style.
+    private void setDefaultTglSort(){
+        tglSort.setFocusPainted(false);
+        tglSort.setContentAreaFilled(false);
+        tglSort.setBorderPainted(false);
+        tglSort.setOpaque(true);
+        tglSort.setBackground(Color.BLACK);
+        tglSort.setForeground(Color.WHITE);
     }
     
     // Wraps the synopsis; proceed to new line when it exceed the width space.
@@ -89,6 +102,10 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         cmbPricePerWeek.setSelectedIndex(0);
         tblMovieRecord.clearSelection();
         txtWeeklyPrice.setText("₱0.00");
+        
+        // Clear filtered search.
+        txtSearch.setText(""); // lear the search field.
+        populateMovieTable(""); // Reset table to show all movies.
     }
 
     // Updates the total price of all selected movies; below tblCard.
@@ -107,12 +124,36 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         txtTotalOrderPrice.setText("₱" + String.format("%.2f", total));
     }
 
-    private void populateMovieTable() {
+    private void populateMovieTable(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblMovieRecord.getModel();
         model.setRowCount(0); // Clear existing rows.
 
         try {
             List<Movie> movies = movieDAO.getAllMoviesForUsers(); // Get all the basic movie info for user table.
+            movies = SearchUtils.searchMoviesByTitle(movies, keyword); // Filters by movie keyword.
+            
+            String selectedSort = cmbSort.getSelectedItem().toString(); // Sort tables by added date, title, genre, & year.
+            String selectedOrder = tglSort.isSelected() ? "DESC" : "ASC";
+            
+            switch (selectedSort) {
+                case "Sort by Title":
+                    SortUtils.sortMovieByTitle(movies);
+                    break;
+                case "Sort by Genre":
+                    SortUtils.sortMovieByGenre(movies);
+                    break;
+                case "Sort by Year":
+                    SortUtils.sortMovieByYear(movies);
+                    break;
+                default:
+                    break;
+            }
+            
+            // Sort by order (ASC or DESC).
+            if (selectedOrder.equals("DESC")) {
+                Collections.reverse(movies);
+            }
+            
             for (Movie m : movies) {
                 Object[] row = {
                     m.getMovieID(),
@@ -861,15 +902,26 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchActionPerformed
 
     private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
-
+        if (tglSort.isSelected()) {
+        tglSort.setText("DESC");
+        } else {
+            tglSort.setText("ASC");
+        }
+        populateMovieTable(txtSearch.getText().trim());
     }//GEN-LAST:event_tglSortActionPerformed
 
     private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
-        // TODO add your handling code here:
+        String sortQuery = txtSearch.getText().trim();
+        populateMovieTable(sortQuery); 
     }//GEN-LAST:event_cmbSortActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
+        String keyword = txtSearch.getText().trim();
+        if (keyword.isEmpty()){
+             Message.error("Please enter a movie title to search.");
+             return;
+        }
+        populateMovieTable(keyword);
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -1016,7 +1068,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         }
 
         // Clear cart and reset UI
-        populateMovieTable(); // Repopulate tblMovieRecord with updated values.
+        populateMovieTable(""); // Repopulate tblMovieRecord with updated values.
         tblCartRecord.setRowCount(0);
         selectedCartRow = -1; // Clears cart row tracking.
         clearMovieSelection(); // Clears movie preview.

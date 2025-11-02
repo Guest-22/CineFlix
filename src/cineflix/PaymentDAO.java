@@ -183,7 +183,7 @@ public class PaymentDAO {
             stmt.setInt(1, paymentID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt("movie_id");
+                return rs.getInt("movieID");
             }
         } catch (Exception e) {
             Message.error("Retreival of Movie ID via Payment ID failed:\n" + e.getMessage());

@@ -1,7 +1,9 @@
 package cineflix;
 
-import java.sql.Timestamp;
+import java.awt.Color;
 import java.sql.Connection;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -12,28 +14,81 @@ public class UserRentalHistory extends javax.swing.JFrame {
         this.setSize(1315, 675);
         this.setLocationRelativeTo(null); // Center the JFrame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        setDefaultTglSort();
         
-        populateRentalTable(); // Populates the rental table with only the necessary details.
+        populateRentalTable(""); // Populates the rental table with only the necessary details.
     }
 
+    // Sets the default toggle button style.
+    private void setDefaultTglSort(){
+        tglSort.setFocusPainted(false);
+        tglSort.setContentAreaFilled(false);
+        tglSort.setBorderPainted(false);
+        tglSort.setOpaque(true);
+        tglSort.setBackground(Color.BLACK);
+        tglSort.setForeground(Color.WHITE);
+    }
+    
+    // Resets rental table.
+    private void clearForm() {
+        txtSearch.setText(""); // lear the search field.
+        populateRentalTable(""); // Reset table to show all movies.
+    }
+    
     // Populates rental table of current loggedin user.
-    private void populateRentalTable() {
-            try {
-            DefaultTableModel model = (DefaultTableModel) tblRentalRecord.getModel();
-            model.setRowCount(0); // Clear existing rows
+    private void populateRentalTable(String keyword) {
+        DefaultTableModel model = (DefaultTableModel) tblRentalRecord.getModel();
+        model.setRowCount(0); // Clear existing rows
 
+        try {
             Connection conn = DBConnection.getConnection();
             if (conn == null) return;
 
             RentalDAO rentalDAO = new RentalDAO(conn);
-            List<Rental> history = rentalDAO.getUserRentalHistory(ActiveSession.loggedInAccountID); 
+            List<Rental> rentals = rentalDAO.getUserRentalHistory(ActiveSession.loggedInAccountID); 
+            rentals = SearchUtils.searchUserRentalHistory(rentals, keyword);
 
-            for (Rental rental : history) {
+            String selectedSort = cmbSort.getSelectedItem().toString();
+            String selectedOrder = tglSort.isSelected() ? "DESC" : "ASC";
+
+            switch (selectedSort) {
+                case "Sort by Rental Date":
+                    SortUtils.sortUserRentalByRentalDate(rentals);
+                    break;
+                case "Sort by Return Date":
+                    SortUtils.sortUserRentalByReturnDate(rentals);
+                    break;
+                case "Sort by Stage":
+                    SortUtils.sortUserRentalByStage(rentals);
+                    break;
+                case "Sort by Status":
+                    SortUtils.sortUserRentalByStatus(rentals);
+                    break;
+                default:
+                    break;
+            }
+
+            if ("DESC".equals(selectedOrder)) {
+                Collections.reverse(rentals);
+            }
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy : h:mm a"); // e.g., November 10, 2025 at 2:30 PM
+
+            for (Rental rental : rentals) {
+                // Format rental and return dates for display
+                String rentalDate = rental.getRentalDate() != null
+                    ? rental.getRentalDate().toLocalDateTime().format(formatter)
+                    : "—";
+
+                String returnDate = rental.getReturnDate() != null
+                    ? rental.getReturnDate().toLocalDateTime().format(formatter)
+                    : "—";
+
                 Object[] row = {
                     rental.getRentalID(),
                     rental.getMovieTitle(),
-                    rental.getRentalDate(),
-                    rental.getReturnDate(),
+                    rentalDate,
+                    returnDate,
                     String.format("₱%.2f", rental.getRentalCost()),
                     String.format("₱%.2f", rental.getAmountPaid()),
                     String.format("₱%.2f", rental.getRemainingBalance()),
@@ -43,9 +98,10 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 model.addRow(row);
             }
         } catch (Exception e) {
-            Message.error("Error loading rental history:\n" + e.getMessage());
+            Message.error("Error loading rental rentals:\n" + e.getMessage());
         }
     }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -65,6 +121,11 @@ public class UserRentalHistory extends javax.swing.JFrame {
         lblRentalHistory = new javax.swing.JLabel();
         scrlRental = new javax.swing.JScrollPane();
         tblRentalRecord = new javax.swing.JTable();
+        cmbSort = new javax.swing.JComboBox<>();
+        tglSort = new javax.swing.JToggleButton();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Rental History");
@@ -232,6 +293,62 @@ public class UserRentalHistory extends javax.swing.JFrame {
         });
         scrlRental.setViewportView(tblRentalRecord);
 
+        cmbSort.setBackground(new java.awt.Color(0, 0, 0));
+        cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        cmbSort.setForeground(new java.awt.Color(255, 255, 255));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Rental Date", "Sort by Return Date", "Sort by Stage", "Sort by Status" }));
+        cmbSort.setFocusable(false);
+        cmbSort.setRequestFocusEnabled(false);
+        cmbSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSortActionPerformed(evt);
+            }
+        });
+
+        tglSort.setBackground(new java.awt.Color(0, 0, 0));
+        tglSort.setFont(new java.awt.Font("SansSerif", 1, 10)); // NOI18N
+        tglSort.setForeground(new java.awt.Color(255, 255, 255));
+        tglSort.setText("ASC");
+        tglSort.setBorderPainted(false);
+        tglSort.setFocusPainted(false);
+        tglSort.setFocusable(false);
+        tglSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tglSortActionPerformed(evt);
+            }
+        });
+
+        txtSearch.setBackground(new java.awt.Color(0, 0, 0));
+        txtSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtSearch.setForeground(new java.awt.Color(255, 255, 255));
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(0, 0, 0));
+        btnSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.setFocusable(false);
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnReset.setBackground(new java.awt.Color(0, 0, 0));
+        btnReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnReset.setForeground(new java.awt.Color(255, 255, 255));
+        btnReset.setText("Reset");
+        btnReset.setFocusable(false);
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
@@ -241,7 +358,18 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblRentalHistory)
-                    .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 1132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(pnlMainLayout.createSequentialGroup()
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 714, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnSearch)
+                            .addGap(12, 12, 12)
+                            .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 1132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
@@ -251,7 +379,14 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblRentalHistory)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch)
+                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tglSort)
+                    .addComponent(btnReset))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(84, 84, 84))
         );
 
@@ -298,6 +433,37 @@ public class UserRentalHistory extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tblRentalRecordMouseClicked
 
+    private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
+        String sortQuery = txtSearch.getText().trim();
+        populateRentalTable(sortQuery);
+    }//GEN-LAST:event_cmbSortActionPerformed
+
+    private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
+        if (tglSort.isSelected()) {
+            tglSort.setText("DESC");
+        } else {
+            tglSort.setText("ASC");
+        }
+        populateRentalTable(txtSearch.getText().trim());
+    }//GEN-LAST:event_tglSortActionPerformed
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String keyword = txtSearch.getText().trim();
+        if (keyword.isEmpty()){
+             Message.error("Please enter a keyword to search.");
+             return;
+        }
+        populateRentalTable(keyword);
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        clearForm();
+    }//GEN-LAST:event_btnResetActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -339,6 +505,9 @@ public class UserRentalHistory extends javax.swing.JFrame {
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMyPayments;
     private javax.swing.JButton btnRentalHistory;
+    private javax.swing.JButton btnReset;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> cmbSort;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
@@ -348,5 +517,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
     private javax.swing.JPanel pnlSideNav;
     private javax.swing.JScrollPane scrlRental;
     private javax.swing.JTable tblRentalRecord;
+    private javax.swing.JToggleButton tglSort;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

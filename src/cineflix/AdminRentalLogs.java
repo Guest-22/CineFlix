@@ -104,7 +104,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 Collections.reverse(rentals);
             }
             
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy : h:mm a");
             for (AdminRentalEntry r : rentals) { // Loops through a List of AdminRentalEntry objects and adds the record to the rental table.
                 // Convert Timestamp to LocalDateTime and format
                 String rentalDateStr = r.getRentalDate().toLocalDateTime().format(formatter);
