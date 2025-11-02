@@ -82,4 +82,19 @@ public class SearchUtils {
         }
         return results;
     }
+    
+    public static List<PersonalInfo> searchUserProfiles(List<PersonalInfo> users, String keyword) {
+        keyword = keyword.toLowerCase();
+        List<PersonalInfo> results = new ArrayList<>();
+
+        for (PersonalInfo u : users) {
+            if (String.valueOf(u.getAccountID()).contains(keyword) ||
+                (u.getFullName() != null && u.getFullName().toLowerCase().contains(keyword)) ||
+                (u.getUsername() != null && u.getUsername().toLowerCase().contains(keyword)) ||
+                (u.getEmail() != null && u.getEmail().toLowerCase().contains(keyword))) {
+                results.add(u);
+            }
+        }
+        return results;
+    }
 }

@@ -79,8 +79,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         selectedMovieID = -1; // Reset selected ID from movie table.
         
         // Clear filtered search.
-        txtSearch.setText(""); // lear the search field.
-        populateMovieTable(""); // Reset table to show all movies.
+        txtSearch.setText(""); // lear the ssearch field.
+        populateMovieTable("");
     }
     
     // Populates movie table with data from our tblMovies.
@@ -901,7 +901,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         } catch (NumberFormatException e) { // Catch invalid numerical values.
             Message.show("Please enter valid numeric values for year, duration, copies, and price/week.");
         } catch (Exception e) {
-            e.printStackTrace();
+            
             Message.error("Error adding movie: " + e.getMessage());
         }
     }//GEN-LAST:event_btnAddActionPerformed
@@ -935,7 +935,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         } catch (NumberFormatException e) { 
             Message.error("Please enter valid numeric values.");
         } catch (Exception e) {
-            e.printStackTrace();
+            
             Message.error("Error updating movie: " + e.getMessage());
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
@@ -960,7 +960,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             clearForm(); // Reset form.
             populateMovieTable(""); // Refresh/Repopulate movie table.
         } catch (Exception e) {
-            e.printStackTrace();
+            
             Message.error("Error deleting movie: " + e.getMessage());
         }
     }//GEN-LAST:event_btnDeleteActionPerformed

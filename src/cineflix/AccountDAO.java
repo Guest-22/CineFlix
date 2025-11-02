@@ -31,7 +31,7 @@ public class AccountDAO {
             ResultSet rs = stmt.executeQuery();
             return rs.next(); // returns true if the username exists.
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Username validation failed:\n" + e.getMessage());
         }
         return false; // Error or not found.
@@ -55,7 +55,7 @@ public class AccountDAO {
                 return rs.getInt(1); // Returns the PK (to be stored for reference).
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Account insertion failed:\n" + e.getMessage());
         }
         return -1; // Insertion failed.
@@ -74,7 +74,7 @@ public class AccountDAO {
             ResultSet rs = stmt.executeQuery();
             return rs.next(); // return true if match has been found.
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Verify account failed:\n" + e.getMessage());
         }
         return false; // Else, return false; account not found.
@@ -93,7 +93,7 @@ public class AccountDAO {
                 return rs.getString(COL_ROLE); // Returns role if found.
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Get role failed:\n" + e.getMessage());
         }
         return null; // Not found/error.
@@ -112,7 +112,7 @@ public class AccountDAO {
                 return rs.getInt(COL_ID); // Return acc ID if found.
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Retrieve account ID failed:\n" + e.getMessage());
         }
         return -1; // Not found.
@@ -130,7 +130,7 @@ public class AccountDAO {
                 return rs.getString("password");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Password retrieval failed:\n" + e.getMessage());
         }
         return null;
@@ -148,7 +148,7 @@ public class AccountDAO {
             stmt.setInt(3, accountID); // WHERE clause target; update this specific ID.
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Account update failed:\n" + e.getMessage());
         }
         return false;
@@ -163,9 +163,26 @@ public class AccountDAO {
             stmt.setInt(1, accountID); // Target row
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Account deletion failed:\n" + e.getMessage());
         }
         return false;
+    }
+    
+    // Returns the total number of accounts created in tblAccounts.
+    public int getAccountTotalCount(String role) {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_ACCOUNT + 
+                " WHERE " + COL_ROLE + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, role);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting accounts by role:\n" + e.getMessage());
+        }
+        return 0;
     }
 }

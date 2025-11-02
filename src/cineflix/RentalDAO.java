@@ -44,7 +44,7 @@ public class RentalDAO {
                 return rs.getInt(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Rental insertion failed:\n" + e.getMessage());
         }
         return -1; // Insert unsuccessful
@@ -92,7 +92,7 @@ public class RentalDAO {
                 history.add(rental);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Error retrieving rental history:\n" + e.getMessage());
         }
         return history;
@@ -130,7 +130,7 @@ public class RentalDAO {
                 logs.add(entry);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Failed to retrieve admin rental logs:\n" + e.getMessage());
         }
         return logs;
@@ -147,7 +147,7 @@ public class RentalDAO {
             pst.setInt(2, rentalID);
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Error updating rental stage:\n" + e.getMessage());
             return false;
         }
@@ -163,7 +163,7 @@ public class RentalDAO {
             pst.setInt(2, rentalID);
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Error updating rental status:\n" + e.getMessage());
             return false;
         }
@@ -194,9 +194,107 @@ public class RentalDAO {
                 return true;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             Message.error("Error deleting rental:\n" + e.getMessage());
         }
         return false;
     }
+    
+    public int getRentalTotalCount() {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_RENTALS;
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting rentals:\n" + e.getMessage());
+        }
+        return 0;
+    }
+    
+    public int getStatusCount(String status) {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_RENTALS + 
+                " WHERE " + COL_STATUS + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting rentals by status:\n" + e.getMessage());
+        }
+        return 0;
+    }
+    
+    public int getStageCount(String stage) {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_RENTALS + 
+                " WHERE " + COL_RENTAL_STAGE + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, stage);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting rentals by stage:\n" + e.getMessage());
+        }
+        return 0;
+    }
+
+    // Get all rental count based on accountID for user dashboard.
+    public int getRentalCountByAccountID(int accountID) {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_RENTALS + " WHERE accountID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting rentals:\n" + e.getMessage());
+        }
+        return 0;
+    }
+
+    // Get rental status count for user dashboard.
+    public int getRentalStatusByAccountID(int accountID, String status) {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_RENTALS + 
+                     " WHERE accountID = ? AND " + COL_STATUS + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            stmt.setString(2, status);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting rentals by status:\n" + e.getMessage());
+        }
+        return 0;
+    }
+    
+    // Get rental stage count for user dashboard.
+    public int getRentalStageByAccountID(int accountID, String stage) {
+        String sql = 
+            "SELECT COUNT(*) FROM " + TABLE_RENTALS + 
+            " WHERE accountID = ? AND " + COL_RENTAL_STAGE + " = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            stmt.setString(2, stage);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting rentals by stage:\n" + e.getMessage());
+        }
+        return 0;
+    }
+
 }

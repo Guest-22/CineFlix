@@ -1,12 +1,45 @@
 package cineflix;
 
-public class UserDashboard extends javax.swing.JFrame {
+import java.sql.Connection;
 
+public class UserDashboard extends javax.swing.JFrame {
+    Connection conn;
+    RentalDAO rentalDAO;
+    PaymentDAO paymentDAO;
+    
     public UserDashboard() {
         initComponents();
         this.setSize(1315, 675);
         this.setLocationRelativeTo(null); // Center the JFrame
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        
+        conn = DBConnection.getConnection();
+        if (conn == null) return;
+        rentalDAO = new RentalDAO(conn);
+        paymentDAO = new PaymentDAO(conn);
+        
+        populateRentalSummary();
+    }
+    
+    // Populate rental summary.
+    private void populateRentalSummary(){
+        if (conn == null) return;
+        rentalDAO = new RentalDAO(conn);
+        paymentDAO = new PaymentDAO(conn);
+        
+        // Get all counts based-off current loggedInUserID.
+        int pendingRequest = rentalDAO.getRentalStageByAccountID(ActiveSession.loggedInAccountID, "Requested");
+        int ongoingRentals = rentalDAO.getRentalStatusByAccountID(ActiveSession.loggedInAccountID, "Ongoing");
+        int returnedRentals = rentalDAO.getRentalStatusByAccountID(ActiveSession.loggedInAccountID, "Returned");
+        int paidFullCount = paymentDAO.getPaymentStatusCountByAccountID(ActiveSession.loggedInAccountID, "Paid Full");
+        int totalRentals = rentalDAO.getRentalCountByAccountID(ActiveSession.loggedInAccountID);
+        
+        // Diplay counts.
+        lblPendingRequest.setText(String.valueOf(pendingRequest));   
+        lblOngoingRentals.setText(String.valueOf(ongoingRentals));
+        lblReturnedRentals.setText(String.valueOf(returnedRentals));
+        lblPaidRentals.setText(String.valueOf(paidFullCount));
+        lblTotalRentals.setText(String.valueOf(totalRentals)); 
     }
     
     @SuppressWarnings("unchecked")
@@ -24,11 +57,18 @@ public class UserDashboard extends javax.swing.JFrame {
         btnMyPayments = new javax.swing.JButton();
         lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
-        lblUserDashboard = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        pnlRentalSummary = new javax.swing.JPanel();
+        lblRentalSummary = new javax.swing.JLabel();
+        lblReturnedRentalsTitle = new javax.swing.JLabel();
+        lblTotalRentalsTitle = new javax.swing.JLabel();
+        lblOngoingRentalsTitle = new javax.swing.JLabel();
+        lblTotalRentals = new javax.swing.JLabel();
+        lblOngoingRentals = new javax.swing.JLabel();
+        lblReturnedRentals = new javax.swing.JLabel();
+        lblPaidRentalsTitle = new javax.swing.JLabel();
+        lblPaidRentals = new javax.swing.JLabel();
+        lblPendingRequestTitle = new javax.swing.JLabel();
+        lblPendingRequest = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: User Dashboard");
@@ -156,56 +196,124 @@ public class UserDashboard extends javax.swing.JFrame {
                 .addComponent(btnMyPayments, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(281, Short.MAX_VALUE))
         );
 
-        lblUserDashboard.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblUserDashboard.setForeground(new java.awt.Color(0, 0, 0));
-        lblUserDashboard.setText("User Dashboard");
-        lblUserDashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        pnlRentalSummary.setBackground(new java.awt.Color(0, 0, 0));
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 280, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 160, Short.MAX_VALUE)
-        );
+        lblRentalSummary.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblRentalSummary.setForeground(new java.awt.Color(255, 255, 255));
+        lblRentalSummary.setText("Rental Summary");
+        lblRentalSummary.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 280, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 160, Short.MAX_VALUE)
-        );
+        lblReturnedRentalsTitle.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblReturnedRentalsTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblReturnedRentalsTitle.setText("Returned Rentals:");
+        lblReturnedRentalsTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 160, Short.MAX_VALUE)
-        );
+        lblTotalRentalsTitle.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblTotalRentalsTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalRentalsTitle.setText("Total Rentals:");
+        lblTotalRentalsTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 280, Short.MAX_VALUE)
+        lblOngoingRentalsTitle.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblOngoingRentalsTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblOngoingRentalsTitle.setText("Ongoing Rentals:");
+        lblOngoingRentalsTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblTotalRentals.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblTotalRentals.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalRentals.setText("N/A");
+        lblTotalRentals.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblOngoingRentals.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblOngoingRentals.setForeground(new java.awt.Color(255, 255, 255));
+        lblOngoingRentals.setText("N/A");
+        lblOngoingRentals.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblReturnedRentals.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblReturnedRentals.setForeground(new java.awt.Color(255, 255, 255));
+        lblReturnedRentals.setText("N/A");
+        lblReturnedRentals.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblPaidRentalsTitle.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblPaidRentalsTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaidRentalsTitle.setText("Paid Rentals");
+        lblPaidRentalsTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblPaidRentals.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblPaidRentals.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaidRentals.setText("N/A");
+        lblPaidRentals.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblPendingRequestTitle.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblPendingRequestTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblPendingRequestTitle.setText("Pending Request:");
+        lblPendingRequestTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblPendingRequest.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblPendingRequest.setForeground(new java.awt.Color(255, 255, 255));
+        lblPendingRequest.setText("N/A");
+        lblPendingRequest.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        javax.swing.GroupLayout pnlRentalSummaryLayout = new javax.swing.GroupLayout(pnlRentalSummary);
+        pnlRentalSummary.setLayout(pnlRentalSummaryLayout);
+        pnlRentalSummaryLayout.setHorizontalGroup(
+            pnlRentalSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(pnlRentalSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
+                        .addComponent(lblOngoingRentalsTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblOngoingRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
+                        .addComponent(lblReturnedRentalsTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblReturnedRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
+                        .addComponent(lblPaidRentalsTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblPaidRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
+                        .addComponent(lblRentalSummary)
+                        .addGap(0, 39, Short.MAX_VALUE))
+                    .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
+                        .addComponent(lblPendingRequestTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblPendingRequest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
+                        .addComponent(lblTotalRentalsTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTotalRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 160, Short.MAX_VALUE)
+        pnlRentalSummaryLayout.setVerticalGroup(
+            pnlRentalSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addComponent(lblRentalSummary)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlRentalSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPendingRequestTitle)
+                    .addComponent(lblPendingRequest))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlRentalSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblOngoingRentalsTitle)
+                    .addComponent(lblOngoingRentals, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlRentalSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblReturnedRentalsTitle)
+                    .addComponent(lblReturnedRentals, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlRentalSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPaidRentalsTitle)
+                    .addComponent(lblPaidRentals))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlRentalSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTotalRentalsTitle)
+                    .addComponent(lblTotalRentals, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
@@ -214,32 +322,17 @@ public class UserDashboard extends javax.swing.JFrame {
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblUserDashboard)
-                    .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnlRentalSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(972, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblUserDashboard)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(494, 494, 494))
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(pnlRentalSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -322,16 +415,23 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMyPayments;
     private javax.swing.JButton btnRentalHistory;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
     private javax.swing.JLabel lblHeader4;
-    private javax.swing.JLabel lblUserDashboard;
+    private javax.swing.JLabel lblOngoingRentals;
+    private javax.swing.JLabel lblOngoingRentalsTitle;
+    private javax.swing.JLabel lblPaidRentals;
+    private javax.swing.JLabel lblPaidRentalsTitle;
+    private javax.swing.JLabel lblPendingRequest;
+    private javax.swing.JLabel lblPendingRequestTitle;
+    private javax.swing.JLabel lblRentalSummary;
+    private javax.swing.JLabel lblReturnedRentals;
+    private javax.swing.JLabel lblReturnedRentalsTitle;
+    private javax.swing.JLabel lblTotalRentals;
+    private javax.swing.JLabel lblTotalRentalsTitle;
     private javax.swing.JPanel pnlMain;
+    private javax.swing.JPanel pnlRentalSummary;
     private javax.swing.JPanel pnlSideNav;
     // End of variables declaration//GEN-END:variables
 }

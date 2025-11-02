@@ -1,8 +1,10 @@
 package cineflix;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,15 +21,26 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         this.setSize(1315, 675);
         this.setLocationRelativeTo(null); // Center the Jframe.
         lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
+        setDefaultTglSort();
         
         conn = DBConnection.getConnection(); // Attemps to get a DB Connection.
         if (conn == null) return; // Validates the connection before continuing.
         infoDAO = new PersonalInfoDAO(conn); // Pass the connection as an argument inside PersonalInfoDAO class for CRUD methods.
         accountDAO = new AccountDAO(conn); // Pass the connection as an argument inside AccountDAO class for CRUD methods.
         
-        populateInfoTable(); // Populate info table.
+        populateInfoTable(""); // Populate info table.
     }
 
+    // Sets the default toggle button style.
+    private void setDefaultTglSort(){
+        tglSort.setFocusPainted(false);
+        tglSort.setContentAreaFilled(false);
+        tglSort.setBorderPainted(false);
+        tglSort.setOpaque(true);
+        tglSort.setBackground(Color.BLACK);
+        tglSort.setForeground(Color.WHITE);
+    }
+    
     // Clears all inputs and deselect row.
     public void clearForm() {
         txtFullName.setText("");
@@ -38,16 +51,43 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         txtaAddress.setText("");
         txtUsername.setText("");
         txtPassword.setText("");
-        tblInfoRecord.clearSelection();
+        tblInfoRecord.clearSelection(); // Clear movie table selection visually.
         selectedInfoID = -1; // Deselect ID just in case.
+        
+        txtSearch.setText("");
+        populateInfoTable("");
     }
 
     // Populates personal info table.
-    public void populateInfoTable() {
+    public void populateInfoTable(String keyword) {
         DefaultTableModel infoModel = (DefaultTableModel) tblInfoRecord.getModel();
         infoModel.setRowCount(0); // Clear table rows.
 
-        List<PersonalInfo> profiles = infoDAO.getAllInfoWithUsername(); // Retrives a record of PersonalInfo model.
+        List<PersonalInfo> profiles = infoDAO.getAllInfoWithUsername(); 
+        profiles = SearchUtils.searchUserProfiles(profiles, keyword);
+        
+        String selectedSort = cmbSort.getSelectedItem().toString();
+        String selectedOrder = tglSort.isSelected() ? "DESC" : "ASC";
+        
+         switch (selectedSort) {
+                case "Sort by Date Added":
+                    SortUtils.sortUserByDateAdded(profiles);
+                    break;
+                case "Sort by Full Name":
+                    SortUtils.sortUserByFullName(profiles);
+                    break;
+                case "Sort by Username":
+                    SortUtils.sortUserByUsername(profiles);
+                    break;
+                default:
+                    break;
+            }
+            
+            // Sort by order (ASC or DESC).
+            if (selectedOrder.equals("DESC")) {
+                Collections.reverse(profiles);
+            }
+            
         for (PersonalInfo p : profiles) { // Loops through profile (List) and get their values.
             Object[] row = {
                 p.getInfoID(),
@@ -116,7 +156,6 @@ public class AdminUserProfiles extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: User Profiles");
-        setMaximumSize(new java.awt.Dimension(1315, 675));
         setMinimumSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
         setSize(new java.awt.Dimension(1315, 675));
@@ -542,7 +581,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         cmbSort.setBackground(new java.awt.Color(0, 0, 0));
         cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cmbSort.setForeground(new java.awt.Color(255, 255, 255));
-        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Title", "Sort by Genre", "Sort by Year" }));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Date Added", "Sort by Full Name", "Sort by Username" }));
         cmbSort.setFocusable(false);
         cmbSort.setRequestFocusEnabled(false);
         cmbSort.addActionListener(new java.awt.event.ActionListener() {
@@ -622,7 +661,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblUserProfiles)
                     .addComponent(scrlInfo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
@@ -745,7 +784,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         boolean success = infoDAO.insertInfo(info); // Inserts the object model inside tblPersonalInfo.
         if (success) { // If the insertion succeed, return to login frame.
             Message.show("Account added successfully!");
-            populateInfoTable(); // Refreshes the JTable after insertion.
+            populateInfoTable(""); // Refreshes the JTable after insertion.
             clearForm(); // Optional: clears the form fields.
         } else { // Else, insertion failed.
             Message.error("Failed to save personal information.");
@@ -800,7 +839,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
             if (infoUpdated && accountUpdated) { // Update success.
                 Message.show("Account updated successfully!");
                 clearForm();           // Reset form
-                populateInfoTable();   // Refresh table
+                populateInfoTable("");   // Refresh table
             } else {
                 Message.error("Update failed. Please try again.");
             }
@@ -838,7 +877,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
 
             Message.show("Account deleted successfully!");
             clearForm(); // Reset form.
-            populateInfoTable(); // Refresh/Repopulate info table.
+            populateInfoTable(""); // Refresh/Repopulate info table.
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -848,18 +887,30 @@ public class AdminUserProfiles extends javax.swing.JFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         clearForm(); // Clear all inputs back to default; Deselects clicked ID just in case.
-        tblInfoRecord.clearSelection(); // Clear movie table selection visually.
+
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
+       String keyword = txtSearch.getText().trim();
+        if (keyword.isEmpty()){
+             Message.error("Please enter a movie title to search.");
+             return;
+        }
+        populateInfoTable(keyword);
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
-        // TODO add your handling code here:
+        String sortQuery = txtSearch.getText().trim();
+        populateInfoTable(sortQuery); 
     }//GEN-LAST:event_cmbSortActionPerformed
 
     private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
+        if (tglSort.isSelected()) {
+        tglSort.setText("DESC");
+        } else {
+            tglSort.setText("ASC");
+        }
+        populateInfoTable(txtSearch.getText().trim());
 
     }//GEN-LAST:event_tglSortActionPerformed
 

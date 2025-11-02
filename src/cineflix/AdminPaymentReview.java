@@ -61,7 +61,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         
         // Clear filtered search.
         txtSearch.setText(""); 
-        populatePaymentTable(""); //
+        populatePaymentTable("");
     }
     
     // Populates payment table.
@@ -1162,7 +1162,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
 
             Message.show("Transaction confirmed successfully.");
             populatePaymentTable("");
-            // clearForm();
         } catch (Exception e) {
             Message.error("Error confirming transaction: " + e.getMessage());
         }

@@ -1,6 +1,7 @@
 package cineflix;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -282,6 +283,7 @@ public class SortUtils {
         }
     }
     
+    // Sort by paymentdate/creation date (admin payment review).
     public static void sortUserPaymentsByPaymentDate(List<Payment> payments) {
         for (int i = 0; i < payments.size() - 1; i++) {
             int minIndex = i;
@@ -299,6 +301,25 @@ public class SortUtils {
         }
     }
     
+    // Sort by return date (admin payment review).
+    public static void sortUserPaymentsByReturnDate(List<Payment> payments) {
+        for (int i = 0; i < payments.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < payments.size(); j++) {
+                LocalDate a = payments.get(j).getReturnDate();
+                LocalDate b = payments.get(minIndex).getReturnDate();
+
+                if (a == null && b == null) continue;
+                else if (a == null) continue; // null = last
+                else if (b == null || a.isBefore(b)) minIndex = j;
+            }
+            Payment temp = payments.get(minIndex);
+            payments.set(minIndex, payments.get(i));
+            payments.set(i, temp);
+        }
+    }
+
+    // Sort by paid amount(admin payment review).
     public static void sortUserPaymentsByPaidAmount(List<Payment> payments) {
         for (int i = 0; i < payments.size() - 1; i++) {
             int minIndex = i;
@@ -316,6 +337,7 @@ public class SortUtils {
         }
     }
     
+    // Sort by remaining balance (admin payment review).
     public static void sortUserPaymentsByRemainingBalance(List<Payment> payments) {
         for (int i = 0; i < payments.size() - 1; i++) {
             int minIndex = i;
@@ -333,6 +355,7 @@ public class SortUtils {
         }
     }
 
+    // Sort by status (admin payment review).
     public static void sortUserPaymentsByRentalStatus(List<Payment> payments) {
         for (int i = 0; i < payments.size() - 1; i++) {
             int minIndex = i;
@@ -351,6 +374,7 @@ public class SortUtils {
         }
     }
     
+    // Sort by rental cost (admin payment review).
     public static void sortUserPaymentsByRentalCost(List<Payment> payments) {
         for (int i = 0; i < payments.size() - 1; i++) {
             int minIndex = i;
@@ -365,6 +389,54 @@ public class SortUtils {
             Payment temp = payments.get(minIndex);
             payments.set(minIndex, payments.get(i));
             payments.set(i, temp);
+        }
+    }
+    
+    // Sort by "Date Added" using Selection Sort (descending), based on accountID.
+    public static void sortUserByDateAdded(List<PersonalInfo> users) {
+        for (int i = 0; i < users.size() - 1; i++) {
+            int maxIndex = i;
+            for (int j = i + 1; j < users.size(); j++) {
+                if (users.get(j).getAccountID() > users.get(maxIndex).getAccountID()) {
+                    maxIndex = j;
+                }
+            }
+            PersonalInfo temp = users.get(maxIndex);
+            users.set(maxIndex, users.get(i));
+            users.set(i, temp);
+        }
+    }
+
+    
+    // Sort by full name using Selection Sort.
+    public static void sortUserByFullName(List<PersonalInfo> users) {
+        for (int i = 0; i < users.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < users.size(); j++) {
+                if (users.get(j).getFullName()
+                        .compareToIgnoreCase(users.get(minIndex).getFullName()) < 0) {
+                    minIndex = j;
+                }
+            }
+            PersonalInfo temp = users.get(minIndex);
+            users.set(minIndex, users.get(i));
+            users.set(i, temp);
+        }
+    }
+
+    // Sort by username using Selection Sort.
+    public static void sortUserByUsername(List<PersonalInfo> users) {
+        for (int i = 0; i < users.size() - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < users.size(); j++) {
+                if (users.get(j).getUsername()
+                        .compareToIgnoreCase(users.get(minIndex).getUsername()) < 0) {
+                    minIndex = j;
+                }
+            }
+            PersonalInfo temp = users.get(minIndex);
+            users.set(minIndex, users.get(i));
+            users.set(i, temp);
         }
     }
 }

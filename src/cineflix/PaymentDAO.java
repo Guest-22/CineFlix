@@ -33,7 +33,7 @@ public class PaymentDAO {
             pst.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Payment failed:\n" + e.getMessage());
         }
         return false;
@@ -71,7 +71,7 @@ public class PaymentDAO {
                 records.add(record);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Failed to load payment records:\n" + e.getMessage());
         }
         return records;
@@ -132,7 +132,7 @@ public class PaymentDAO {
             pst.setInt(3, rentalID);
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Error updating payment status & amount:\n" + e.getMessage());
             return false;
         }
@@ -151,7 +151,7 @@ public class PaymentDAO {
             stmt.setInt(4, paymentID);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Payment transaction failed:\n" + e.getMessage());
             return false;
         }
@@ -165,7 +165,7 @@ public class PaymentDAO {
             stmt.setInt(1, paymentID);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Payment transaction deletion failed:\n" + e.getMessage());
             return false;
         }
@@ -187,8 +187,62 @@ public class PaymentDAO {
             }
         } catch (Exception e) {
             Message.error("Retreival of Movie ID via Payment ID failed:\n" + e.getMessage());
-            e.printStackTrace();
         }
         return -1; // Movie ID not found.
     }
+    
+    // Get total payment records for admin dashboard stats.
+    public int getPaymentTotalCount() {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_PAYMENTS;
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting payment records:\n" + e.getMessage());
+        }
+        return 0;
+    }
+    
+    // Retrieve total revenue (sum of all amounts paid).
+    public double getSumAmount() {
+        String sql = 
+                "SELECT SUM(" + COL_AMOUNT + ") "
+                + "FROM " + TABLE_PAYMENTS;
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error calculating total revenue:\n" + e.getMessage());
+        }
+        return 0.0;
+    }
+    
+    // Retrieve count of selected status (i.e., Pending, Paid Upfront, or Paid Full).
+    public int getPaymentStatusCountByAccountID(int accountID, String status) {
+        String sql = 
+            "SELECT COUNT(*) FROM " + TABLE_PAYMENTS + " p " +
+            "JOIN tblRentals r ON p.rentalID = r.rentalID " +
+            "WHERE r.accountID = ? AND p.paymentStatus = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            stmt.setString(2, status);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting payments by status:\n" + e.getMessage());
+        }
+        return 0;
+    }
+
 }

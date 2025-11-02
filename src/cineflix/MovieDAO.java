@@ -46,7 +46,6 @@ public class MovieDAO {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             Message.error("Movie insertion failed:\n" + e.getMessage());
         }
     }
@@ -75,7 +74,6 @@ public class MovieDAO {
                 list.add(m);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             Message.error("Error retrieving all movies:\n" + e.getMessage());
         }
         return list;
@@ -106,7 +104,6 @@ public class MovieDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
             Message.error("Error retrieving all Movies for Users:\n" + e.getMessage());
         }
 
@@ -128,7 +125,6 @@ public class MovieDAO {
                 imagePath = rs.getString(COL_IMAGEPATH);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             Message.error("Error retrieving imagepath:\n" + e.getMessage());
         }
 
@@ -150,7 +146,6 @@ public class MovieDAO {
                 synopsis = rs.getString(COL_SYNOPSIS);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             Message.error("Error retrieving synopsis:\n" + e.getMessage());
         }
 
@@ -179,7 +174,6 @@ public class MovieDAO {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             Message.error("Movie update failed:\n" + e.getMessage());
         }
     }
@@ -194,7 +188,6 @@ public class MovieDAO {
             stmt.setInt(1, movieID);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             Message.error("Movie deletion failed:\n" + e.getMessage());
         }
     }
@@ -231,5 +224,20 @@ public class MovieDAO {
             Message.error("Movie copy incremental failed:\n" + e.getMessage());
         }
         return false;
+    }
+    
+    // Returns the total number of movie entries in tblMovies.
+    public int getMovieTotalCount() {
+        String sql = "SELECT COUNT(*) FROM " + TABLE_MOVIES;
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting movies:\n" + e.getMessage());
+        }
+        return 0;
     }
 }

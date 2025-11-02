@@ -64,6 +64,9 @@ public class UserMyPayments extends javax.swing.JFrame {
             case "Sort by Payment Date":
                 SortUtils.sortUserPaymentsByPaymentDate(payments);
                 break;
+            case "Sort by Return Date":
+                SortUtils.sortUserPaymentsByReturnDate(payments);
+                break;
             case "Sort by Paid Amount":
                 SortUtils.sortUserPaymentsByPaidAmount(payments);
                 break;
@@ -78,49 +81,50 @@ public class UserMyPayments extends javax.swing.JFrame {
                 break;
             default:
                 break;
-            }
+        }
             
-            if ("DESC".equals(selectedOrder)) {
-                Collections.reverse(payments);
-            }
-            
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy : h:mm a"); // Formats date.
-            
-            for (Payment p : payments) {
-                double rentalCost = p.getRentalCost();
-                double overdue = p.getOverdueAmount();
-                double amountPaid = p.getAmount();
-                double remainingBalance = rentalCost + overdue - amountPaid;        
+        if ("DESC".equals(selectedOrder)) {
+            Collections.reverse(payments);
+        }
 
-                 String rentalDate = p.getRentalDate() != null
-                    ? p.getRentalDate().atStartOfDay().format(formatter)
-                    : "—";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy : h:mm a"); // Formats date.
 
-                String returnDate = p.getReturnDate() != null
-                    ? p.getReturnDate().atStartOfDay().format(formatter)
-                    : "—";
+        for (Payment p : payments) {
+            double rentalCost = p.getRentalCost();
+            double overdue = p.getOverdueAmount();
+            double amountPaid = p.getAmount();
+            double remainingBalance = rentalCost + overdue - amountPaid;        
 
-                Object[] row = {
-                    p.getRentalID(),
-                    p.getMovieTitle(),
-                    rentalDate,
-                    returnDate,
-                    p.getRentalStatus(),
-                    p.getPaymentStatus(),
-                    "₱" + formatAmount(rentalCost),
-                    "₱" + formatAmount(overdue),
-                    "₱" + formatAmount(amountPaid),
-                    "₱" + formatAmount(remainingBalance)
-                };
-                model.addRow(row); // Add row to table
-            }
-            
-            // Hide rentalID column (index 0).
-            tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
-            tblPaymentRecord.getColumnModel().getColumn(0).setMaxWidth(0);
-            tblPaymentRecord.getColumnModel().getColumn(0).setWidth(0);
+             String rentalDate = p.getRentalDate() != null
+                ? p.getRentalDate().atStartOfDay().format(formatter)
+                : "—";
+
+            String returnDate = p.getReturnDate() != null
+                ? p.getReturnDate().atStartOfDay().format(formatter)
+                : "—";
+
+            Object[] row = {
+                p.getRentalID(),
+                p.getMovieTitle(),
+                rentalDate,
+                returnDate,
+                p.getRentalStatus(),
+                p.getPaymentStatus(),
+                "₱" + formatAmount(rentalCost),
+                "₱" + formatAmount(overdue),
+                "₱" + formatAmount(amountPaid),
+                "₱" + formatAmount(remainingBalance)
+            };
+            model.addRow(row); // Add row to table
+        }
+
+        // Hide rentalID column (index 0).
+        tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setWidth(0);
+        
         } catch (Exception e) {
-            e.printStackTrace();
+            
             Message.error("Error loading payment table: " + e.getMessage());
         }
     }
@@ -402,7 +406,7 @@ public class UserMyPayments extends javax.swing.JFrame {
         cmbSort.setBackground(new java.awt.Color(0, 0, 0));
         cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cmbSort.setForeground(new java.awt.Color(255, 255, 255));
-        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Payment Date", "Sort by Paid Amount", "Sort by Balance", "Sort by Rental Cost", "Sort by Rental Status" }));
+        cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Payment Date", "Sort by Return Date", "Sort by Paid Amount", "Sort by Balance", "Sort by Rental Cost", "Sort by Rental Status" }));
         cmbSort.setFocusable(false);
         cmbSort.setRequestFocusEnabled(false);
         cmbSort.addActionListener(new java.awt.event.ActionListener() {

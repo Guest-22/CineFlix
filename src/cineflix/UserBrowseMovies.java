@@ -2,8 +2,6 @@ package cineflix;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -102,12 +100,8 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         cmbPricePerWeek.setSelectedIndex(0);
         tblMovieRecord.clearSelection();
         txtWeeklyPrice.setText("₱0.00");
-        
-        // Clear filtered search.
-        txtSearch.setText(""); // lear the search field.
-        populateMovieTable(""); // Reset table to show all movies.
     }
-
+    
     // Updates the total price of all selected movies; below tblCard.
     public void updateCartTotalPrice() {
         tblCartRecord = (DefaultTableModel) tblCart.getModel();
@@ -172,7 +166,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             tblMovieRecord.getColumnModel().getColumn(0).setMaxWidth(0);
             tblMovieRecord.getColumnModel().getColumn(0).setWidth(0);
         } catch (Exception e) {
-            e.printStackTrace();
+            
             Message.error("Error loading movie table: " + e.getMessage());
         }
     }

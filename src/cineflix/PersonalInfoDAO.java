@@ -35,7 +35,7 @@ public class PersonalInfoDAO {
             ResultSet rs = stmt.executeQuery();
             return rs.next(); // Returns true if email already exists
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Email checker failed:\n" + e.getMessage());
         }
         return false;
@@ -59,7 +59,7 @@ public class PersonalInfoDAO {
 
             return stmt.executeUpdate() > 0; // Return true if insert succeeded.
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Personal info insertion failed:\n" + e.getMessage());
         }
         return false; // Insert failed; return false.
@@ -77,7 +77,7 @@ public class PersonalInfoDAO {
                 return rs.getInt("accountID");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Account ID retrieval failed:\n" + e.getMessage());
         }
         return -1;
@@ -108,7 +108,7 @@ public class PersonalInfoDAO {
                 list.add(info);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Retrieval of all personal infos & username failed:\n" + e.getMessage());
         }
         return list;
@@ -129,7 +129,7 @@ public class PersonalInfoDAO {
             stmt.setInt(6, info.getInfoID()); // WHERE clause target; update this specific ID.
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Personal info update failed:\n" + e.getMessage());
         }
         return false;
@@ -144,7 +144,7 @@ public class PersonalInfoDAO {
             stmt.setInt(1, infoID); // Target row.
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            
             Message.error("Personal info deletion failed:\n" + e.getMessage());
         }
         return false;
