@@ -121,8 +121,9 @@ public class AdminUserProfiles extends javax.swing.JFrame {
         btnUserProfiles = new javax.swing.JButton();
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
-        lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lblHeader4 = new javax.swing.JTextArea();
         pnlForm = new javax.swing.JPanel();
         lblManageUserProfiles = new javax.swing.JLabel();
         lblFullName = new javax.swing.JLabel();
@@ -237,11 +238,6 @@ public class AdminUserProfiles extends javax.swing.JFrame {
             }
         });
 
-        lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader4.setText("Welcome, Admin");
-        lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
         btnLogout.setBackground(new java.awt.Color(0, 0, 0));
         btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -253,24 +249,37 @@ public class AdminUserProfiles extends javax.swing.JFrame {
             }
         });
 
+        lblHeader4.setEditable(false);
+        lblHeader4.setBackground(new java.awt.Color(0, 0, 0));
+        lblHeader4.setColumns(20);
+        lblHeader4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader4.setLineWrap(true);
+        lblHeader4.setRows(3);
+        lblHeader4.setWrapStyleWord(true);
+        lblHeader4.setBorder(null);
+        lblHeader4.setFocusable(false);
+        jScrollPane5.setViewportView(lblHeader4);
+
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
         pnlSideNavLayout.setHorizontalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSideNavLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
             .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlSideNavLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,8 +291,8 @@ public class AdminUserProfiles extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader4)
-                .addGap(44, 44, 44)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMovieInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1034,6 +1043,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
     private javax.swing.JButton btnUserProfiles;
     private javax.swing.JCheckBox chkShowPassword;
     private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblAddress;
     private javax.swing.JLabel lblContact;
     private javax.swing.JLabel lblEmail;
@@ -1041,7 +1051,7 @@ public class AdminUserProfiles extends javax.swing.JFrame {
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
-    private javax.swing.JLabel lblHeader4;
+    private javax.swing.JTextArea lblHeader4;
     private javax.swing.JLabel lblManageUserProfiles;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblSex;

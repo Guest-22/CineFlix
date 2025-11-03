@@ -142,11 +142,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         tblPaymentTable.getColumnModel().getColumn(6).setMinWidth(0);
         tblPaymentTable.getColumnModel().getColumn(6).setMaxWidth(0);
         tblPaymentTable.getColumnModel().getColumn(6).setWidth(0);
-        
-        // Hides rental status.
-        tblPaymentTable.getColumnModel().getColumn(7).setMinWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(7).setMaxWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(7).setWidth(0);
 
         // Hides payment date.
         tblPaymentTable.getColumnModel().getColumn(12).setMinWidth(0);
@@ -162,12 +157,11 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             LocalDateTime returnDate = p.getReturnDate();
             boolean isPastDue = returnDate.isBefore(now);
             boolean isOngoing = "Ongoing".equalsIgnoreCase(p.getRentalStatus());
-            boolean isPaidFull = "Paid Full".equalsIgnoreCase(p.getPaymentStatus());
 
             double overdueAmount = 0.00;
             String rentalStatus = p.getRentalStatus();
 
-            if (isPastDue && !isPaidFull) {
+            if (isPastDue) {
                 long daysLate = java.time.temporal.ChronoUnit.DAYS.between(returnDate.toLocalDate(), now.toLocalDate());
                 overdueAmount = daysLate * 10.00;
 
@@ -184,10 +178,14 @@ public class AdminPaymentReview extends javax.swing.JFrame {
 
     // Apply designated color based-off payment status.
     private void applyPaymentTableColorRenderers(JTable tblPaymentRecord) {
-        Color colGray   = new Color(128, 128, 128); // Pending.
-        Color colGreen  = new Color(88, 199, 138); // Paid Upfront.
-        Color colPurple = new Color(153, 102, 204); // Paid Full.
-        Color colRed    = new Color(226, 88, 88);   // Overdue.
+        Color colGray = new Color(96, 96, 96); // Pending.
+        Color colGreen = new Color(44, 160, 110); // Paid Upfront.
+        Color colPurple = new Color(102, 51, 153); // Paid Full.
+        Color colRed = new Color(180, 40, 40); // Overdue/Cancelled.
+
+        Color colOrange = new Color(255, 140, 0); // Late.
+        Color colBlue = new Color(70, 130, 180); // Ongoing.
+        Color colTeal = new Color(0, 128, 128); // Returned.
 
         // Row-wide renderer based on paymentStatus (col 8), excluding overdueAmount (col 11).
         tblPaymentRecord.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -197,6 +195,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
 
                 Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 Object statusObj = table.getValueAt(row, 8); // paymentStatus.
+                Object rentalObj = table.getValueAt(row, 7); // rentalStatus.
                 Object overdueObj = table.getValueAt(row, 11); // overdueAmount.
 
                 if (isSelected) {
@@ -219,6 +218,26 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                                 break;
                             default:
                                 baseColor = table.getBackground();
+                        }
+                    }
+
+                    // Apply rental status color only to rentalStatus column (col 7)
+                    if (column == 7 && rentalObj != null) {
+                        String rentalStatus = rentalObj.toString();
+                        switch (rentalStatus) {
+                            case "Late":
+                                baseColor = colOrange;
+                                break;
+                            case "Ongoing":
+                                baseColor = colBlue;
+                                break;
+                            case "Returned":
+                                baseColor = colTeal;
+                                break;
+                            case "Cancelled":
+                                baseColor = colRed;
+                            default:
+                                // keep baseColor
                         }
                     }
 
@@ -259,8 +278,9 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         btnUserProfiles = new javax.swing.JButton();
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
-        lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lblHeader4 = new javax.swing.JTextArea();
         lblPaymentReview = new javax.swing.JLabel();
         scrlPayment = new javax.swing.JScrollPane();
         tblPaymentTable = new javax.swing.JTable();
@@ -390,11 +410,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             }
         });
 
-        lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader4.setText("Welcome, Admin");
-        lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
         btnLogout.setBackground(new java.awt.Color(0, 0, 0));
         btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -406,24 +421,37 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             }
         });
 
+        lblHeader4.setEditable(false);
+        lblHeader4.setBackground(new java.awt.Color(0, 0, 0));
+        lblHeader4.setColumns(20);
+        lblHeader4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader4.setLineWrap(true);
+        lblHeader4.setRows(3);
+        lblHeader4.setWrapStyleWord(true);
+        lblHeader4.setBorder(null);
+        lblHeader4.setFocusable(false);
+        jScrollPane5.setViewportView(lblHeader4);
+
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
         pnlSideNavLayout.setHorizontalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSideNavLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlSideNavLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -435,8 +463,8 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader4)
-                .addGap(44, 44, 44)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMovieInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1179,24 +1207,30 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             return;
         }
 
-        boolean confirm = Message.confirm("Are you sure you want to delete this transaction?", "Confirm Delete");
+        boolean confirm = Message.confirm("Are you sure you want to delete this transaction and its rental?", "Confirm Delete");
         if (!confirm) return;
 
         try {
             conn = DBConnection.getConnection();
             if (conn == null) return;
 
-            paymentDAO = new PaymentDAO(conn);
-            boolean success = paymentDAO.deletePaymentTransaction(selectedPaymentID);
+            rentalDAO = new RentalDAO(conn); // Use RentalDAO to resolve and delete rental.
+            int rentalID = rentalDAO.getRentalIDByPaymentID(selectedPaymentID); // Query rentalID via paymentID.
+
+            if (rentalID == -1) {
+                Message.error("Rental record not found for this payment.");
+                return;
+            }
+
+            boolean success = rentalDAO.deleteRental(rentalID); // Deletes rental and payment record.
 
             if (success) {
-                Message.show("Transaction deleted successfully.");
-                populatePaymentTable("");
-                clearForm();
+                Message.show("Transaction and rental deleted successfully.");
+                populatePaymentTable(""); // Refresh payment table.
+                clearForm(); // Reset form.
             } else {
                 Message.error("Failed to delete transaction.");
             }
-
         } catch (Exception e) {
             Message.error("Error deleting transaction: " + e.getMessage());
         }
@@ -1252,7 +1286,18 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 Message.error("Failed to increment movie copy.");
                 return;
             }
-
+            
+            // Update rental status to 'Returned'.
+            RentalDAO rentalDAO = new RentalDAO(conn);
+            int rentalID = rentalDAO.getRentalIDByPaymentID(selectedPaymentID);
+            if (rentalID != -1) {
+                boolean rentalUpdated = rentalDAO.updateRentalStatus(rentalID, "Returned");
+                if (!rentalUpdated) {
+                    Message.error("Failed to update rental status.");
+                    return;
+                }
+            }
+            
             Message.show("Transaction confirmed successfully.");
             populatePaymentTable("");
         } catch (Exception e) {
@@ -1310,11 +1355,12 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbRentalStage;
     private javax.swing.JComboBox<String> cmbRentalStatus;
     private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblAccountName;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
-    private javax.swing.JLabel lblHeader4;
+    private javax.swing.JTextArea lblHeader4;
     private javax.swing.JLabel lblManageRentalDetails;
     private javax.swing.JLabel lblMovieTitle;
     private javax.swing.JLabel lblOverdue;

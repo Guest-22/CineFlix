@@ -153,6 +153,26 @@ public class RentalDAO {
         }
     }
     
+    // Retrieves rentalID based on paymentID; used for cascading deletion from payment to rental.
+    public int getRentalIDByPaymentID(int paymentID) {
+        String sql = 
+                "SELECT r.rentalID " +
+                "FROM " + TABLE_PAYMENTS + " p " +
+                "JOIN " + TABLE_RENTALS +" r ON p.rentalID = r.rentalID " +
+                "WHERE p.paymentID = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, paymentID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("rentalID");
+            }
+        } catch (Exception e) {
+            Message.error("Retrieval of Rental ID via Payment ID failed:\n" + e.getMessage());
+        }
+        return -1; // Rental ID not found.
+    }
+    
     // Updates rental status from tblRentals (AdminRentalLogs).
     public boolean updateRentalStatus(int rentalID, String newStatus) {
         String sql = 
@@ -296,5 +316,34 @@ public class RentalDAO {
         }
         return 0;
     }
+    
+    // Gets the recent rental record by accountID with an expected limits.
+    public List<Rental> getRecentRentalsByAccountID(int accountID, int limit) {
+        List<Rental> rentals = new ArrayList<>();
+        String sql = 
+            "SELECT m.title, r.rentalDate, r.returnDate, r.rentalStatus, r.rentalCost " +
+            "FROM " + TABLE_RENTALS + " r " +
+            "JOIN tblMovies m ON r.movieID = m.movieID " +
+            "WHERE r.accountID = ? " +
+            "ORDER BY r.rentalDate DESC " +
+            "LIMIT ?";
 
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            stmt.setInt(2, limit);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Rental rental = new Rental();
+                rental.setMovieTitle(rs.getString("title"));
+                rental.setRentalDate(rs.getTimestamp("rentalDate"));
+                rental.setReturnDate(rs.getTimestamp("returnDate"));
+                rental.setRentalStatus(rs.getString("rentalStatus"));
+                rental.setRentalCost(rs.getDouble("rentalCost"));
+                rentals.add(rental);
+            }
+        } catch (SQLException e) {
+            Message.error("Error retrieving recent rentals:\n" + e.getMessage());
+        }
+        return rentals;
+    }
 }

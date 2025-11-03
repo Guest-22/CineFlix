@@ -77,8 +77,9 @@ public class AdminDashboard extends javax.swing.JFrame {
         btnUserProfiles = new javax.swing.JButton();
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
-        lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lblHeader4 = new javax.swing.JTextArea();
         pnlSummary = new javax.swing.JPanel();
         pnlMovie = new javax.swing.JPanel();
         lblMovie = new javax.swing.JLabel();
@@ -195,11 +196,6 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader4.setText("Welcome, Admin");
-        lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
         btnLogout.setBackground(new java.awt.Color(0, 0, 0));
         btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -211,24 +207,37 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
+        lblHeader4.setEditable(false);
+        lblHeader4.setBackground(new java.awt.Color(0, 0, 0));
+        lblHeader4.setColumns(20);
+        lblHeader4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader4.setLineWrap(true);
+        lblHeader4.setRows(3);
+        lblHeader4.setWrapStyleWord(true);
+        lblHeader4.setBorder(null);
+        lblHeader4.setFocusable(false);
+        jScrollPane5.setViewportView(lblHeader4);
+
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
         pnlSideNavLayout.setHorizontalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSideNavLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(18, Short.MAX_VALUE))
             .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlSideNavLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,8 +249,8 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader4)
-                .addGap(44, 44, 44)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMovieInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -267,7 +276,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         lblMovie.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblMovie.setForeground(new java.awt.Color(0, 0, 0));
-        lblMovie.setText("Movies");
+        lblMovie.setText("Movie Details");
 
         lblEntriesAddedTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblEntriesAddedTitle.setForeground(new java.awt.Color(0, 0, 0));
@@ -320,7 +329,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         lblRentals.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblRentals.setForeground(new java.awt.Color(0, 0, 0));
         lblRentals.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblRentals.setText("Rentals");
+        lblRentals.setText("Rentals Details");
 
         lblOngoingTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblOngoingTitle.setForeground(new java.awt.Color(0, 0, 0));
@@ -451,7 +460,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         lblPayments.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblPayments.setForeground(new java.awt.Color(0, 0, 0));
-        lblPayments.setText("Payments");
+        lblPayments.setText("Payments Details");
 
         lblRecordsAddedTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblRecordsAddedTitle.setForeground(new java.awt.Color(0, 0, 0));
@@ -514,7 +523,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         lblUsers.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblUsers.setForeground(new java.awt.Color(0, 0, 0));
-        lblUsers.setText("Users");
+        lblUsers.setText("Users Details");
 
         lblAccountsCreated.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblAccountsCreated.setForeground(new java.awt.Color(0, 0, 0));
@@ -618,7 +627,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 12, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -725,6 +734,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnRentalLogs;
     private javax.swing.JButton btnUserProfiles;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblAccountsCreated;
     private javax.swing.JLabel lblAccountsCreatedTitle;
     private javax.swing.JLabel lblCancelled;
@@ -734,7 +744,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
-    private javax.swing.JLabel lblHeader4;
+    private javax.swing.JTextArea lblHeader4;
     private javax.swing.JLabel lblLate;
     private javax.swing.JLabel lblLateTitle;
     private javax.swing.JLabel lblMovie;

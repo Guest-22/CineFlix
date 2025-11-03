@@ -136,10 +136,10 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     // Applies color indicator based on the rental stage & rental status.
     private void applyRentalTableColorRenderers(JTable tblRentalRecord) {
         // Colors indicators.
-        Color colGray   = new Color(128, 128, 128); // Neutral.
-        Color colGreen  = new Color(88, 199, 138); // Active.
-        Color colPurple = new Color(153, 102, 204); // Completed.
-        Color colRed    = new Color(226, 88, 88); // Problematic.
+        Color colGray   = new Color(96, 96, 96); // Neutral.
+        Color colGreen  = new Color(44, 160, 110); // Active.
+        Color colPurple = new Color(102, 51, 153); // Completed.
+        Color colRed    = new Color(180, 40, 40); // Problematic.
 
         // Apply row-wide color renderer based on rentalStage col (index 5).
         tblRentalRecord.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -157,11 +157,19 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                     if (column != 6 && stageValue != null) { // Skip rentalStatus column.
                         String rentalStageCol = stageValue.toString();
                         switch (rentalStageCol) {
-                            case "Requested":  cell.setBackground(colGray);   break;
-                            case "Approved":   cell.setBackground(colGreen);  break;
-                            case "PickedUp":   cell.setBackground(colPurple); break;
-                            case "Rejected":   cell.setBackground(colRed);    break;
-                            default:           cell.setBackground(table.getBackground());
+                            case "Requested":
+                                cell.setBackground(colGray);
+                                break;
+                            case "Approved":
+                                cell.setBackground(colGreen);
+                                break;
+                            case "PickedUp":
+                                cell.setBackground(colPurple);
+                                break;
+                            case "Rejected":   cell.setBackground(colRed);
+                            break;
+                            default:
+                                cell.setBackground(table.getBackground());
                         }
                     } else {
                         cell.setBackground(table.getBackground());
@@ -186,12 +194,21 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 } else {
                     String rentalStatusCol = value.toString();
                     switch (rentalStatusCol) {
-                        case "Pending":    cell.setBackground(colGray);   break;
-                        case "Ongoing":    cell.setBackground(colGreen);  break;
-                        case "Returned":   cell.setBackground(colPurple); break;
+                        case "Pending":
+                            cell.setBackground(colGray);
+                            break;
+                        case "Ongoing":
+                            cell.setBackground(colGreen);
+                        break;
+                        case "Returned":
+                            cell.setBackground(colPurple);
+                            break;
                         case "Late":
-                        case "Cancelled":  cell.setBackground(colRed);    break;
-                        default:           cell.setBackground(table.getBackground());
+                        case "Cancelled":
+                            cell.setBackground(colRed); 
+                        break;
+                        default:
+                            cell.setBackground(table.getBackground());
                     }
                     cell.setForeground(table.getForeground());
                 }
@@ -214,8 +231,9 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         btnUserProfiles = new javax.swing.JButton();
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
-        lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lblHeader4 = new javax.swing.JTextArea();
         lblRentalLogs = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
         cmbSort = new javax.swing.JComboBox<>();
@@ -336,11 +354,6 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             }
         });
 
-        lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader4.setText("Welcome, Admin");
-        lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
         btnLogout.setBackground(new java.awt.Color(0, 0, 0));
         btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -352,24 +365,37 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             }
         });
 
+        lblHeader4.setEditable(false);
+        lblHeader4.setBackground(new java.awt.Color(0, 0, 0));
+        lblHeader4.setColumns(20);
+        lblHeader4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader4.setLineWrap(true);
+        lblHeader4.setRows(3);
+        lblHeader4.setWrapStyleWord(true);
+        lblHeader4.setBorder(null);
+        lblHeader4.setFocusable(false);
+        jScrollPane5.setViewportView(lblHeader4);
+
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
         pnlSideNavLayout.setHorizontalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSideNavLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
             .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlSideNavLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,8 +407,8 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader4)
-                .addGap(44, 44, 44)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnMovieInventory, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1054,7 +1080,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     }//GEN-LAST:event_txtRentalIDActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-       if (selectedRentalID <= 0) { // Handles no row being selected.
+       if (selectedRentalID == -1) { // Handles no row being selected.
             Message.error("No rental selected.");
             return;
         }
@@ -1072,7 +1098,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         if (!confirmed) return;
 
         if (conn == null) return; // Validates connection.
-        rentalDAO = new RentalDAO(conn); // Use DAO to delete rental
+        rentalDAO = new RentalDAO(conn); // Use DAO to delete rental.
         boolean success = rentalDAO.deleteRental(selectedRentalID); // Deletes rental and payment record
 
         if (success) {
@@ -1138,12 +1164,13 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbRentalStage;
     private javax.swing.JComboBox<String> cmbRentalStatus;
     private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblAccountName;
     private javax.swing.JLabel lblAmountPaid;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
-    private javax.swing.JLabel lblHeader4;
+    private javax.swing.JTextArea lblHeader4;
     private javax.swing.JLabel lblManageRentalDetails;
     private javax.swing.JLabel lblMovieTitle;
     private javax.swing.JLabel lblRentalDate;

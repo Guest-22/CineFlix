@@ -57,6 +57,15 @@ public class Rental {
         this.paymentStatus = paymentStatus;
     }
     
+    // Constructor for user dashboard recent movies.
+    public Rental(String movieTitle, Timestamp rentalDate, Timestamp returnDate, String rentalStatus, double rentalPrice) {
+        this.movieTitle = movieTitle;
+        this.rentalDate = rentalDate;
+        this.returnDate = returnDate;
+        this.rentalStatus = rentalStatus;
+        this.rentalCost = rentalPrice;
+    }
+
     // Getter method.
     public int getRentalID() {
         return rentalID;

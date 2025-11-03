@@ -260,4 +260,85 @@ public class PaymentDAO {
             return false;
         }
     }
+    
+    // Retrieve total amount paid by a specific user.
+    public double getTotalPaidByAccountID(int accountID) {
+        String sql =
+            "SELECT SUM(p.amount) " +
+            "FROM " + TABLE_PAYMENTS + " p " +
+            "JOIN tblRentals r ON p.rentalID = r.rentalID " +
+            "WHERE r.accountID = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error retrieving total amount paid:\n" + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Retrieve total unpaid balance by user (rentalCost + overdueAmount - amount).
+    public double getTotalUnpaidBalanceByAccountID(int accountID) {
+        String sql =
+            "SELECT SUM((r.rentalCost + p.overdueAmount) - p.amount) " +
+            "FROM " + TABLE_PAYMENTS + " p " +
+            "JOIN tblRentals r ON p.rentalID = r.rentalID " +
+            "WHERE r.accountID = ? AND p.paymentStatus != 'Paid Full'";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error retrieving unpaid balance:\n" + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Retrieve total overdue charges by user.
+    public double getTotalOverdueChargesByAccountID(int accountID) {
+        String sql =
+            "SELECT SUM(p.overdueAmount) " +
+            "FROM " + TABLE_PAYMENTS + " p " +
+            "JOIN tblRentals r ON p.rentalID = r.rentalID " +
+            "WHERE r.accountID = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error retrieving overdue charges:\n" + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    // Retrieve last payment date by user.
+    public LocalDateTime getLastPaymentDateByAccountID(int accountID) {
+        String sql =
+            "SELECT MAX(p.paymentDate) " +
+            "FROM " + TABLE_PAYMENTS + " p " + 
+            " JOIN tblRentals r ON p.rentalID = r.rentalID " +
+            "WHERE r.accountID = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Timestamp ts = rs.getTimestamp(1);
+                return ts != null ? ts.toLocalDateTime() : null;
+            }
+        } catch (SQLException e) {
+            Message.error("Error retrieving last payment date:\n" + e.getMessage());
+        }
+        return null;
+    }
 }

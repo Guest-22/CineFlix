@@ -240,4 +240,30 @@ public class MovieDAO {
         }
         return 0;
     }
+    
+    // Retrieve top rented movies based on rental count.
+    public List<Movie> getTopRentedMovieSummaries(int limit) {
+        List<Movie> topMovies = new ArrayList<>();
+        String sql = 
+            "SELECT m.title, m.imagePath, COUNT(*) AS rentalCount " +
+            "FROM tblRentals r " +
+            "JOIN tblMovies m ON r.movieID = m.movieID " +
+            "GROUP BY m.title, m.imagePath " +
+            "ORDER BY rentalCount DESC " +
+            "LIMIT ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, limit);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Movie movie = new Movie();
+                movie.setTitle(rs.getString("title"));
+                movie.setImagePath(rs.getString("imagePath"));
+                topMovies.add(movie);
+            }
+        } catch (SQLException e) {
+            Message.error("Error fetching top rented movies:\n" + e.getMessage());
+        }
+        return topMovies;
+    }
 }

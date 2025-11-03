@@ -1,11 +1,16 @@
 package cineflix;
 
 import java.awt.Color;
+import java.awt.Component;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class UserMyPayments extends javax.swing.JFrame {
     private List<Payment> payments; // Used in generate receipts and populate payment table.
@@ -45,7 +50,7 @@ public class UserMyPayments extends javax.swing.JFrame {
     }
     
     private void populatePaymentTable(String keyword) {
-        DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblPaymentTable.getModel();
         model.setRowCount(0); // Clear existing rows
 
         try {
@@ -55,6 +60,7 @@ public class UserMyPayments extends javax.swing.JFrame {
             PaymentDAO paymentDAO = new PaymentDAO(conn); // Pass the DB connection.
             // Retrieve payment records for the current user.
             payments = paymentDAO.getPaymentRecordsByAccountID(ActiveSession.loggedInAccountID); 
+            validateOverdueChargesAndStatus(payments);
             payments = SearchUtils.searchUserPayment(payments, keyword);
             
             String selectedSort = cmbSort.getSelectedItem().toString();
@@ -117,11 +123,12 @@ public class UserMyPayments extends javax.swing.JFrame {
             };
             model.addRow(row); // Add row to table
         }
-
+        applyUserPaymentTableColorRenderers(tblPaymentTable);
+        
         // Hide rentalID column (index 0).
-        tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(0).setMaxWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(0).setWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(0).setMinWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(0).setWidth(0);
         
         } catch (Exception e) {
             
@@ -129,9 +136,121 @@ public class UserMyPayments extends javax.swing.JFrame {
         }
     }
 
-    // Formats the amount with two decimals.
+     // Formats the amount with two decimals.
     private String formatAmount(double amount) {
         return String.format("%.2f", amount);
+    }
+    
+    // Validates returned date if late charge 10Php as additional payment.
+    private void validateOverdueChargesAndStatus(List<Payment> payments) {
+        LocalDateTime now = LocalDateTime.now();
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            if (conn == null) return;
+
+            PaymentDAO paymentDAO = new PaymentDAO(conn);
+            RentalDAO rentalDAO = new RentalDAO(conn);
+
+            for (Payment p : payments) {
+                LocalDate returnDate = p.getReturnDate();
+                boolean isPastDue = returnDate != null && returnDate.isBefore(now.toLocalDate());
+                boolean isOngoing = "Ongoing".equalsIgnoreCase(p.getRentalStatus());
+
+                double overdueAmount = 0.00;
+                String rentalStatus = p.getRentalStatus();
+
+                if (isPastDue) {
+                    long daysLate = java.time.temporal.ChronoUnit.DAYS.between(returnDate, now.toLocalDate());
+                    overdueAmount = daysLate * 10.00;
+
+                    if (isOngoing) { // Only change status if it's still marked as 'Ongoing'
+                        rentalStatus = "Late";
+                    }
+                }
+
+                // Update DB values directly.
+                paymentDAO.updateOverdueAmount(p.getPaymentID(), overdueAmount);
+                rentalDAO.updateRentalStatus(p.getRentalID(), rentalStatus);
+            }
+        } catch (Exception e) {
+            Message.error("Error validating overdue charges: " + e.getMessage());
+        }
+    }
+    
+    private void applyUserPaymentTableColorRenderers(JTable tblPaymentTable) {
+        // Finals-defensible color palette
+        Color colGray   = new Color(96, 96, 96); // Pending.
+        Color colGreen  = new Color(44, 160, 110); // Paid Upfront.
+        Color colPurple = new Color(102, 51, 153); // Paid Full.
+        Color colRed    = new Color(180, 40, 40); // Overdue / Cancelled.
+        Color colOrange = new Color(255, 140, 0); // Late.
+        Color colBlue   = new Color(70, 130, 180); // Ongoing.
+        Color colTeal   = new Color(0, 128, 128); // Returned.
+
+        // Apply row-wide renderer based on paymentStatus (column 5), rentalStatus (column 4), and overdueAmount (column 7).
+        tblPaymentTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                Object paymentStatusObj = table.getValueAt(row, 5); // paymentStatus.
+                Object rentalStatusObj  = table.getValueAt(row, 4); // rentalStatus.
+                Object overdueObj       = table.getValueAt(row, 7); // overdueAmount.
+
+                if (isSelected) {
+                    cell.setBackground(table.getSelectionBackground());
+                    cell.setForeground(table.getSelectionForeground());
+                } else {
+                    Color baseColor = table.getBackground();
+
+                    // Row-wide base color from paymentStatus.
+                    if (paymentStatusObj != null) {
+                        String status = paymentStatusObj.toString();
+                        switch (status) {
+                            case "Pending":      baseColor = colGray; break;
+                            case "Paid Upfront": baseColor = colGreen; break;
+                            case "Paid Full":    baseColor = colPurple; break;
+                            default:             baseColor = table.getBackground();
+                        }
+                    }
+
+                    // Column-specific override for rentalStatus (column 4).
+                    if (column == 4 && rentalStatusObj != null) {
+                        String rentalStatus = rentalStatusObj.toString();
+                        switch (rentalStatus) {
+                            case "Late":      baseColor = colOrange; break;
+                            case "Ongoing":   baseColor = colBlue; break;
+                            case "Returned":  baseColor = colTeal; break;
+                            case "Cancelled": baseColor = colRed; break;
+                            default:          /* keep baseColor */
+                        }
+                    }
+
+                    // Column-specific override for overdueAmount (column 7).
+                    if (column == 7 && overdueObj != null) {
+                        try {
+                            String valStr = overdueObj.toString().replace("₱", "").replace(",", "").trim();
+                            double overdue = Double.parseDouble(valStr);
+                            if (overdue > 0.0) {
+                                cell.setBackground(colRed);
+                            } else {
+                                cell.setBackground(baseColor);
+                            }
+                        } catch (Exception e) {
+                            cell.setBackground(baseColor);
+                        }
+                    } else {
+                        cell.setBackground(baseColor);
+                    }
+
+                    cell.setForeground(table.getForeground());
+                }
+                return cell;
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -147,11 +266,12 @@ public class UserMyPayments extends javax.swing.JFrame {
         btnBrowseMovies = new javax.swing.JButton();
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
-        lblHeader4 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lblHeader4 = new javax.swing.JTextArea();
         lblMyPayments = new javax.swing.JLabel();
         scrlRental = new javax.swing.JScrollPane();
-        tblPaymentRecord = new javax.swing.JTable();
+        tblPaymentTable = new javax.swing.JTable();
         pnlReceipt = new javax.swing.JPanel();
         scrlReceipt = new javax.swing.JScrollPane();
         txtaReceipt = new javax.swing.JTextArea();
@@ -237,11 +357,6 @@ public class UserMyPayments extends javax.swing.JFrame {
             }
         });
 
-        lblHeader4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
-        lblHeader4.setText("Welcome, User");
-        lblHeader4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
         btnLogout.setBackground(new java.awt.Color(0, 0, 0));
         btnLogout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -253,23 +368,36 @@ public class UserMyPayments extends javax.swing.JFrame {
             }
         });
 
+        lblHeader4.setEditable(false);
+        lblHeader4.setBackground(new java.awt.Color(0, 0, 0));
+        lblHeader4.setColumns(20);
+        lblHeader4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblHeader4.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader4.setLineWrap(true);
+        lblHeader4.setRows(3);
+        lblHeader4.setWrapStyleWord(true);
+        lblHeader4.setBorder(null);
+        lblHeader4.setFocusable(false);
+        jScrollPane5.setViewportView(lblHeader4);
+
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
         pnlSideNavLayout.setHorizontalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSideNavLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHeader4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(18, Short.MAX_VALUE))
             .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnBrowseMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnMyPayments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlSideNavLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,8 +409,8 @@ public class UserMyPayments extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHeader4)
-                .addGap(44, 44, 44)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnBrowseMovies, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -300,10 +428,10 @@ public class UserMyPayments extends javax.swing.JFrame {
         lblMyPayments.setText("My Payments");
         lblMyPayments.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        tblPaymentRecord.setBackground(new java.awt.Color(0, 0, 0));
-        tblPaymentRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblPaymentRecord.setForeground(new java.awt.Color(255, 255, 255));
-        tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
+        tblPaymentTable.setBackground(new java.awt.Color(0, 0, 0));
+        tblPaymentTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblPaymentTable.setForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null},
@@ -322,14 +450,14 @@ public class UserMyPayments extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblPaymentRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
-        tblPaymentRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
-        tblPaymentRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblPaymentTable.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblPaymentTable.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblPaymentRecordMouseClicked(evt);
+                tblPaymentTableMouseClicked(evt);
             }
         });
-        scrlRental.setViewportView(tblPaymentRecord);
+        scrlRental.setViewportView(tblPaymentTable);
 
         pnlReceipt.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -536,12 +664,12 @@ public class UserMyPayments extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void tblPaymentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentRecordMouseClicked
+    private void tblPaymentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentTableMouseClicked
 
-    }//GEN-LAST:event_tblPaymentRecordMouseClicked
+    }//GEN-LAST:event_tblPaymentTableMouseClicked
 
     private void btnGenerateReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReceiptActionPerformed
-        int selectedRow = tblPaymentRecord.getSelectedRow(); // Get selected row index.
+        int selectedRow = tblPaymentTable.getSelectedRow(); // Get selected row index.
 
         if (selectedRow == -1) { // If theres none, display this error message.
             Message.error("Please select a payment record first.");
@@ -685,10 +813,11 @@ public class UserMyPayments extends javax.swing.JFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
-    private javax.swing.JLabel lblHeader4;
+    private javax.swing.JTextArea lblHeader4;
     private javax.swing.JLabel lblMyPayments;
     private javax.swing.JLabel lblMyPayments1;
     private javax.swing.JPanel pnlMain;
@@ -696,7 +825,7 @@ public class UserMyPayments extends javax.swing.JFrame {
     private javax.swing.JPanel pnlSideNav;
     private javax.swing.JScrollPane scrlReceipt;
     private javax.swing.JScrollPane scrlRental;
-    private javax.swing.JTable tblPaymentRecord;
+    private javax.swing.JTable tblPaymentTable;
     private javax.swing.JToggleButton tglSort;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextArea txtaReceipt;
