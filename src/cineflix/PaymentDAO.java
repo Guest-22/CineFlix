@@ -244,5 +244,20 @@ public class PaymentDAO {
         }
         return 0;
     }
-
+    
+    // Updates overdue amount in tblPayments (AdminPaymentLogs).
+    public boolean updateOverdueAmount(int paymentID, double newAmount) {
+        String sql = 
+                "UPDATE " + TABLE_PAYMENTS + 
+                " SET " + COL_OVERDUE + " = ? " + 
+                "WHERE " + COL_ID + " = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setDouble(1, newAmount);
+            pst.setInt(2, paymentID);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            Message.error("Error updating overdue amount:\n" + e.getMessage());
+            return false;
+        }
+    }
 }

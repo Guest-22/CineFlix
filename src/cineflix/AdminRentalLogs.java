@@ -58,7 +58,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         txtTotalCost.setText("");
         txtUpfrontFee.setText("");
         txtPaidAmount.setText("");
-        tblRentalRecord.clearSelection();
+        tblRentalTable.clearSelection();
         selectedRentalID = -1; // Resets selected row rental id.
         
         // Clear filtered search.
@@ -68,7 +68,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     
     // Populates the rental record.
     private void populateRentalRecord(String keyword) {
-        DefaultTableModel rentalModel = (DefaultTableModel) tblRentalRecord.getModel();
+        DefaultTableModel rentalModel = (DefaultTableModel) tblRentalTable.getModel();
         rentalModel.setRowCount(0); // Clear existing rows.
 
         try{
@@ -106,7 +106,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy : h:mm a");
             for (AdminRentalEntry r : rentals) { // Loops through a List of AdminRentalEntry objects and adds the record to the rental table.
-                // Convert Timestamp to LocalDateTime and format
+                // Convert Timestamp to LocalDateTime and format.
                 String rentalDateStr = r.getRentalDate().toLocalDateTime().format(formatter);
                 String returnDateStr = r.getReturnDate().toLocalDateTime().format(formatter);
 
@@ -123,49 +123,55 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 });
             }
             // Hide paymentStatus.
-            tblRentalRecord.getColumnModel().getColumn(7).setMinWidth(0);
-            tblRentalRecord.getColumnModel().getColumn(7).setMaxWidth(0);
-            tblRentalRecord.getColumnModel().getColumn(7).setWidth(0);
+            tblRentalTable.getColumnModel().getColumn(7).setMinWidth(0);
+            tblRentalTable.getColumnModel().getColumn(7).setMaxWidth(0);
+            tblRentalTable.getColumnModel().getColumn(7).setWidth(0);
             
         } catch (Exception e){
             Message.error("Error loading rental table: " + e.getMessage());
         }
+        applyRentalTableColorRenderers(tblRentalTable); // Apply color indicator that varies on stage & status.
+    }
         
+    // Applies color indicator based on the rental stage & rental status.
+    private void applyRentalTableColorRenderers(JTable tblRentalRecord) {
         // Colors indicators.
-        Color colGray   = new Color(128, 128, 128);   // Neutral
-        Color colGreen  = new Color(88, 199, 138);    // Active
-        Color colPurple = new Color(153, 102, 204);   // Completed
-        Color colRed    = new Color(226, 88, 88);     // Problematic
-        
-        // Apply color renderer to rentalStage col (index 5).
-        tblRentalRecord.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+        Color colGray   = new Color(128, 128, 128); // Neutral.
+        Color colGreen  = new Color(88, 199, 138); // Active.
+        Color colPurple = new Color(153, 102, 204); // Completed.
+        Color colRed    = new Color(226, 88, 88); // Problematic.
+
+        // Apply row-wide color renderer based on rentalStage col (index 5).
+        tblRentalRecord.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
 
                 Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                String rentalStageCol = value.toString();
 
-                switch (rentalStageCol) {
-                    case "Requested": 
-                        cell.setBackground(colGray); 
-                        break;
-                    case "Approved":
-                        cell.setBackground(colGreen); 
-                        break;
-                    case "PickedUp":
-                        cell.setBackground(colPurple);
-                        break;
-                    case "Rejected":
-                        cell.setBackground(colRed); 
-                        break;
-                    default:
+                if (isSelected) {
+                    cell.setBackground(table.getSelectionBackground());
+                    cell.setForeground(table.getSelectionForeground());
+                } else {
+                    Object stageValue = table.getValueAt(row, 5); // rentalStage column.
+                    if (column != 6 && stageValue != null) { // Skip rentalStatus column.
+                        String rentalStageCol = stageValue.toString();
+                        switch (rentalStageCol) {
+                            case "Requested":  cell.setBackground(colGray);   break;
+                            case "Approved":   cell.setBackground(colGreen);  break;
+                            case "PickedUp":   cell.setBackground(colPurple); break;
+                            case "Rejected":   cell.setBackground(colRed);    break;
+                            default:           cell.setBackground(table.getBackground());
+                        }
+                    } else {
                         cell.setBackground(table.getBackground());
+                    }
+                    cell.setForeground(table.getForeground());
                 }
                 return cell;
             }
         });
-        
+
         // Apply color renderer to rentalStatus col (index 6).
         tblRentalRecord.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -173,24 +179,21 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 boolean isSelected, boolean hasFocus, int row, int column) {
 
                 Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                String rentalStatusCol = value.toString();
 
-                 switch (rentalStatusCol) {
-                    case "Pending":
-                        cell.setBackground(colGray); 
-                        break;
-                    case "Ongoing":
-                        cell.setBackground(colGreen); 
-                        break;
-                    case "Returned":
-                        cell.setBackground(colPurple); 
-                        break;
-                    case "Late":
-                    case "Cancelled":
-                        cell.setBackground(colRed);
-                        break;
-                    default:
-                        cell.setBackground(table.getBackground());
+                if (isSelected) {
+                    cell.setBackground(table.getSelectionBackground());
+                    cell.setForeground(table.getSelectionForeground());
+                } else {
+                    String rentalStatusCol = value.toString();
+                    switch (rentalStatusCol) {
+                        case "Pending":    cell.setBackground(colGray);   break;
+                        case "Ongoing":    cell.setBackground(colGreen);  break;
+                        case "Returned":   cell.setBackground(colPurple); break;
+                        case "Late":
+                        case "Cancelled":  cell.setBackground(colRed);    break;
+                        default:           cell.setBackground(table.getBackground());
+                    }
+                    cell.setForeground(table.getForeground());
                 }
                 return cell;
             }
@@ -219,7 +222,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         tglSort = new javax.swing.JToggleButton();
         txtSearch = new javax.swing.JTextField();
         scrlRental = new javax.swing.JScrollPane();
-        tblRentalRecord = new javax.swing.JTable();
+        tblRentalTable = new javax.swing.JTable();
         pnlForm = new javax.swing.JPanel();
         lblManageRentalDetails = new javax.swing.JLabel();
         lblRentalID = new javax.swing.JLabel();
@@ -444,10 +447,10 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             }
         });
 
-        tblRentalRecord.setBackground(new java.awt.Color(0, 0, 0));
-        tblRentalRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblRentalRecord.setForeground(new java.awt.Color(255, 255, 255));
-        tblRentalRecord.setModel(new javax.swing.table.DefaultTableModel(
+        tblRentalTable.setBackground(new java.awt.Color(0, 0, 0));
+        tblRentalTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblRentalTable.setForeground(new java.awt.Color(255, 255, 255));
+        tblRentalTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -466,14 +469,14 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblRentalRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
-        tblRentalRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
-        tblRentalRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblRentalTable.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblRentalTable.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tblRentalTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblRentalRecordMouseClicked(evt);
+                tblRentalTableMouseClicked(evt);
             }
         });
-        scrlRental.setViewportView(tblRentalRecord);
+        scrlRental.setViewportView(tblRentalTable);
 
         pnlForm.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -885,27 +888,27 @@ public class AdminRentalLogs extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void tblRentalRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalRecordMouseClicked
-       tblRentalRecord.addMouseListener(new MouseAdapter() {
+    private void tblRentalTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalTableMouseClicked
+       tblRentalTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) { // Handles tblRentalRecord click.
-                int row = tblRentalRecord.getSelectedRow();
+                int row = tblRentalTable.getSelectedRow();
                 if (row >= 0) {
                     // Stores selected rental ID globally for reference.
-                    selectedRentalID = Integer.parseInt(tblRentalRecord.getValueAt(row, 0).toString());
+                    selectedRentalID = Integer.parseInt(tblRentalTable.getValueAt(row, 0).toString());
                     
                     // Populate form fields with selected row data.
-                    txtRentalID.setText(tblRentalRecord.getValueAt(row, 0).toString()); 
-                    txtAccountName.setText(tblRentalRecord.getValueAt(row, 1).toString()); 
-                    txtMovieTitle.setText(tblRentalRecord.getValueAt(row, 2).toString()); 
-                    txtRentalDate.setText(tblRentalRecord.getValueAt(row, 3).toString()); 
-                    txtReturnDate.setText(tblRentalRecord.getValueAt(row, 4).toString()); 
-                    cmbRentalStage.setSelectedItem(tblRentalRecord.getValueAt(row, 5).toString());
-                    cmbRentalStatus.setSelectedItem(tblRentalRecord.getValueAt(row, 6).toString()); 
-                    txtTotalCost.setText(tblRentalRecord.getValueAt(row, 8).toString());
+                    txtRentalID.setText(tblRentalTable.getValueAt(row, 0).toString()); 
+                    txtAccountName.setText(tblRentalTable.getValueAt(row, 1).toString()); 
+                    txtMovieTitle.setText(tblRentalTable.getValueAt(row, 2).toString()); 
+                    txtRentalDate.setText(tblRentalTable.getValueAt(row, 3).toString()); 
+                    txtReturnDate.setText(tblRentalTable.getValueAt(row, 4).toString()); 
+                    cmbRentalStage.setSelectedItem(tblRentalTable.getValueAt(row, 5).toString());
+                    cmbRentalStatus.setSelectedItem(tblRentalTable.getValueAt(row, 6).toString()); 
+                    txtTotalCost.setText(tblRentalTable.getValueAt(row, 8).toString());
                     
                     // Extract total cost from col 8 and calculate the upfront fee.
-                    String totalCostStr = tblRentalRecord.getValueAt(row, 8).toString().replace("₱", "");
+                    String totalCostStr = tblRentalTable.getValueAt(row, 8).toString().replace("₱", "");
                     double totalCost = Double.parseDouble(totalCostStr);
                     double upfrontFee = totalCost * 0.25; // 25% downpayment/upfrontfee or ignore to pay in full.
                     txtUpfrontFee.setText(String.format("₱%.2f", upfrontFee));
@@ -925,7 +928,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 }
             }
         }); 
-    }//GEN-LAST:event_tblRentalRecordMouseClicked
+    }//GEN-LAST:event_tblRentalTableMouseClicked
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         ActiveSession.clearSession(); // Clears active session.
@@ -1158,7 +1161,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
     private javax.swing.JScrollPane scrlRental;
-    private javax.swing.JTable tblRentalRecord;
+    private javax.swing.JTable tblRentalTable;
     private javax.swing.JToggleButton tglSort;
     private javax.swing.JTextField txtAccountName;
     private javax.swing.JTextField txtMovieTitle;

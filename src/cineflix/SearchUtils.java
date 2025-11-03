@@ -24,9 +24,11 @@ public class SearchUtils {
 
     for (AdminRentalEntry r : rentalList) { 
         // Loop thru rental list one by one and search for the searched keyword.
-        if (String.valueOf(r.getRentalID()).contains(keyword) ||
-            r.getFullName().toLowerCase().contains(keyword) ||
-            r.getMovieTitle().toLowerCase().contains(keyword)) {
+        if (String.valueOf(r.getRentalID()).contains(keyword) || 
+            r.getFullName().toLowerCase().contains(keyword) || 
+            r.getMovieTitle().toLowerCase().contains(keyword) || 
+            r.getRentalStage().toLowerCase().contains(keyword) ||
+            r.getRentalStatus().toLowerCase().contains(keyword)) {
             results.add(r);
         }
     }

@@ -89,6 +89,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         movieModel.setRowCount(0); // Clear existing rows.
 
         try {
+            if (conn == null) return;
             List<Movie> movies = movieDAO.getAllMovies(); // Gets all the movies and store it inside a list.
             movies = SearchUtils.searchMoviesByTitle(movies, keyword); // Filters by movie keyword.
             

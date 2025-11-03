@@ -1,17 +1,24 @@
 package cineflix;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.math.BigDecimal;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class AdminPaymentReview extends javax.swing.JFrame {
     private Connection conn;
     private PaymentDAO paymentDAO;
+    private RentalDAO rentalDAO;
     
     private int selectedPaymentID = -1;
     
@@ -25,6 +32,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         conn = DBConnection.getConnection();
         if (conn == null) return;
         paymentDAO = new PaymentDAO(conn);
+        rentalDAO = new RentalDAO(conn);
         
         populatePaymentTable(""); // Populates payment table.
     }
@@ -57,7 +65,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblRemainingBalance.setText("N/A");
         lblPaymentDate.setText("N/A");
         selectedPaymentID = -1;
-        tblPaymentRecord.clearSelection();
+        tblPaymentTable.clearSelection();
         
         // Clear filtered search.
         txtSearch.setText(""); 
@@ -66,17 +74,17 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     
     // Populates payment table.
     private void populatePaymentTable(String keyword) {
-        DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblPaymentTable.getModel();
         model.setRowCount(0); // Clear existing rows
 
         try{
-            conn = DBConnection.getConnection();
             if (conn == null) return;
-
             paymentDAO = new PaymentDAO(conn);
             List<AdminPaymentEntry> payments = paymentDAO.getAdminPaymentLogs();
+            validateOverdueChargesAndStatus(payments); // Validates if the movie is overdue.
+            payments = paymentDAO.getAdminPaymentLogs(); // Re-fetch the updated values.
             payments = SearchUtils.searchPayments(payments, keyword); // Filters table by keyword.
-
+            
             String selectedSort = cmbSort.getSelectedItem().toString(); 
             String selectedOrder = tglSort.isSelected() ? "DESC" : "ASC";
             
@@ -121,35 +129,120 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         } catch (Exception e){
             Message.error("Error loading payment table:\n" + e.getMessage());
         }
+        
+        // Apply color renderer based-off payment status; highlght overdue amount if it exceeds reurn date.
+        applyPaymentTableColorRenderers(tblPaymentTable); 
+        
         // Hides payment ID.
-        tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(0).setMaxWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(0).setWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(0).setMinWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(0).setWidth(0);
 
         // Hides rental stage.
-        tblPaymentRecord.getColumnModel().getColumn(6).setMinWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(6).setMaxWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(6).setWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(6).setMinWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(6).setMaxWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(6).setWidth(0);
         
         // Hides rental status.
-        tblPaymentRecord.getColumnModel().getColumn(7).setMinWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(7).setMaxWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(7).setWidth(0);
-        
-        // Hides payment status.
-        tblPaymentRecord.getColumnModel().getColumn(8).setMinWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(8).setMaxWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(8).setWidth(0);
-        
-        // Hides overdue amount.
-        tblPaymentRecord.getColumnModel().getColumn(11).setMinWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(11).setMaxWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(11).setWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(7).setMinWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(7).setMaxWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(7).setWidth(0);
 
         // Hides payment date.
-        tblPaymentRecord.getColumnModel().getColumn(12).setMinWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(12).setMaxWidth(0);
-        tblPaymentRecord.getColumnModel().getColumn(12).setWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(12).setMinWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(12).setMaxWidth(0);
+        tblPaymentTable.getColumnModel().getColumn(12).setWidth(0);
+    }
+
+    // Validates returned date if late charge 10Php as additional payment.
+    private void validateOverdueChargesAndStatus(List<AdminPaymentEntry> payments) {
+        LocalDateTime now = LocalDateTime.now();
+
+        for (AdminPaymentEntry p : payments) {
+            LocalDateTime returnDate = p.getReturnDate();
+            boolean isPastDue = returnDate.isBefore(now);
+            boolean isOngoing = "Ongoing".equalsIgnoreCase(p.getRentalStatus());
+            boolean isPaidFull = "Paid Full".equalsIgnoreCase(p.getPaymentStatus());
+
+            double overdueAmount = 0.00;
+            String rentalStatus = p.getRentalStatus();
+
+            if (isPastDue && !isPaidFull) {
+                long daysLate = java.time.temporal.ChronoUnit.DAYS.between(returnDate.toLocalDate(), now.toLocalDate());
+                overdueAmount = daysLate * 10.00;
+
+                if (isOngoing) {
+                    rentalStatus = "Late";
+                }
+            }
+
+            // Update DB values directly.
+            paymentDAO.updateOverdueAmount(p.getPaymentID(), overdueAmount);
+            rentalDAO.updateRentalStatus(p.getRentalID(), rentalStatus);
+        }
+    }
+
+    // Apply designated color based-off payment status.
+    private void applyPaymentTableColorRenderers(JTable tblPaymentRecord) {
+        Color colGray   = new Color(128, 128, 128); // Pending.
+        Color colGreen  = new Color(88, 199, 138); // Paid Upfront.
+        Color colPurple = new Color(153, 102, 204); // Paid Full.
+        Color colRed    = new Color(226, 88, 88);   // Overdue.
+
+        // Row-wide renderer based on paymentStatus (col 8), excluding overdueAmount (col 11).
+        tblPaymentRecord.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                Object statusObj = table.getValueAt(row, 8); // paymentStatus.
+                Object overdueObj = table.getValueAt(row, 11); // overdueAmount.
+
+                if (isSelected) {
+                    cell.setBackground(table.getSelectionBackground());
+                    cell.setForeground(table.getSelectionForeground());
+                } else {
+                    Color baseColor = table.getBackground();
+
+                    if (statusObj != null) {
+                        String status = statusObj.toString();
+                        switch (status) {
+                            case "Pending":
+                                baseColor = colGray;
+                                break;
+                            case "Paid Upfront":
+                                baseColor = colGreen;
+                                break;
+                            case "Paid Full":
+                                baseColor = colPurple;
+                                break;
+                            default:
+                                baseColor = table.getBackground();
+                        }
+                    }
+
+                    // Apply red override only for overdueAmount column if value > 0
+                    if (column == 11 && overdueObj != null) {
+                        try {
+                            String valStr = overdueObj.toString().replace("₱", "").replace(",", "").trim();
+                            double overdue = Double.parseDouble(valStr);
+                            if (overdue > 0.0) {
+                                cell.setBackground(colRed);
+                            } else {
+                                cell.setBackground(baseColor);
+                            }
+                        } catch (Exception e) {
+                            cell.setBackground(baseColor);
+                        }
+                    } else {
+                        cell.setBackground(baseColor);
+                    }
+                    cell.setForeground(table.getForeground());
+                }
+                return cell;
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -170,7 +263,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         btnLogout = new javax.swing.JButton();
         lblPaymentReview = new javax.swing.JLabel();
         scrlPayment = new javax.swing.JScrollPane();
-        tblPaymentRecord = new javax.swing.JTable();
+        tblPaymentTable = new javax.swing.JTable();
         pnlForm = new javax.swing.JPanel();
         lblManageRentalDetails = new javax.swing.JLabel();
         txtTotalCost = new javax.swing.JTextField();
@@ -363,10 +456,10 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblPaymentReview.setText("Payment Review");
         lblPaymentReview.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        tblPaymentRecord.setBackground(new java.awt.Color(0, 0, 0));
-        tblPaymentRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblPaymentRecord.setForeground(new java.awt.Color(255, 255, 255));
-        tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
+        tblPaymentTable.setBackground(new java.awt.Color(0, 0, 0));
+        tblPaymentTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblPaymentTable.setForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -385,14 +478,14 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblPaymentRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
-        tblPaymentRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
-        tblPaymentRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblPaymentTable.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblPaymentTable.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblPaymentRecordMouseClicked(evt);
+                tblPaymentTableMouseClicked(evt);
             }
         });
-        scrlPayment.setViewportView(tblPaymentRecord);
+        scrlPayment.setViewportView(tblPaymentTable);
 
         pnlForm.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -927,28 +1020,28 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void tblPaymentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentRecordMouseClicked
-        int row = tblPaymentRecord.getSelectedRow();
+    private void tblPaymentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentTableMouseClicked
+        int row = tblPaymentTable.getSelectedRow();
         if (row >= 0) {
             // Stores selected payment ID globally for reference.
-            selectedPaymentID = Integer.parseInt(tblPaymentRecord.getValueAt(row, 0).toString());
+            selectedPaymentID = Integer.parseInt(tblPaymentTable.getValueAt(row, 0).toString());
 
             // Populate form fields with selected row data.
-            txtPaymentID.setText(tblPaymentRecord.getValueAt(row, 0).toString()); 
-            txtRentalID.setText(tblPaymentRecord.getValueAt(row, 1).toString()); 
-            txtAccountName.setText(tblPaymentRecord.getValueAt(row, 2).toString()); 
-            txtMovieTitle.setText(tblPaymentRecord.getValueAt(row, 3).toString()); 
-            txtRentalDate.setText(tblPaymentRecord.getValueAt(row, 4).toString()); 
-            txtReturnDate.setText(tblPaymentRecord.getValueAt(row, 5).toString()); 
-            cmbRentalStage.setSelectedItem(tblPaymentRecord.getValueAt(row, 6).toString());
-            cmbRentalStatus.setSelectedItem(tblPaymentRecord.getValueAt(row, 7).toString()); 
-            txtPaymentStatus.setText(tblPaymentRecord.getValueAt(row, 8).toString());
-            txtTotalCost.setText(tblPaymentRecord.getValueAt(row, 9).toString());
-            txtPaidAmount.setText(tblPaymentRecord.getValueAt(row, 10).toString());
-            txtOverdue.setText(tblPaymentRecord.getValueAt(row, 11).toString());
-            cmbRentalStatus.setSelectedItem(tblPaymentRecord.getValueAt(row, 7).toString());
+            txtPaymentID.setText(tblPaymentTable.getValueAt(row, 0).toString()); 
+            txtRentalID.setText(tblPaymentTable.getValueAt(row, 1).toString()); 
+            txtAccountName.setText(tblPaymentTable.getValueAt(row, 2).toString()); 
+            txtMovieTitle.setText(tblPaymentTable.getValueAt(row, 3).toString()); 
+            txtRentalDate.setText(tblPaymentTable.getValueAt(row, 4).toString()); 
+            txtReturnDate.setText(tblPaymentTable.getValueAt(row, 5).toString()); 
+            cmbRentalStage.setSelectedItem(tblPaymentTable.getValueAt(row, 6).toString());
+            cmbRentalStatus.setSelectedItem(tblPaymentTable.getValueAt(row, 7).toString()); 
+            txtPaymentStatus.setText(tblPaymentTable.getValueAt(row, 8).toString());
+            txtTotalCost.setText(tblPaymentTable.getValueAt(row, 9).toString());
+            txtPaidAmount.setText(tblPaymentTable.getValueAt(row, 10).toString());
+            txtOverdue.setText(tblPaymentTable.getValueAt(row, 11).toString());
+            cmbRentalStatus.setSelectedItem(tblPaymentTable.getValueAt(row, 7).toString());
             // Null-safe payment date display.
-            Object paymentDateObj = tblPaymentRecord.getValueAt(row, 12);
+            Object paymentDateObj = tblPaymentTable.getValueAt(row, 12);
             String paymentDateStr = (paymentDateObj != null) ? paymentDateObj.toString() : "";
             lblPaymentDate.setText(paymentDateStr);
 
@@ -977,7 +1070,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 lblRemainingBalance.setText("");
             }
         }
-    }//GEN-LAST:event_tblPaymentRecordMouseClicked
+    }//GEN-LAST:event_tblPaymentTableMouseClicked
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
@@ -1053,13 +1146,13 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         }
         
         // Declare and assign selected row.
-        int row = tblPaymentRecord.getSelectedRow();
+        int row = tblPaymentTable.getSelectedRow();
         if (row < 0) {
             Message.error("No row selected in the table.");
             return;
         }
         // Extract rentalID from hidden column (index 1)
-        int rentalID = Integer.parseInt(tblPaymentRecord.getValueAt(row, 1).toString());
+        int rentalID = Integer.parseInt(tblPaymentTable.getValueAt(row, 1).toString());
 
         // Get selected rental stage & status from ComboBox
         String selectedStage = cmbRentalStage.getSelectedItem().toString();
@@ -1246,7 +1339,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
     private javax.swing.JScrollPane scrlPayment;
-    private javax.swing.JTable tblPaymentRecord;
+    private javax.swing.JTable tblPaymentTable;
     private javax.swing.JToggleButton tglSort;
     private javax.swing.JTextField txtAccountName;
     private javax.swing.JTextField txtMovieTitle;

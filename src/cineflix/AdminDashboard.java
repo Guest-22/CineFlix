@@ -650,6 +650,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void btnPaymentReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentReviewActionPerformed
         new AdminPaymentReview().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnPaymentReviewActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
