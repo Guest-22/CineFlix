@@ -2,10 +2,10 @@ package cineflix;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.sql.Connection;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -118,7 +118,16 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 Collections.reverse(movies);
             }
             
+            DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("MMM d, yyyy : h:mm a");
+            
             for (Movie m : movies) { // Loops thru the list of movies and adds all the record per row.
+                String formattedCreatedAt = "—";
+                String raw = m.getCreatedAt().trim();
+                LocalDateTime parsed = LocalDateTime.parse(raw, inputFormat);
+                formattedCreatedAt = outputFormat.format(parsed);
+               
+
                 Object[] row = {
                     m.getMovieID(),
                     m.getTitle(),
@@ -129,7 +138,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                     m.getCopies(),
                     m.getPricePerWeek(),
                     m.getImagePath(),
-                    m.getCreatedAt()
+                    formattedCreatedAt
                 };
                 movieModel.addRow(row); // Adds the movie one-by-one.
             }
@@ -528,8 +537,9 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlFormLayout.createSequentialGroup()
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblManageMovieRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlFormLayout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -572,27 +582,20 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtReleaseYear, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
                                     .addComponent(txtDuration))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblCopies)
-                                        .addGap(18, 18, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblPricePerWeek)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addComponent(txtPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(1, 1, 1))))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
+                                    .addComponent(lblCopies)
+                                    .addComponent(lblPricePerWeek))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                    .addComponent(txtPricePerWeek)))))
+                    .addGroup(pnlFormLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtGenre, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(20, 20, 20))
-            .addComponent(lblManageMovieRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                            .addComponent(txtGenre))))
+                .addGap(37, 37, 37))
         );
         pnlFormLayout.setVerticalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -611,22 +614,21 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                     .addGroup(pnlFormLayout.createSequentialGroup()
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtReleaseYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlFormLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlFormLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(2, 2, 2)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblCopies, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCopies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtCopies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(txtPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSynopsis, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -653,7 +655,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(147, Short.MAX_VALUE))
         );
 
         lblMovieInventory.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
@@ -666,6 +668,9 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         btnSearch.setForeground(new java.awt.Color(255, 255, 255));
         btnSearch.setText("Search");
         btnSearch.setFocusable(false);
+        btnSearch.setMaximumSize(new java.awt.Dimension(72, 24));
+        btnSearch.setMinimumSize(new java.awt.Dimension(72, 24));
+        btnSearch.setPreferredSize(new java.awt.Dimension(72, 24));
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
@@ -677,6 +682,8 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         cmbSort.setForeground(new java.awt.Color(255, 255, 255));
         cmbSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort by Date Added", "Sort by Title", "Sort by Genre", "Sort by Release Year" }));
         cmbSort.setFocusable(false);
+        cmbSort.setMinimumSize(new java.awt.Dimension(159, 24));
+        cmbSort.setPreferredSize(new java.awt.Dimension(159, 24));
         cmbSort.setRequestFocusEnabled(false);
         cmbSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -701,7 +708,10 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         txtSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtSearch.setForeground(new java.awt.Color(255, 255, 255));
         txtSearch.setToolTipText("");
+        txtSearch.setMaximumSize(new java.awt.Dimension(2147483647, 24));
+        txtSearch.setMinimumSize(new java.awt.Dimension(64, 24));
         txtSearch.setName(""); // NOI18N
+        txtSearch.setPreferredSize(new java.awt.Dimension(64, 24));
         txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtSearchFocusGained(evt);
@@ -757,32 +767,32 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblMovieInventory)
                     .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(scrlMovie))
                 .addGap(18, 18, 18)
-                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
-                .addGap(7, 7, 7)
+                .addContainerGap(7, Short.MAX_VALUE)
                 .addComponent(lblMovieInventory)
-                .addGap(4, 4, 4)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(2, 2, 2)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tglSort, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
                 .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(59, 59, 59))
         );
@@ -1003,31 +1013,30 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchActionPerformed
 
     private void tblMovieRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMovieRecordMouseClicked
-        tblMovieRecord.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) { // Handles tblMovieRecord click.
-                int row = tblMovieRecord.getSelectedRow();
-                if (row >= 0) {
-                    selectedMovieID = Integer.parseInt(tblMovieRecord.getValueAt(row, 0).toString()); // Stores the selected ID as reference.
-                    // Populate forms with the value from selected row.
-                    txtTitle.setText(tblMovieRecord.getValueAt(row, 1).toString()); 
-                    txtaSynopsis.setText(tblMovieRecord.getValueAt(row, 2).toString()); 
-                    txtGenre.setText(tblMovieRecord.getValueAt(row, 3).toString()); 
-                    txtReleaseYear.setText(tblMovieRecord.getValueAt(row, 4).toString()); 
-                    txtDuration.setText(tblMovieRecord.getValueAt(row, 5).toString()); 
-                    txtCopies.setText(tblMovieRecord.getValueAt(row, 6).toString()); 
-                    txtPricePerWeek.setText(tblMovieRecord.getValueAt(row, 7).toString()); 
-                    selectedImagePath = tblMovieRecord.getValueAt(row, 8).toString(); 
-                    lblCreatedAt.setText(tblMovieRecord.getValueAt(row, 9).toString());
-                    
-                    // Display movie cover image in lblImagePath.
-                    ImageIcon icon = new ImageIcon(selectedImagePath);
-                    Image scaled = icon.getImage().getScaledInstance(
-                        lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);
-                    lblImagePath.setIcon(new ImageIcon(scaled));
-                }
-            }
-        });
+
+        int row = tblMovieRecord.getSelectedRow();
+        if (row >= 0) {
+            selectedMovieID = Integer.parseInt(tblMovieRecord.getValueAt(row, 0).toString()); // Stores the selected ID as reference.
+            // Populate forms with the value from selected row.
+            txtTitle.setText(tblMovieRecord.getValueAt(row, 1).toString()); 
+            txtaSynopsis.setText(tblMovieRecord.getValueAt(row, 2).toString()); 
+            txtGenre.setText(tblMovieRecord.getValueAt(row, 3).toString()); 
+            txtReleaseYear.setText(tblMovieRecord.getValueAt(row, 4).toString()); 
+            txtDuration.setText(tblMovieRecord.getValueAt(row, 5).toString()); 
+            txtCopies.setText(tblMovieRecord.getValueAt(row, 6).toString()); 
+            txtPricePerWeek.setText(tblMovieRecord.getValueAt(row, 7).toString()); 
+            selectedImagePath = tblMovieRecord.getValueAt(row, 8).toString(); 
+            lblCreatedAt.setText(tblMovieRecord.getValueAt(row, 9).toString());
+
+            // Display movie cover image in lblImagePath.
+            ImageIcon icon = new ImageIcon(selectedImagePath);
+            Image scaled = icon.getImage().getScaledInstance(
+                lblImagePath.getWidth(), lblImagePath.getHeight(), Image.SCALE_SMOOTH);
+            lblImagePath.setIcon(new ImageIcon(scaled));
+        }
+        /*} catch (Exception e){
+            Message.error("Retrieving data from table movie failed:\n" + e.getMessage());
+        }*/
     }//GEN-LAST:event_tblMovieRecordMouseClicked
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed

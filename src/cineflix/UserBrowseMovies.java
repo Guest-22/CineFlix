@@ -1125,6 +1125,8 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         txtSearch.setText("");
         cmbSort.setSelectedIndex(0);
+        tglSort.setSelected(false);
+        tglSort.setText("ASC");
         populateMovieTable("");
     }//GEN-LAST:event_btnResetActionPerformed
 

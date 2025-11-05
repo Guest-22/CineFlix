@@ -10,11 +10,17 @@ public class SearchUtils {
         keyword = keyword.toLowerCase();
         List<Movie> results = new ArrayList<>();
 
-        for (Movie m : movieList) { // Loop thru movie list one by one and search for the searched keyword.
-            if (m.getTitle().toLowerCase().contains(keyword)) {
-                results.add(m);
-            }
+        for (Movie m : movieList) {
+        String title = m.getTitle().toLowerCase();
+        String genre = m.getGenre().toLowerCase();
+        String year = String.valueOf(m.getReleaseYear());
+
+        if (title.contains(keyword) 
+            || genre.contains(keyword) 
+            || year.contains(keyword)) {
+            results.add(m);
         }
+    }
         return results;
     }
     

@@ -760,6 +760,8 @@ public class UserMyPayments extends javax.swing.JFrame {
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         txtSearch.setText(""); // Clear the search field.
         cmbSort.setSelectedIndex(0); // Sets sort back to default value.
+        tglSort.setSelected(false);
+        tglSort.setText("ASC");
         populatePaymentTable(""); // Reset table to show all movies.
     }//GEN-LAST:event_btnResetActionPerformed
 

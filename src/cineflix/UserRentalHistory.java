@@ -32,12 +32,6 @@ public class UserRentalHistory extends javax.swing.JFrame {
         tglSort.setForeground(Color.WHITE);
     }
     
-    // Resets rental table.
-    private void clearForm() {
-        txtSearch.setText(""); // lear the search field.
-        populateRentalTable(""); // Reset table to show all movies.
-    }
-    
     // Populates rental table of current loggedin user.
     private void populateRentalTable(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblRentalRecord.getModel();
@@ -548,8 +542,11 @@ public class UserRentalHistory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        txtSearch.setText("");
         cmbSort.setSelectedIndex(0);
-        clearForm();
+        tglSort.setSelected(false);
+        tglSort.setText("ASC");
+        populateRentalTable("");
     }//GEN-LAST:event_btnResetActionPerformed
 
     /**

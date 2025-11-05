@@ -104,7 +104,7 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                 Collections.reverse(rentals);
             }
             
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy : h:mm a");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy: h:mm a");
             for (AdminRentalEntry r : rentals) { // Loops through a List of AdminRentalEntry objects and adds the record to the rental table.
                 // Convert Timestamp to LocalDateTime and format.
                 String rentalDateStr = r.getRentalDate().toLocalDateTime().format(formatter);
@@ -127,10 +127,10 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             tblRentalRecord.getColumnModel().getColumn(7).setMaxWidth(0);
             tblRentalRecord.getColumnModel().getColumn(7).setWidth(0);
             
+            applyRentalTableColorRenderers(tblRentalRecord); // Apply color indicator that varies on stage & status.
         } catch (Exception e){
             Message.error("Error loading rental table: " + e.getMessage());
-        }
-        applyRentalTableColorRenderers(tblRentalRecord); // Apply color indicator that varies on stage & status.
+        }   
     }
         
     // Applies color indicator based on the rental stage & rental status.
@@ -166,8 +166,9 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                             case "PickedUp":
                                 cell.setBackground(colPurple);
                                 break;
-                            case "Rejected":   cell.setBackground(colRed);
-                            break;
+                            case "Rejected":
+                                cell.setBackground(colRed);
+                                break;
                             default:
                                 cell.setBackground(table.getBackground());
                         }
@@ -727,21 +728,20 @@ public class AdminRentalLogs extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtPaidAmount, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
-                                            .addComponent(lblWeekDuration)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(lblWeeks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addComponent(txtTotalCost, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                        .addComponent(txtRentalID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                        .addComponent(txtAccountName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                        .addComponent(txtMovieTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                        .addComponent(txtRentalDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                        .addComponent(txtReturnDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                        .addComponent(cmbRentalStage, javax.swing.GroupLayout.Alignment.LEADING, 0, 248, Short.MAX_VALUE)
-                                        .addComponent(cmbRentalStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, 248, Short.MAX_VALUE)
-                                        .addComponent(txtUpfrontFee, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                                        .addComponent(lblUpfrontFee1, javax.swing.GroupLayout.Alignment.LEADING)))))
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(lblWeekDuration)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblWeeks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(txtTotalCost, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                    .addComponent(txtRentalID, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                    .addComponent(txtAccountName, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                    .addComponent(txtMovieTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                    .addComponent(txtRentalDate, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                    .addComponent(txtReturnDate, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                    .addComponent(cmbRentalStage, 0, 248, Short.MAX_VALUE)
+                                    .addComponent(cmbRentalStatus, 0, 248, Short.MAX_VALUE)
+                                    .addComponent(txtUpfrontFee, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                    .addComponent(lblUpfrontFee1))))
                         .addGap(31, 31, 31))))
         );
         pnlFormLayout.setVerticalGroup(
@@ -811,17 +811,17 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblRentalLogs)
-                    .addComponent(scrlRental))
+                    .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 746, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -831,14 +831,17 @@ public class AdminRentalLogs extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblRentalLogs)
-                .addGap(4, 4, 4)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch)
-                    .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tglSort))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(scrlRental, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(cmbSort)
+                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(92, 92, 92))
             .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -909,45 +912,45 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchActionPerformed
 
     private void tblRentalRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalRecordMouseClicked
-       tblRentalRecord.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) { // Handles tblRentalRecord click.
-                int row = tblRentalRecord.getSelectedRow();
-                if (row >= 0) {
-                    // Stores selected rental ID globally for reference.
-                    selectedRentalID = Integer.parseInt(tblRentalRecord.getValueAt(row, 0).toString());
-                    
-                    // Populate form fields with selected row data.
-                    txtRentalID.setText(tblRentalRecord.getValueAt(row, 0).toString()); 
-                    txtAccountName.setText(tblRentalRecord.getValueAt(row, 1).toString()); 
-                    txtMovieTitle.setText(tblRentalRecord.getValueAt(row, 2).toString()); 
-                    txtRentalDate.setText(tblRentalRecord.getValueAt(row, 3).toString()); 
-                    txtReturnDate.setText(tblRentalRecord.getValueAt(row, 4).toString()); 
-                    cmbRentalStage.setSelectedItem(tblRentalRecord.getValueAt(row, 5).toString());
-                    cmbRentalStatus.setSelectedItem(tblRentalRecord.getValueAt(row, 6).toString()); 
-                    txtTotalCost.setText(tblRentalRecord.getValueAt(row, 8).toString());
-                    
-                    // Extract total cost from col 8 and calculate the upfront fee.
-                    String totalCostStr = tblRentalRecord.getValueAt(row, 8).toString().replace("₱", "");
-                    double totalCost = Double.parseDouble(totalCostStr);
-                    double upfrontFee = totalCost * 0.25; // 25% downpayment/upfrontfee or ignore to pay in full.
-                    txtUpfrontFee.setText(String.format("₱%.2f", upfrontFee));
-                    
-                    // Calcuate weeks based-off rentaldate & returndate.
-                    try {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                        LocalDateTime rentalDateTime = LocalDateTime.parse(txtRentalDate.getText().trim(), formatter);
-                        LocalDateTime returnDateTime = LocalDateTime.parse(txtReturnDate.getText().trim(), formatter);
+        try {
+            int row = tblRentalRecord.getSelectedRow();
+            if (row >= 0) {
+                // Stores selected rental ID globally for reference.
+                selectedRentalID = Integer.parseInt(tblRentalRecord.getValueAt(row, 0).toString());
 
-                        long days = ChronoUnit.DAYS.between(rentalDateTime.toLocalDate(), returnDateTime.toLocalDate());
-                        long weeks = days / 7;
-                        lblWeeks.setText(weeks + " Week/s");
-                    } catch (Exception e2) {
-                        lblWeeks.setText("Invalid date format");
-                    }
+                // Populate form fields with selected row data.
+                txtRentalID.setText(tblRentalRecord.getValueAt(row, 0).toString()); 
+                txtAccountName.setText(tblRentalRecord.getValueAt(row, 1).toString()); 
+                txtMovieTitle.setText(tblRentalRecord.getValueAt(row, 2).toString()); 
+                txtRentalDate.setText(tblRentalRecord.getValueAt(row, 3).toString()); 
+                txtReturnDate.setText(tblRentalRecord.getValueAt(row, 4).toString()); 
+                cmbRentalStage.setSelectedItem(tblRentalRecord.getValueAt(row, 5).toString());
+                cmbRentalStatus.setSelectedItem(tblRentalRecord.getValueAt(row, 6).toString()); 
+                txtTotalCost.setText(tblRentalRecord.getValueAt(row, 8).toString());
+
+                // Calcuate weeks based-off rentaldate & returndate.
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy: h:mm a");
+                    LocalDateTime rentalDateTime = LocalDateTime.parse(txtRentalDate.getText().trim(), formatter);
+                    LocalDateTime returnDateTime = LocalDateTime.parse(txtReturnDate.getText().trim(), formatter);
+
+                    long days = ChronoUnit.DAYS.between(rentalDateTime.toLocalDate(), returnDateTime.toLocalDate());
+                    long weeks = days / 7;
+                    
+                    lblWeeks.setText(weeks + " Week/s");
+                } catch (Exception e) {
+                    lblWeeks.setText("Invalid date format");
                 }
+
+                // Extract total cost from col 8 and calculate the upfront fee.
+                String totalCostStr = tblRentalRecord.getValueAt(row, 8).toString().replace("₱", "");
+                double totalCost = Double.parseDouble(totalCostStr);
+                double upfrontFee = totalCost * 0.25; // 25% downpayment/upfrontfee or ignore to pay in full.
+                txtUpfrontFee.setText(String.format("₱%.2f", upfrontFee));
             }
-        }); 
+        } catch (Exception e2){
+            Message.error("Data retrieval in rental table failed:\n" + e2.getMessage());
+        }
     }//GEN-LAST:event_tblRentalRecordMouseClicked
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -957,28 +960,32 @@ public class AdminRentalLogs extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-       if (selectedRentalID <= 0) { // Handles no row selection.
-            Message.error("No rental selected.");
-            return;
-        }
+        try {
+            if (selectedRentalID <= 0) { // Handles no row selection.
+                Message.error("No rental selected.");
+                return;
+            }
 
-        // Get selected rental stage & status from ComboBox.
-        String selectedStage = cmbRentalStage.getSelectedItem().toString();
-        String selectedStatus = cmbRentalStatus.getSelectedItem().toString();
+            // Get selected rental stage & status from ComboBox.
+            String selectedStage = cmbRentalStage.getSelectedItem().toString();
+            String selectedStatus = cmbRentalStatus.getSelectedItem().toString();
 
-        if (conn == null) return; // Validates connection
-        rentalDAO = new RentalDAO(conn); // Use DAO to update
+            if (conn == null) return; // Validates connection
+            rentalDAO = new RentalDAO(conn); // Use DAO to update
 
-        // Update both stage and status
-        boolean stageUpdated = rentalDAO.updateRentalStage(selectedRentalID, selectedStage);
-        boolean statusUpdated = rentalDAO.updateRentalStatus(selectedRentalID, selectedStatus);
+            // Update both stage and status
+            boolean stageUpdated = rentalDAO.updateRentalStage(selectedRentalID, selectedStage);
+            boolean statusUpdated = rentalDAO.updateRentalStatus(selectedRentalID, selectedStatus);
 
-        if (stageUpdated && statusUpdated) {
-            Message.show("Rental updated: Stage = " + selectedStage + ", Status = " + selectedStatus);
-            populateRentalTable(""); // Refresh table
-            // clearForm(); // Reset form
-        } else {
-            Message.error("Failed to update rental.");
+            if (stageUpdated && statusUpdated) {
+                Message.show("Rental updated: Stage = " + selectedStage + ", Status = " + selectedStatus);
+                populateRentalTable(""); // Refresh table
+                // clearForm(); // Reset form
+            } else {
+                Message.error("Failed to update rental.");
+            }
+        } catch (Exception e2){
+            Message.error("Rental update failed:\n" + e2.getMessage());
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
