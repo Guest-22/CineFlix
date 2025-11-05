@@ -65,7 +65,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblRemainingBalance.setText("N/A");
         lblPaymentDate.setText("N/A");
         selectedPaymentID = -1;
-        tblPaymentTable.clearSelection();
+        tblPaymentRecord.clearSelection();
         
         // Clear filtered search.
         txtSearch.setText(""); 
@@ -74,7 +74,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     
     // Populates payment table.
     private void populatePaymentTable(String keyword) {
-        DefaultTableModel model = (DefaultTableModel) tblPaymentTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
         model.setRowCount(0); // Clear existing rows
 
         try{
@@ -131,22 +131,22 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         }
         
         // Apply color renderer based-off payment status; highlght overdue amount if it exceeds reurn date.
-        applyPaymentTableColorRenderers(tblPaymentTable); 
+        applyPaymentTableColorRenderers(tblPaymentRecord); 
         
         // Hides payment ID.
-        tblPaymentTable.getColumnModel().getColumn(0).setMinWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(0).setWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setWidth(0);
 
         // Hides rental stage.
-        tblPaymentTable.getColumnModel().getColumn(6).setMinWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(6).setMaxWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(6).setWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(6).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(6).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(6).setWidth(0);
 
         // Hides payment date.
-        tblPaymentTable.getColumnModel().getColumn(12).setMinWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(12).setMaxWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(12).setWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(12).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(12).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(12).setWidth(0);
     }
 
     // Validates returned date if late charge 10Php as additional payment.
@@ -279,15 +279,14 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        scrlHeader4 = new javax.swing.JScrollPane();
         lblHeader4 = new javax.swing.JTextArea();
         lblPaymentReview = new javax.swing.JLabel();
         scrlPayment = new javax.swing.JScrollPane();
-        tblPaymentTable = new javax.swing.JTable();
+        tblPaymentRecord = new javax.swing.JTable();
         pnlForm = new javax.swing.JPanel();
         lblManageRentalDetails = new javax.swing.JLabel();
         txtTotalCost = new javax.swing.JTextField();
-        txtReturnDate = new javax.swing.JTextField();
         lblTotalCost = new javax.swing.JLabel();
         lblRentalID = new javax.swing.JLabel();
         lblOverdue = new javax.swing.JLabel();
@@ -297,18 +296,14 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         cmbRentalStage = new javax.swing.JComboBox<>();
         lblRentalDate = new javax.swing.JLabel();
         cmbRentalStatus = new javax.swing.JComboBox<>();
-        lblReturnDate = new javax.swing.JLabel();
         lblRentalStage = new javax.swing.JLabel();
         lblRentalStatus = new javax.swing.JLabel();
         txtRentalID = new javax.swing.JTextField();
         txtAccountName = new javax.swing.JTextField();
-        txtMovieTitle = new javax.swing.JTextField();
-        txtRentalDate = new javax.swing.JTextField();
         txtPaymentID = new javax.swing.JTextField();
         lblPaymentID = new javax.swing.JLabel();
         lblPaymentStatus = new javax.swing.JLabel();
         txtPaymentStatus = new javax.swing.JTextField();
-        txtOverdue = new javax.swing.JTextField();
         lblPaidAmount = new javax.swing.JLabel();
         txtPaidAmount = new javax.swing.JTextField();
         lblPaymentDate = new javax.swing.JLabel();
@@ -322,6 +317,11 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblRemainingBalance = new javax.swing.JLabel();
         lblWeekDuration = new javax.swing.JLabel();
         lblPaymentDate1 = new javax.swing.JLabel();
+        txtMovieTitle = new javax.swing.JTextField();
+        lblReturnDate = new javax.swing.JLabel();
+        txtRentalDate = new javax.swing.JTextField();
+        txtReturnDate = new javax.swing.JTextField();
+        txtOverdue = new javax.swing.JTextField();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         cmbSort = new javax.swing.JComboBox<>();
@@ -431,7 +431,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblHeader4.setWrapStyleWord(true);
         lblHeader4.setBorder(null);
         lblHeader4.setFocusable(false);
-        jScrollPane5.setViewportView(lblHeader4);
+        scrlHeader4.setViewportView(lblHeader4);
 
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
@@ -446,7 +446,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -463,7 +463,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -484,10 +484,10 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblPaymentReview.setText("Payment Review");
         lblPaymentReview.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        tblPaymentTable.setBackground(new java.awt.Color(0, 0, 0));
-        tblPaymentTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblPaymentTable.setForeground(new java.awt.Color(255, 255, 255));
-        tblPaymentTable.setModel(new javax.swing.table.DefaultTableModel(
+        tblPaymentRecord.setBackground(new java.awt.Color(0, 0, 0));
+        tblPaymentRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblPaymentRecord.setForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -506,14 +506,14 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblPaymentTable.setSelectionBackground(new java.awt.Color(74, 144, 226));
-        tblPaymentTable.setSelectionForeground(new java.awt.Color(255, 255, 255));
-        tblPaymentTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblPaymentRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblPaymentRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblPaymentTableMouseClicked(evt);
+                tblPaymentRecordMouseClicked(evt);
             }
         });
-        scrlPayment.setViewportView(tblPaymentTable);
+        scrlPayment.setViewportView(tblPaymentRecord);
 
         pnlForm.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -530,16 +530,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         txtTotalCost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTotalCostActionPerformed(evt);
-            }
-        });
-
-        txtReturnDate.setEditable(false);
-        txtReturnDate.setBackground(new java.awt.Color(204, 204, 204));
-        txtReturnDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtReturnDate.setForeground(new java.awt.Color(0, 0, 0));
-        txtReturnDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtReturnDateActionPerformed(evt);
             }
         });
 
@@ -581,10 +571,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         cmbRentalStatus.setForeground(new java.awt.Color(0, 0, 0));
         cmbRentalStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Ongoing", "Returned", "Late", "Cancelled" }));
 
-        lblReturnDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblReturnDate.setForeground(new java.awt.Color(255, 255, 255));
-        lblReturnDate.setText("Return Date:");
-
         lblRentalStage.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblRentalStage.setForeground(new java.awt.Color(255, 255, 255));
         lblRentalStage.setText("Rental Stage:");
@@ -613,26 +599,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
             }
         });
 
-        txtMovieTitle.setEditable(false);
-        txtMovieTitle.setBackground(new java.awt.Color(204, 204, 204));
-        txtMovieTitle.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtMovieTitle.setForeground(new java.awt.Color(0, 0, 0));
-        txtMovieTitle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMovieTitleActionPerformed(evt);
-            }
-        });
-
-        txtRentalDate.setEditable(false);
-        txtRentalDate.setBackground(new java.awt.Color(204, 204, 204));
-        txtRentalDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtRentalDate.setForeground(new java.awt.Color(0, 0, 0));
-        txtRentalDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRentalDateActionPerformed(evt);
-            }
-        });
-
         txtPaymentID.setEditable(false);
         txtPaymentID.setBackground(new java.awt.Color(204, 204, 204));
         txtPaymentID.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -649,7 +615,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
 
         lblPaymentStatus.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblPaymentStatus.setForeground(new java.awt.Color(255, 255, 255));
-        lblPaymentStatus.setText("Payment Status:");
+        lblPaymentStatus.setText("Pay Status:");
 
         txtPaymentStatus.setEditable(false);
         txtPaymentStatus.setBackground(new java.awt.Color(204, 204, 204));
@@ -658,15 +624,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         txtPaymentStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPaymentStatusActionPerformed(evt);
-            }
-        });
-
-        txtOverdue.setBackground(new java.awt.Color(204, 204, 204));
-        txtOverdue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtOverdue.setForeground(new java.awt.Color(0, 0, 0));
-        txtOverdue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtOverdueActionPerformed(evt);
             }
         });
 
@@ -741,6 +698,11 @@ public class AdminPaymentReview extends javax.swing.JFrame {
 
         txtSettleBalance.setBackground(new java.awt.Color(255, 255, 255));
         txtSettleBalance.setForeground(new java.awt.Color(0, 0, 0));
+        txtSettleBalance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSettleBalanceActionPerformed(evt);
+            }
+        });
 
         lblRemainingBalance.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblRemainingBalance.setForeground(new java.awt.Color(0, 255, 51));
@@ -754,97 +716,134 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         lblPaymentDate1.setForeground(new java.awt.Color(204, 204, 204));
         lblPaymentDate1.setText("Last Payment Date:");
 
+        txtMovieTitle.setEditable(false);
+        txtMovieTitle.setBackground(new java.awt.Color(204, 204, 204));
+        txtMovieTitle.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtMovieTitle.setForeground(new java.awt.Color(0, 0, 0));
+        txtMovieTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMovieTitleActionPerformed(evt);
+            }
+        });
+
+        lblReturnDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblReturnDate.setForeground(new java.awt.Color(255, 255, 255));
+        lblReturnDate.setText("Return Date:");
+
+        txtRentalDate.setEditable(false);
+        txtRentalDate.setBackground(new java.awt.Color(204, 204, 204));
+        txtRentalDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtRentalDate.setForeground(new java.awt.Color(0, 0, 0));
+        txtRentalDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRentalDateActionPerformed(evt);
+            }
+        });
+
+        txtReturnDate.setEditable(false);
+        txtReturnDate.setBackground(new java.awt.Color(204, 204, 204));
+        txtReturnDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtReturnDate.setForeground(new java.awt.Color(0, 0, 0));
+        txtReturnDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtReturnDateActionPerformed(evt);
+            }
+        });
+
+        txtOverdue.setBackground(new java.awt.Color(204, 204, 204));
+        txtOverdue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtOverdue.setForeground(new java.awt.Color(0, 0, 0));
+        txtOverdue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtOverdueActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlFormLayout = new javax.swing.GroupLayout(pnlForm);
         pnlForm.setLayout(pnlFormLayout);
         pnlFormLayout.setHorizontalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFormLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblManageRentalDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlFormLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
-                                .addComponent(lblSettleBalance)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtSettleBalance))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormLayout.createSequentialGroup()
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlFormLayout.createSequentialGroup()
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblPaymentStatus)
-                                    .addComponent(lblTotalCost)
+                                    .addComponent(lblTotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblPaidAmount))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(7, 7, 7))
+                            .addComponent(lblSettleBalance, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtTotalCost, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlFormLayout.createSequentialGroup()
-                                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtTotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(lblOverdue)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(pnlFormLayout.createSequentialGroup()
-                                                .addComponent(lblRemainingBalance1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lblRemainingBalance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                            .addGroup(pnlFormLayout.createSequentialGroup()
-                                                .addComponent(lblOverdue)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(txtOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addComponent(txtPaymentStatus)))
-                            .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(6, 6, 6))
+                                        .addComponent(txtOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 49, Short.MAX_VALUE))
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(lblRemainingBalance1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblRemainingBalance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(txtSettleBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(pnlFormLayout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblPaymentID)
-                                        .addComponent(lblAccountName)
-                                        .addComponent(lblMovieTitle)
-                                        .addComponent(lblRentalDate))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(pnlFormLayout.createSequentialGroup()
-                                            .addComponent(txtPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(lblRentalID)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(pnlFormLayout.createSequentialGroup()
-                                            .addGap(0, 0, Short.MAX_VALUE)
-                                            .addComponent(txtAccountName, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addComponent(lblRentalStatus)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(cmbRentalStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(pnlFormLayout.createSequentialGroup()
-                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblRentalStage)
-                                        .addComponent(lblReturnDate))
-                                    .addGap(22, 22, 22)
-                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtReturnDate, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(cmbRentalStage, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtRentalDate)
-                                        .addComponent(txtMovieTitle)
-                                        .addGroup(pnlFormLayout.createSequentialGroup()
-                                            .addComponent(lblWeekDuration)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(lblWeeks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(pnlFormLayout.createSequentialGroup()
                                 .addComponent(lblPaymentDate1)
                                 .addGap(18, 18, 18)
-                                .addComponent(lblPaymentDate, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(lblPaymentDate, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblManageRentalDetails, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblRentalStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblPaymentStatus)
+                                    .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblReturnDate)
+                                        .addComponent(lblRentalStage)))
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(lblWeekDuration)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblWeeks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(cmbRentalStage, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbRentalStatus, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtPaymentStatus)
+                                    .addComponent(txtReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormLayout.createSequentialGroup()
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblRentalDate)
+                                    .addComponent(lblMovieTitle)
+                                    .addComponent(lblAccountName)
+                                    .addComponent(lblPaymentID))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtAccountName)
+                                    .addComponent(txtMovieTitle)
+                                    .addComponent(txtRentalDate)
+                                    .addGroup(pnlFormLayout.createSequentialGroup()
+                                        .addComponent(txtPaymentID, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblRentalID)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(pnlFormLayout.createSequentialGroup()
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(24, 24, 24))
+                .addContainerGap())
         );
         pnlFormLayout.setVerticalGroup(
             pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -852,10 +851,10 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 .addComponent(lblManageRentalDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRentalID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAccountName, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -865,57 +864,60 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                     .addComponent(lblMovieTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMovieTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblWeeks, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblWeekDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cmbRentalStage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblRentalStage, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtRentalDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblRentalStage, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblRentalStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlFormLayout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblWeeks, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblWeekDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbRentalStage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbRentalStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRentalStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbRentalStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblOverdue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblRemainingBalance)
-                    .addComponent(lblRemainingBalance1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblRemainingBalance1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRemainingBalance))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPaymentDate, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPaymentDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPaymentDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPaymentDate, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSettleBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSettleBalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnConfirmTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(146, 146, 146))
         );
 
         txtSearch.setBackground(new java.awt.Color(0, 0, 0));
@@ -971,20 +973,18 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrlPayment, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
-                    .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(lblPaymentReview)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(txtSearch)
+                    .addComponent(lblPaymentReview)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainLayout.createSequentialGroup()
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scrlPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 725, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1008,7 +1008,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 1307, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1048,28 +1048,28 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void tblPaymentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentTableMouseClicked
-        int row = tblPaymentTable.getSelectedRow();
+    private void tblPaymentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentRecordMouseClicked
+        int row = tblPaymentRecord.getSelectedRow();
         if (row >= 0) {
             // Stores selected payment ID globally for reference.
-            selectedPaymentID = Integer.parseInt(tblPaymentTable.getValueAt(row, 0).toString());
+            selectedPaymentID = Integer.parseInt(tblPaymentRecord.getValueAt(row, 0).toString());
 
             // Populate form fields with selected row data.
-            txtPaymentID.setText(tblPaymentTable.getValueAt(row, 0).toString()); 
-            txtRentalID.setText(tblPaymentTable.getValueAt(row, 1).toString()); 
-            txtAccountName.setText(tblPaymentTable.getValueAt(row, 2).toString()); 
-            txtMovieTitle.setText(tblPaymentTable.getValueAt(row, 3).toString()); 
-            txtRentalDate.setText(tblPaymentTable.getValueAt(row, 4).toString()); 
-            txtReturnDate.setText(tblPaymentTable.getValueAt(row, 5).toString()); 
-            cmbRentalStage.setSelectedItem(tblPaymentTable.getValueAt(row, 6).toString());
-            cmbRentalStatus.setSelectedItem(tblPaymentTable.getValueAt(row, 7).toString()); 
-            txtPaymentStatus.setText(tblPaymentTable.getValueAt(row, 8).toString());
-            txtTotalCost.setText(tblPaymentTable.getValueAt(row, 9).toString());
-            txtPaidAmount.setText(tblPaymentTable.getValueAt(row, 10).toString());
-            txtOverdue.setText(tblPaymentTable.getValueAt(row, 11).toString());
-            cmbRentalStatus.setSelectedItem(tblPaymentTable.getValueAt(row, 7).toString());
+            txtPaymentID.setText(tblPaymentRecord.getValueAt(row, 0).toString()); 
+            txtRentalID.setText(tblPaymentRecord.getValueAt(row, 1).toString()); 
+            txtAccountName.setText(tblPaymentRecord.getValueAt(row, 2).toString()); 
+            txtMovieTitle.setText(tblPaymentRecord.getValueAt(row, 3).toString()); 
+            txtRentalDate.setText(tblPaymentRecord.getValueAt(row, 4).toString()); 
+            txtReturnDate.setText(tblPaymentRecord.getValueAt(row, 5).toString()); 
+            cmbRentalStage.setSelectedItem(tblPaymentRecord.getValueAt(row, 6).toString());
+            cmbRentalStatus.setSelectedItem(tblPaymentRecord.getValueAt(row, 7).toString()); 
+            txtPaymentStatus.setText(tblPaymentRecord.getValueAt(row, 8).toString());
+            txtTotalCost.setText(tblPaymentRecord.getValueAt(row, 9).toString());
+            txtPaidAmount.setText(tblPaymentRecord.getValueAt(row, 10).toString());
+            txtOverdue.setText(tblPaymentRecord.getValueAt(row, 11).toString());
+            cmbRentalStatus.setSelectedItem(tblPaymentRecord.getValueAt(row, 7).toString());
             // Null-safe payment date display.
-            Object paymentDateObj = tblPaymentTable.getValueAt(row, 12);
+            Object paymentDateObj = tblPaymentRecord.getValueAt(row, 12);
             String paymentDateStr = (paymentDateObj != null) ? paymentDateObj.toString() : "";
             lblPaymentDate.setText(paymentDateStr);
 
@@ -1098,7 +1098,7 @@ public class AdminPaymentReview extends javax.swing.JFrame {
                 lblRemainingBalance.setText("");
             }
         }
-    }//GEN-LAST:event_tblPaymentTableMouseClicked
+    }//GEN-LAST:event_tblPaymentRecordMouseClicked
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
@@ -1127,79 +1127,94 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         populatePaymentTable(txtSearch.getText().trim());
     }//GEN-LAST:event_tglSortActionPerformed
 
-    private void txtTotalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalCostActionPerformed
+    private void txtPaymentIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaymentIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTotalCostActionPerformed
-
-    private void txtReturnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReturnDateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtReturnDateActionPerformed
-
-    private void txtRentalIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRentalIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRentalIDActionPerformed
-
-    private void txtAccountNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAccountNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtAccountNameActionPerformed
+    }//GEN-LAST:event_txtPaymentIDActionPerformed
 
     private void txtMovieTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMovieTitleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMovieTitleActionPerformed
 
-    private void txtRentalDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRentalDateActionPerformed
+    private void txtAccountNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAccountNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtRentalDateActionPerformed
+    }//GEN-LAST:event_txtAccountNameActionPerformed
 
-    private void txtPaymentIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaymentIDActionPerformed
+    private void txtRentalIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRentalIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPaymentIDActionPerformed
+    }//GEN-LAST:event_txtRentalIDActionPerformed
 
-    private void txtPaymentStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaymentStatusActionPerformed
+    private void txtSettleBalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSettleBalanceActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPaymentStatusActionPerformed
+    }//GEN-LAST:event_txtSettleBalanceActionPerformed
 
-    private void txtOverdueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOverdueActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtOverdueActionPerformed
-
-    private void txtPaidAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaidAmountActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPaidAmountActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (selectedPaymentID <= 0) { // Handles no row selection
-            Message.error("No payment selected.");
+    private void btnConfirmTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmTransactionActionPerformed
+        if (selectedPaymentID == -1) {
+            Message.error("No payment selected."); // Handles no row selected.
             return;
         }
-        
-        // Declare and assign selected row.
-        int row = tblPaymentTable.getSelectedRow();
-        if (row < 0) {
-            Message.error("No row selected in the table.");
-            return;
+
+        try {
+            double remainingBalance = Double.parseDouble(lblRemainingBalance.getText().replace("₱", "").trim());
+            double settleAmount = Double.parseDouble(txtSettleBalance.getText().replace("₱", "").trim());
+            double currentPaidAmount = Double.parseDouble(txtPaidAmount.getText().replace("₱", "").trim());
+            double newTotalPaid = currentPaidAmount + settleAmount;
+
+            // Payment must be full/equivalent to remaining balance.
+            if (settleAmount != remainingBalance) {
+                Message.show("Settle amount must match the remaining balance to confirm.", "Mismatch");
+                return;
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+            String status = "Paid Full";
+
+            conn = DBConnection.getConnection();
+            if (conn == null) return;
+
+            paymentDAO = new PaymentDAO(conn);
+            //Inserts the full payment.
+            boolean success = paymentDAO.confirmPaymentTransaction(selectedPaymentID, status, newTotalPaid, now);
+
+            if (!success) {
+                Message.error("Failed to confirm transaction.");
+                return;
+            }
+
+            // If Transaction is confirmed, proceed with copy increment.
+            int movieID = paymentDAO.getMovieIDByPaymentID(selectedPaymentID);
+            if (movieID == -1) { // Movie copy increment failed.
+                Message.error("Movie ID not found for this payment.");
+                return;
+            }
+
+            MovieDAO movieDAO = new MovieDAO(conn);
+            boolean updated = movieDAO.incrementMovieCopies(movieID);
+            if (!updated) {
+                Message.error("Failed to increment movie copy.");
+                return;
+            }
+
+            // Update rental status to 'Returned'.
+            RentalDAO rentalDAO = new RentalDAO(conn);
+            int rentalID = rentalDAO.getRentalIDByPaymentID(selectedPaymentID);
+            if (rentalID != -1) {
+                boolean rentalUpdated = rentalDAO.updateRentalStatus(rentalID, "Returned");
+                if (!rentalUpdated) {
+                    Message.error("Failed to update rental status.");
+                    return;
+                }
+            }
+
+            Message.show("Transaction confirmed successfully.");
+            populatePaymentTable("");
+        } catch (Exception e) {
+            Message.error("Error confirming transaction: " + e.getMessage());
         }
-        // Extract rentalID from hidden column (index 1)
-        int rentalID = Integer.parseInt(tblPaymentTable.getValueAt(row, 1).toString());
+    }//GEN-LAST:event_btnConfirmTransactionActionPerformed
 
-        // Get selected rental stage & status from ComboBox
-        String selectedStage = cmbRentalStage.getSelectedItem().toString();
-        String selectedStatus = cmbRentalStatus.getSelectedItem().toString();
-
-        if (conn == null) return; // Validates connection.
-        RentalDAO rentalDAO = new RentalDAO(conn); // Use rentalDAO to update.
-
-        boolean isStageUpdated = rentalDAO.updateRentalStage(rentalID, selectedStage);
-        boolean isStatusUpdated = rentalDAO.updateRentalStatus(rentalID, selectedStatus);
-
-        if (isStageUpdated && isStatusUpdated) {
-            Message.show("Payment record updated: Stage = " + selectedStage + ", Status = " + selectedStatus);
-            populatePaymentTable(""); // Refresh table
-            // clearForm(); // Optional: reset right panel
-        } else {
-            Message.error("Failed to update payment record.");
-        }
-    }//GEN-LAST:event_btnUpdateActionPerformed
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clearForm();
+    }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (selectedPaymentID == -1) {
@@ -1236,74 +1251,63 @@ public class AdminPaymentReview extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        clearForm();
-    }//GEN-LAST:event_btnClearActionPerformed
-
-    private void btnConfirmTransactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmTransactionActionPerformed
-            if (selectedPaymentID == -1) {
-            Message.error("No payment selected."); // Handles no row selected.
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if (selectedPaymentID <= 0) { // Handles no row selection
+            Message.error("No payment selected.");
             return;
         }
 
-        try {
-            double remainingBalance = Double.parseDouble(lblRemainingBalance.getText().replace("₱", "").trim());
-            double settleAmount = Double.parseDouble(txtSettleBalance.getText().replace("₱", "").trim());
-            double currentPaidAmount = Double.parseDouble(txtPaidAmount.getText().replace("₱", "").trim());
-            double newTotalPaid = currentPaidAmount + settleAmount;
-            
-            // Payment must be full/equivalent to remaining balance.
-            if (settleAmount != remainingBalance) {
-                Message.show("Settle amount must match the remaining balance to confirm.", "Mismatch");
-                return;
-            }
-
-            LocalDateTime now = LocalDateTime.now();
-            String status = "Paid Full";
-
-            conn = DBConnection.getConnection();
-            if (conn == null) return;
-
-            paymentDAO = new PaymentDAO(conn);
-            //Inserts the full payment.
-            boolean success = paymentDAO.confirmPaymentTransaction(selectedPaymentID, status, newTotalPaid, now);
-
-            if (!success) {
-                Message.error("Failed to confirm transaction.");
-                return;
-            }
-
-            // If Transaction is confirmed, proceed with copy increment.
-            int movieID = paymentDAO.getMovieIDByPaymentID(selectedPaymentID);
-            if (movieID == -1) { // Movie copy increment failed.
-                Message.error("Movie ID not found for this payment.");
-                return;
-            }
-
-            MovieDAO movieDAO = new MovieDAO(conn);
-            boolean updated = movieDAO.incrementMovieCopies(movieID);
-            if (!updated) {
-                Message.error("Failed to increment movie copy.");
-                return;
-            }
-            
-            // Update rental status to 'Returned'.
-            RentalDAO rentalDAO = new RentalDAO(conn);
-            int rentalID = rentalDAO.getRentalIDByPaymentID(selectedPaymentID);
-            if (rentalID != -1) {
-                boolean rentalUpdated = rentalDAO.updateRentalStatus(rentalID, "Returned");
-                if (!rentalUpdated) {
-                    Message.error("Failed to update rental status.");
-                    return;
-                }
-            }
-            
-            Message.show("Transaction confirmed successfully.");
-            populatePaymentTable("");
-        } catch (Exception e) {
-            Message.error("Error confirming transaction: " + e.getMessage());
+        // Declare and assign selected row.
+        int row = tblPaymentRecord.getSelectedRow();
+        if (row < 0) {
+            Message.error("No row selected in the table.");
+            return;
         }
-    }//GEN-LAST:event_btnConfirmTransactionActionPerformed
+        // Extract rentalID from hidden column (index 1)
+        int rentalID = Integer.parseInt(tblPaymentRecord.getValueAt(row, 1).toString());
+
+        // Get selected rental stage & status from ComboBox
+        String selectedStage = cmbRentalStage.getSelectedItem().toString();
+        String selectedStatus = cmbRentalStatus.getSelectedItem().toString();
+
+        if (conn == null) return; // Validates connection.
+        RentalDAO rentalDAO = new RentalDAO(conn); // Use rentalDAO to update.
+
+        boolean isStageUpdated = rentalDAO.updateRentalStage(rentalID, selectedStage);
+        boolean isStatusUpdated = rentalDAO.updateRentalStatus(rentalID, selectedStatus);
+
+        if (isStageUpdated && isStatusUpdated) {
+            Message.show("Payment record updated: Stage = " + selectedStage + ", Status = " + selectedStatus);
+            populatePaymentTable(""); // Refresh table
+            // clearForm(); // Optional: reset right panel
+        } else {
+            Message.error("Failed to update payment record.");
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void txtPaidAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaidAmountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPaidAmountActionPerformed
+
+    private void txtPaymentStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaymentStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPaymentStatusActionPerformed
+
+    private void txtTotalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalCostActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotalCostActionPerformed
+
+    private void txtReturnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtReturnDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtReturnDateActionPerformed
+
+    private void txtRentalDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRentalDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtRentalDateActionPerformed
+
+    private void txtOverdueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOverdueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtOverdueActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1355,7 +1359,6 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbRentalStage;
     private javax.swing.JComboBox<String> cmbRentalStatus;
     private javax.swing.JComboBox<String> cmbSort;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblAccountName;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
@@ -1384,8 +1387,9 @@ public class AdminPaymentReview extends javax.swing.JFrame {
     private javax.swing.JPanel pnlForm;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
+    private javax.swing.JScrollPane scrlHeader4;
     private javax.swing.JScrollPane scrlPayment;
-    private javax.swing.JTable tblPaymentTable;
+    private javax.swing.JTable tblPaymentRecord;
     private javax.swing.JToggleButton tglSort;
     private javax.swing.JTextField txtAccountName;
     private javax.swing.JTextField txtMovieTitle;

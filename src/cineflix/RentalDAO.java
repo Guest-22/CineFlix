@@ -346,4 +346,22 @@ public class RentalDAO {
         }
         return rentals;
     }
+    
+    // Retrieve todays rental count/requests.
+    public int getTodayRentalCount() {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_RENTALS + 
+                " WHERE DATE(" + COL_RENTAL_DATE + ") = CURDATE()";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting today's rental requests:\n" + e.getMessage());
+        }
+        return 0;
+    }
 }

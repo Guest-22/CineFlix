@@ -40,7 +40,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
     
     // Populates rental table of current loggedin user.
     private void populateRentalTable(String keyword) {
-        DefaultTableModel model = (DefaultTableModel) tblRentalTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblRentalRecord.getModel();
         model.setRowCount(0); // Clear existing rows
 
         try {
@@ -100,7 +100,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 };
                 model.addRow(row);
             }
-            applyRentalColorRenderers(tblRentalTable);
+            applyRentalColorRenderers(tblRentalRecord);
         } catch (Exception e) {
             Message.error("Error loading rental rentals:\n" + e.getMessage());
         }
@@ -195,11 +195,11 @@ public class UserRentalHistory extends javax.swing.JFrame {
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        scrlHeader4 = new javax.swing.JScrollPane();
         lblHeader4 = new javax.swing.JTextArea();
         lblRentalHistory = new javax.swing.JLabel();
         scrlRental = new javax.swing.JScrollPane();
-        tblRentalTable = new javax.swing.JTable();
+        tblRentalRecord = new javax.swing.JTable();
         cmbSort = new javax.swing.JComboBox<>();
         tglSort = new javax.swing.JToggleButton();
         txtSearch = new javax.swing.JTextField();
@@ -299,7 +299,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
         lblHeader4.setWrapStyleWord(true);
         lblHeader4.setBorder(null);
         lblHeader4.setFocusable(false);
-        jScrollPane5.setViewportView(lblHeader4);
+        scrlHeader4.setViewportView(lblHeader4);
 
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
@@ -313,7 +313,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -330,7 +330,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -349,10 +349,10 @@ public class UserRentalHistory extends javax.swing.JFrame {
         lblRentalHistory.setText("Rental History");
         lblRentalHistory.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        tblRentalTable.setBackground(new java.awt.Color(0, 0, 0));
-        tblRentalTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblRentalTable.setForeground(new java.awt.Color(255, 255, 255));
-        tblRentalTable.setModel(new javax.swing.table.DefaultTableModel(
+        tblRentalRecord.setBackground(new java.awt.Color(0, 0, 0));
+        tblRentalRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblRentalRecord.setForeground(new java.awt.Color(255, 255, 255));
+        tblRentalRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -371,14 +371,14 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblRentalTable.setSelectionBackground(new java.awt.Color(74, 144, 226));
-        tblRentalTable.setSelectionForeground(new java.awt.Color(255, 255, 255));
-        tblRentalTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblRentalRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblRentalRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tblRentalRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblRentalTableMouseClicked(evt);
+                tblRentalRecordMouseClicked(evt);
             }
         });
-        scrlRental.setViewportView(tblRentalTable);
+        scrlRental.setViewportView(tblRentalRecord);
 
         cmbSort.setBackground(new java.awt.Color(0, 0, 0));
         cmbSort.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -516,9 +516,9 @@ public class UserRentalHistory extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void tblRentalTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalTableMouseClicked
+    private void tblRentalRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalRecordMouseClicked
 
-    }//GEN-LAST:event_tblRentalTableMouseClicked
+    }//GEN-LAST:event_tblRentalRecordMouseClicked
 
     private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
         String sortQuery = txtSearch.getText().trim();
@@ -548,6 +548,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        cmbSort.setSelectedIndex(0);
         clearForm();
     }//GEN-LAST:event_btnResetActionPerformed
 
@@ -595,7 +596,6 @@ public class UserRentalHistory extends javax.swing.JFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbSort;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
@@ -603,8 +603,9 @@ public class UserRentalHistory extends javax.swing.JFrame {
     private javax.swing.JLabel lblRentalHistory;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
+    private javax.swing.JScrollPane scrlHeader4;
     private javax.swing.JScrollPane scrlRental;
-    private javax.swing.JTable tblRentalTable;
+    private javax.swing.JTable tblRentalRecord;
     private javax.swing.JToggleButton tglSort;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables

@@ -34,7 +34,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="pnlMain" alignment="0" max="-2" attributes="0"/>
+          <Component id="pnlMain" min="-2" pref="1304" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -80,7 +80,7 @@
                       <Component id="scrlMovie" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="pnlForm" max="32767" attributes="0"/>
+                  <Component id="pnlForm" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -118,8 +118,8 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btnHome" alignment="0" pref="130" max="32767" attributes="0"/>
-                  <Component id="btnMovieInventory" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnHome" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnMovieInventory" alignment="0" pref="130" max="32767" attributes="0"/>
                   <Component id="btnUserProfiles" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnRentalLogs" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnPaymentReview" alignment="0" max="32767" attributes="0"/>
@@ -127,7 +127,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane5" min="-2" pref="102" max="-2" attributes="0"/>
+                          <Component id="scrlHeader4" min="-2" pref="102" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="lblHeader3" alignment="0" max="32767" attributes="0"/>
                               <Component id="lblHeader2" alignment="0" max="32767" attributes="0"/>
@@ -148,7 +148,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblHeader3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane5" min="-2" pref="42" max="-2" attributes="0"/>
+                      <Component id="scrlHeader4" min="-2" pref="42" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnHome" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -317,7 +317,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogoutActionPerformed"/>
               </Events>
             </Component>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane5">
+            <Container class="javax.swing.JScrollPane" name="scrlHeader4">
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
               </AuxValues>
@@ -406,7 +406,7 @@
                                               </Group>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">

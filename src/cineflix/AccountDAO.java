@@ -6,11 +6,12 @@ public class AccountDAO {
     private Connection conn;
     
     // Database variables.
-    private final static String TABLE_ACCOUNT = "tblAccounts";
+    private final static String TABLE_ACCOUNTS = "tblAccounts";
     private final static String COL_ID = "accountID"; // PRIMARY KEY.
     private final static String COL_USERNAME = "username"; // UNIQUE.
     private final static String COL_PASSWORD = "password";
     private final static String COL_ROLE = "role"; // ENUM ('User,'Admin') DEFAULT 'User'.
+    private final static String COL_CREATEDAT = "createdAt";
     
     // Default constructor.
     public AccountDAO (){}
@@ -23,7 +24,7 @@ public class AccountDAO {
     // Checks if a username already exists in tblAccounts.
     public boolean isUsernameExist(String username) {
         String sql = 
-                "SELECT " + COL_ID + " FROM " + TABLE_ACCOUNT + 
+                "SELECT " + COL_ID + " FROM " + TABLE_ACCOUNTS + 
                 " WHERE " + COL_USERNAME + " = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -41,7 +42,7 @@ public class AccountDAO {
     public int insertAccount(String username, String password) {
         // Insert query; creates a new account; automatically assigns user as default role.
         String sql = 
-                "INSERT INTO " + TABLE_ACCOUNT + 
+                "INSERT INTO " + TABLE_ACCOUNTS + 
                 "(" + COL_USERNAME + ", " + COL_PASSWORD + ", " + COL_ROLE + ") " + 
                 "VALUES (?, ?, 'User')";
         
@@ -65,7 +66,7 @@ public class AccountDAO {
     public boolean verifyAccount(String username, String password) {
         // Read query; looks for an existing account inside DB.
         String sql = 
-                "SELECT * FROM " + TABLE_ACCOUNT + 
+                "SELECT * FROM " + TABLE_ACCOUNTS + 
                 " WHERE " + COL_USERNAME + " = ?" + " AND " + COL_PASSWORD + " = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -83,7 +84,7 @@ public class AccountDAO {
     // Get role of a user by username; returns role as a String or null if not found.
     public String getRole(String username) {
         String sql = 
-                "SELECT " + COL_ROLE + " FROM " + TABLE_ACCOUNT + 
+                "SELECT " + COL_ROLE + " FROM " + TABLE_ACCOUNTS + 
                 " WHERE " + COL_USERNAME + " = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -101,7 +102,7 @@ public class AccountDAO {
     
     // Gets accountID by username and password (used after login).
     public int getAccountID(String username, String password) {
-        String sql = "SELECT " + COL_ID + " FROM " + TABLE_ACCOUNT +
+        String sql = "SELECT " + COL_ID + " FROM " + TABLE_ACCOUNTS +
                      " WHERE " + COL_USERNAME + " = ? AND " + COL_PASSWORD + " = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -121,7 +122,7 @@ public class AccountDAO {
     // Gets the password via accountID (FK in tblPersonalInfo).
     public String getPasswordByAccountID(int accountID) {
         String sql = 
-                "SELECT " + COL_PASSWORD + " FROM " + TABLE_ACCOUNT +
+                "SELECT " + COL_PASSWORD + " FROM " + TABLE_ACCOUNTS +
                 " WHERE " + COL_ID + " = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, accountID);
@@ -139,7 +140,7 @@ public class AccountDAO {
     // Update account details; role not included.
     public boolean updateAccount(int accountID, String username, String password) {
         String sql = 
-                "UPDATE " + TABLE_ACCOUNT + 
+                "UPDATE " + TABLE_ACCOUNTS + 
                 " SET " + COL_USERNAME + " = ?, " + COL_PASSWORD + " = ? "
                 + "WHERE " + COL_ID + " = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -157,7 +158,7 @@ public class AccountDAO {
     // Deletes account data.
     public boolean deleteAccount(int accountID) {
         String sql = 
-                "DELETE FROM " + TABLE_ACCOUNT + 
+                "DELETE FROM " + TABLE_ACCOUNTS + 
                 " WHERE " + COL_ID + " = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, accountID); // Target row
@@ -172,7 +173,7 @@ public class AccountDAO {
     // Returns the total number of accounts created in tblAccounts.
     public int getAccountTotalCount(String role) {
         String sql = 
-                "SELECT COUNT(*) FROM " + TABLE_ACCOUNT + 
+                "SELECT COUNT(*) FROM " + TABLE_ACCOUNTS + 
                 " WHERE " + COL_ROLE + " = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, role);
@@ -182,6 +183,24 @@ public class AccountDAO {
             }
         } catch (SQLException e) {
             Message.error("Error counting accounts by role:\n" + e.getMessage());
+        }
+        return 0;
+    }
+    
+    // Gets the count of newly registered user/s.
+    public int getTodayUserCount() {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_ACCOUNTS + 
+                " WHERE DATE(" + COL_CREATEDAT + ") = CURDATE()";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting today's user registrations:\n" + e.getMessage());
         }
         return 0;
     }

@@ -228,7 +228,8 @@ public class MovieDAO {
     
     // Returns the total number of movie entries in tblMovies.
     public int getMovieTotalCount() {
-        String sql = "SELECT COUNT(*) FROM " + TABLE_MOVIES;
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_MOVIES;
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -265,5 +266,75 @@ public class MovieDAO {
             Message.error("Error fetching top rented movies:\n" + e.getMessage());
         }
         return topMovies;
+    }
+    
+    // Returns the lowest stock count (minimum copies) among all movies.
+    public int getLowestStockCount() {
+        String sql = 
+                "SELECT MIN(" + COL_COPIES + ") FROM " + TABLE_MOVIES;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error retrieving lowest stock count:\n" + e.getMessage());
+        }
+        return 0;
+    }
+        
+    // Returns the highest stock count (maximum copies) among all movies.
+    public int getHighestStockCount() {
+        String sql = 
+                "SELECT MAX(" + COL_COPIES + ") FROM " + TABLE_MOVIES;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error retrieving highest stock count:\n" + e.getMessage());
+        }
+        return 0;
+    }
+    
+    // Returns the createdAt timestamp of the latest movie added.
+    public Timestamp getLatestMovieCreatedAt() {
+        String sql = 
+                "SELECT " + COL_CREATEDAT + " FROM " + TABLE_MOVIES + 
+                " ORDER BY createdAt DESC LIMIT 1";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getTimestamp("createdAt");
+            }
+        } catch (SQLException e) {
+            Message.error("Error retrieving latest movie timestamp:\n" + e.getMessage());
+        }
+        return null;
+    }
+    
+    // Gets the total count of newly created movies.
+    public int getTodayMovieCount() {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_MOVIES + 
+                " WHERE DATE(" + COL_CREATEDAT + ") = CURDATE()";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting today's movie entries:\n" + e.getMessage());
+        }
+        return 0;
     }
 }

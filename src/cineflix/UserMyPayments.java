@@ -43,14 +43,8 @@ public class UserMyPayments extends javax.swing.JFrame {
         tglSort.setForeground(Color.WHITE);
     }
     
-    // Resets payment table.
-    private void clearForm() {
-        txtSearch.setText(""); // lear the search field.
-        populatePaymentTable(""); // Reset table to show all movies.
-    }
-    
     private void populatePaymentTable(String keyword) {
-        DefaultTableModel model = (DefaultTableModel) tblPaymentTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
         model.setRowCount(0); // Clear existing rows
 
         try {
@@ -123,12 +117,12 @@ public class UserMyPayments extends javax.swing.JFrame {
             };
             model.addRow(row); // Add row to table
         }
-        applyUserPaymentTableColorRenderers(tblPaymentTable);
+        applyUserPaymentTableColorRenderers(tblPaymentRecord);
         
         // Hide rentalID column (index 0).
-        tblPaymentTable.getColumnModel().getColumn(0).setMinWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(0).setMaxWidth(0);
-        tblPaymentTable.getColumnModel().getColumn(0).setWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setMinWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblPaymentRecord.getColumnModel().getColumn(0).setWidth(0);
         
         } catch (Exception e) {
             
@@ -267,11 +261,11 @@ public class UserMyPayments extends javax.swing.JFrame {
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        scrlHeader4 = new javax.swing.JScrollPane();
         lblHeader4 = new javax.swing.JTextArea();
         lblMyPayments = new javax.swing.JLabel();
         scrlRental = new javax.swing.JScrollPane();
-        tblPaymentTable = new javax.swing.JTable();
+        tblPaymentRecord = new javax.swing.JTable();
         pnlReceipt = new javax.swing.JPanel();
         scrlReceipt = new javax.swing.JScrollPane();
         txtaReceipt = new javax.swing.JTextArea();
@@ -378,7 +372,7 @@ public class UserMyPayments extends javax.swing.JFrame {
         lblHeader4.setWrapStyleWord(true);
         lblHeader4.setBorder(null);
         lblHeader4.setFocusable(false);
-        jScrollPane5.setViewportView(lblHeader4);
+        scrlHeader4.setViewportView(lblHeader4);
 
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
@@ -392,7 +386,7 @@ public class UserMyPayments extends javax.swing.JFrame {
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -409,7 +403,7 @@ public class UserMyPayments extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -428,10 +422,10 @@ public class UserMyPayments extends javax.swing.JFrame {
         lblMyPayments.setText("My Payments");
         lblMyPayments.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        tblPaymentTable.setBackground(new java.awt.Color(0, 0, 0));
-        tblPaymentTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblPaymentTable.setForeground(new java.awt.Color(255, 255, 255));
-        tblPaymentTable.setModel(new javax.swing.table.DefaultTableModel(
+        tblPaymentRecord.setBackground(new java.awt.Color(0, 0, 0));
+        tblPaymentRecord.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblPaymentRecord.setForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null},
@@ -450,14 +444,14 @@ public class UserMyPayments extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblPaymentTable.setSelectionBackground(new java.awt.Color(74, 144, 226));
-        tblPaymentTable.setSelectionForeground(new java.awt.Color(255, 255, 255));
-        tblPaymentTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblPaymentRecord.setSelectionBackground(new java.awt.Color(74, 144, 226));
+        tblPaymentRecord.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tblPaymentRecord.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblPaymentTableMouseClicked(evt);
+                tblPaymentRecordMouseClicked(evt);
             }
         });
-        scrlRental.setViewportView(tblPaymentTable);
+        scrlRental.setViewportView(tblPaymentRecord);
 
         pnlReceipt.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -664,12 +658,12 @@ public class UserMyPayments extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void tblPaymentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentTableMouseClicked
+    private void tblPaymentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentRecordMouseClicked
 
-    }//GEN-LAST:event_tblPaymentTableMouseClicked
+    }//GEN-LAST:event_tblPaymentRecordMouseClicked
 
     private void btnGenerateReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReceiptActionPerformed
-        int selectedRow = tblPaymentTable.getSelectedRow(); // Get selected row index.
+        int selectedRow = tblPaymentRecord.getSelectedRow(); // Get selected row index.
 
         if (selectedRow == -1) { // If theres none, display this error message.
             Message.error("Please select a payment record first.");
@@ -729,7 +723,7 @@ public class UserMyPayments extends javax.swing.JFrame {
         txtaReceipt.append("Please proceed to the front desk and say:\n");
         txtaReceipt.append("“Payment for Rental ID: " + rentalID + "”\n");
         txtaReceipt.append(br + "\n");
-        txtaReceipt.append(br + "\n");
+        txtaReceipt.append(br);
     }//GEN-LAST:event_btnGenerateReceiptActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -764,7 +758,9 @@ public class UserMyPayments extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        clearForm();
+        txtSearch.setText(""); // Clear the search field.
+        cmbSort.setSelectedIndex(0); // Sets sort back to default value.
+        populatePaymentTable(""); // Reset table to show all movies.
     }//GEN-LAST:event_btnResetActionPerformed
 
     /**
@@ -813,7 +809,6 @@ public class UserMyPayments extends javax.swing.JFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbSort;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
@@ -823,9 +818,10 @@ public class UserMyPayments extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlReceipt;
     private javax.swing.JPanel pnlSideNav;
+    private javax.swing.JScrollPane scrlHeader4;
     private javax.swing.JScrollPane scrlReceipt;
     private javax.swing.JScrollPane scrlRental;
-    private javax.swing.JTable tblPaymentTable;
+    private javax.swing.JTable tblPaymentRecord;
     private javax.swing.JToggleButton tglSort;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextArea txtaReceipt;

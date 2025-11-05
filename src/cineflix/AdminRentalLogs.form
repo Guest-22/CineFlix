@@ -76,7 +76,7 @@
                       <Component id="lblRentalLogs" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="scrlRental" alignment="0" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="23" max="32767" attributes="0"/>
+                  <EmptySpace pref="17" max="32767" attributes="0"/>
                   <Component id="pnlForm" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -122,7 +122,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane5" min="-2" pref="102" max="-2" attributes="0"/>
+                          <Component id="scrlHeader4" min="-2" pref="102" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="lblHeader3" alignment="0" max="32767" attributes="0"/>
                               <Component id="lblHeader2" alignment="0" max="32767" attributes="0"/>
@@ -143,7 +143,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblHeader3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane5" min="-2" pref="42" max="-2" attributes="0"/>
+                      <Component id="scrlHeader4" min="-2" pref="42" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Component id="btnHome" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -312,7 +312,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogoutActionPerformed"/>
               </Events>
             </Component>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane5">
+            <Container class="javax.swing.JScrollPane" name="scrlHeader4">
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
               </AuxValues>
@@ -449,7 +449,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="tblRentalTable">
+            <Component class="javax.swing.JTable" name="tblRentalRecord">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
@@ -481,7 +481,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblRentalTableMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblRentalRecordMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>
@@ -496,73 +496,66 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblManageRentalDetails" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="17" pref="17" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblRentalID" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblRentalStage" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblReturnDate" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblRentalDate" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblMovieTitle" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblAccountName" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnConfirmTransaction" alignment="0" min="-2" pref="357" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="btnUpdate" min="-2" pref="111" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btnDelete" min="-2" pref="111" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btnClear" min="-2" pref="111" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="lblAmountPaid" alignment="0" min="-2" pref="86" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="30" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="lblManageRentalDetails" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="lblTotalCost" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="lblRentalStatus" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="lblRentalStatus" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblRentalID" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblRentalStage" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblReturnDate" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblAccountName" alignment="0" min="-2" pref="96" max="-2" attributes="0"/>
+                                              <Component id="lblMovieTitle" alignment="0" min="-2" pref="74" max="-2" attributes="0"/>
+                                              <Component id="lblRentalDate" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="lblTotalCost" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Component id="lblUpfrontFee" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="txtPaidAmount" pref="248" max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="lblWeekDuration" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="lblWeeks" max="32767" attributes="0"/>
+                                              </Group>
+                                              <Component id="txtTotalCost" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="txtRentalID" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="txtAccountName" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="txtMovieTitle" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="txtRentalDate" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="txtReturnDate" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="cmbRentalStage" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="cmbRentalStatus" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="txtUpfrontFee" alignment="0" pref="248" max="32767" attributes="0"/>
+                                              <Component id="lblUpfrontFee1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
                               </Group>
+                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblWeekDuration" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblWeeks" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="lblUpfrontFee1" pref="248" max="32767" attributes="0"/>
-                          <Component id="txtTotalCost" alignment="0" pref="248" max="32767" attributes="0"/>
-                          <Component id="txtRentalID" alignment="0" pref="248" max="32767" attributes="0"/>
-                          <Component id="txtAccountName" alignment="0" pref="248" max="32767" attributes="0"/>
-                          <Component id="txtMovieTitle" alignment="0" pref="248" max="32767" attributes="0"/>
-                          <Component id="txtRentalDate" alignment="0" pref="248" max="32767" attributes="0"/>
-                          <Component id="txtReturnDate" alignment="0" pref="248" max="32767" attributes="0"/>
-                          <Component id="cmbRentalStage" alignment="0" pref="248" max="32767" attributes="0"/>
-                          <Component id="cmbRentalStatus" alignment="0" pref="248" max="32767" attributes="0"/>
-                          <Component id="txtUpfrontFee" alignment="0" pref="248" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnConfirmTransaction" alignment="0" min="-2" pref="357" max="-2" attributes="0"/>
-                          <Component id="lblUpfrontFee" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnUpdate" min="-2" pref="111" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="btnDelete" min="-2" pref="111" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="btnClear" min="-2" pref="111" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblAmountPaid" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="txtPaidAmount" min="-2" pref="247" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="0" pref="24" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -622,12 +615,12 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblUpfrontFee1" min="-2" pref="15" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblAmountPaid" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
-                          <Component id="txtPaidAmount" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="lblAmountPaid" min="-2" pref="21" max="-2" attributes="0"/>
+                          <Component id="txtPaidAmount" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnUpdate" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
                           <Component id="btnDelete" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>

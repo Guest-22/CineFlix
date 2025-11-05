@@ -1,6 +1,12 @@
 package cineflix;
 
+import java.awt.Image;
 import java.sql.Connection;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 public class AdminDashboard extends javax.swing.JFrame {
     Connection conn;
@@ -23,44 +29,145 @@ public class AdminDashboard extends javax.swing.JFrame {
         paymentDAO = new PaymentDAO(conn);
         
         populateSummaryDetails();
+        populateTopMovies();
+        populateTodaysHighlight();
     }
     
     private void populateSummaryDetails(){
-        if (conn == null) return;
-        movieDAO = new MovieDAO(conn);
-        accountDAO = new AccountDAO(conn);
-        rentalDAO = new RentalDAO(conn);
-        paymentDAO = new PaymentDAO(conn);
-        
-        // Movies
-        int totalMovies = movieDAO.getMovieTotalCount();
-        lblEntriesAdded.setText(String.valueOf(totalMovies));
-        
-       // Rentals
-        int totalRentals = rentalDAO.getRentalTotalCount();
-        int requested = rentalDAO.getStageCount("Requested");
-        int ongoing = rentalDAO.getStatusCount("Ongoing");
-        int returned = rentalDAO.getStatusCount("Returned");
-        int late = rentalDAO.getStatusCount("Late");
-        int cancelled = rentalDAO.getStageCount("Cancelled"); // If "Cancelled" is stored in stage
+        try{
+            if (conn == null) return;
+            movieDAO = new MovieDAO(conn);
+            accountDAO = new AccountDAO(conn);
+            rentalDAO = new RentalDAO(conn);
+            paymentDAO = new PaymentDAO(conn);
 
-        lblRentalsAdded.setText(String.valueOf(totalRentals));
-        lblRequest.setText(String.valueOf(requested));
-        lblOngoing.setText(String.valueOf(ongoing));
-        lblReturned.setText(String.valueOf(returned));
-        lblLate.setText(String.valueOf(late));
-        lblCancelled.setText(String.valueOf(cancelled));
+            // Movies
+            int totalMovies = movieDAO.getMovieTotalCount();
+            int lowestMovieCopy = movieDAO.getLowestStockCount();
+            int highestMovieCopy = movieDAO.getHighestStockCount();
+            Timestamp latestCreatedAt = movieDAO.getLatestMovieCreatedAt();
+            SimpleDateFormat fmt = new SimpleDateFormat("MMM dd, yyyy"); // Formats the date (e.g., Nov 01, 2025).
+            String formattedDate = fmt.format(latestCreatedAt);
+            lblLastAdded.setText(formattedDate);
+            lblTotalMovies.setText(String.valueOf(totalMovies));
+            lblLowestStock.setText(String.valueOf(lowestMovieCopy));
+            lblHighestStock.setText(String.valueOf(highestMovieCopy));
 
-        // Users
-        int totalUsers = accountDAO.getAccountTotalCount("User");
-        lblAccountsCreated.setText(String.valueOf(totalUsers)); 
 
-        // Payments
-        int totalPayments = paymentDAO.getPaymentTotalCount();
-        double totalRevenue = paymentDAO.getSumAmount();
+           // Rentals
+            int totalRentals = rentalDAO.getRentalTotalCount();
+            int requested = rentalDAO.getStageCount("Requested");
+            int ongoing = rentalDAO.getStatusCount("Ongoing");
+            int returned = rentalDAO.getStatusCount("Returned");
+            int late = rentalDAO.getStatusCount("Late");
+            int cancelled = rentalDAO.getStageCount("Cancelled"); // If "Cancelled" is stored in stage
 
-        lblRecordsAdded.setText(String.valueOf(totalPayments));
-        lblTotalRevenue.setText("₱" + String.format("%,.2f", totalRevenue));
+            lblTotalRentals.setText(String.valueOf(totalRentals));
+            lblRequest.setText(String.valueOf(requested));
+            lblOngoing.setText(String.valueOf(ongoing));
+            lblReturned.setText(String.valueOf(returned));
+            lblLate.setText(String.valueOf(late));
+            lblCancelled.setText(String.valueOf(cancelled));
+
+            // Users
+            int totalUsers = accountDAO.getAccountTotalCount("User");
+            lblTotalUsers.setText(String.valueOf(totalUsers)); 
+
+            // Payments
+            int totalPayments = paymentDAO.getPaymentTotalCount();
+            double totalRevenue = paymentDAO.getSumAmount();
+            lblTotalPayments.setText(String.valueOf(totalPayments));
+            lblTotalRevenue.setText("₱" + String.format("%,.2f", totalRevenue));
+        } catch(Exception e){
+            Message.error("Error populating summary details:\n" + e.getMessage());
+        }
+    }
+    
+    // Display top rented movies.
+    public void populateTopMovies() {
+        try{
+            if (conn == null) return;
+            MovieDAO movieDAO = new MovieDAO(conn);
+            List<Movie> topMovies = movieDAO.getTopRentedMovieSummaries(5);
+
+            for (int i = 0; i < topMovies.size(); i++) {
+                Movie movie = topMovies.get(i);
+                String title = movie.getTitle();
+                String imagePath = movie.getImagePath();
+                ImageIcon scaledIcon = null;
+
+                // Dynamically resize image to match JLabel dimensions
+                if (imagePath != null && !imagePath.isEmpty()) {
+                    ImageIcon originalIcon = new ImageIcon(imagePath);
+                    JLabel targetLabel = switch (i) {
+                        case 0 -> lblImage1;
+                        case 1 -> lblImage2;
+                        case 2 -> lblImage3;
+                        case 3 -> lblImage4;
+                        case 4 -> lblImage5;
+                        default -> null;
+                    };
+
+                    if (targetLabel != null) {
+                        int width = targetLabel.getWidth();
+                        int height = targetLabel.getHeight();
+                        Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                        scaledIcon = new ImageIcon(scaledImage);
+                    }
+                }
+
+                // Assign title and image to corresponding components
+                switch (i) {
+                    case 0:
+                        txtaTitle1.setText(title);
+                        lblImage1.setIcon(scaledIcon);
+                        break;
+                    case 1:
+                        txtaTitle2.setText(title);
+                        lblImage2.setIcon(scaledIcon);
+                        break;
+                    case 2:
+                        txtaTitle3.setText(title);
+                        lblImage3.setIcon(scaledIcon);
+                        break;
+                    case 3:
+                        txtaTitle4.setText(title);
+                        lblImage4.setIcon(scaledIcon);
+                        break;
+                    case 4:
+                        txtaTitle5.setText(title);
+                        lblImage5.setIcon(scaledIcon);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (Exception e){
+            Message.error("Error populating top rented movies:\n" + e.getMessage());
+        }
+    }
+    
+    // Retrieve all new entries today (CURDATE()).
+    private void populateTodaysHighlight (){
+        try {
+            if(conn == null)return;
+            movieDAO = new MovieDAO(conn);
+            accountDAO = new AccountDAO(conn);
+            rentalDAO = new RentalDAO(conn);
+            paymentDAO = new PaymentDAO(conn);
+            
+            int todayMovieCount = movieDAO.getTodayMovieCount();
+            int todayAccountCount = accountDAO.getTodayUserCount();
+            int todayRentalCount = rentalDAO.getTodayRentalCount();
+            int todayPaymentCount = paymentDAO.getTodayPaymentCount();
+            
+            lblMovieEntriesAdded.setText("- " + String.valueOf(todayMovieCount));
+            lblAccountsCreated.setText("- " + String.valueOf(todayAccountCount));
+            lblRentalRequestsReceived.setText("- " + String.valueOf(todayRentalCount));
+            lblPaymentsCompleted.setText("- " + String.valueOf(todayPaymentCount));
+        } catch (Exception e){
+            Message.error("Error retrieving today's highlight:\n" + e.getMessage());
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -78,13 +185,19 @@ public class AdminDashboard extends javax.swing.JFrame {
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        scrlHeader4 = new javax.swing.JScrollPane();
         lblHeader4 = new javax.swing.JTextArea();
-        pnlSummary = new javax.swing.JPanel();
+        pnlSummaryDetails = new javax.swing.JPanel();
         pnlMovie = new javax.swing.JPanel();
         lblMovie = new javax.swing.JLabel();
-        lblEntriesAddedTitle = new javax.swing.JLabel();
-        lblEntriesAdded = new javax.swing.JLabel();
+        lblTotalMoviesTitle = new javax.swing.JLabel();
+        lblTotalMovies = new javax.swing.JLabel();
+        lblLowestStockTitle = new javax.swing.JLabel();
+        lblHighestStockTitle = new javax.swing.JLabel();
+        lblLowestStock = new javax.swing.JLabel();
+        lblHighestStock = new javax.swing.JLabel();
+        lblLastAddedTitle = new javax.swing.JLabel();
+        lblLastAdded = new javax.swing.JLabel();
         lblSummaryDetails = new javax.swing.JLabel();
         pnlRentals = new javax.swing.JPanel();
         lblRentals = new javax.swing.JLabel();
@@ -93,8 +206,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         lblLateTitle = new javax.swing.JLabel();
         lblCancelledTitle = new javax.swing.JLabel();
         lblRequestTitle = new javax.swing.JLabel();
-        lblRentalsAddedTitle = new javax.swing.JLabel();
-        lblRentalsAdded = new javax.swing.JLabel();
+        lblTotalRentalsTitle = new javax.swing.JLabel();
+        lblTotalRentals = new javax.swing.JLabel();
         lblRequest = new javax.swing.JLabel();
         lblOngoing = new javax.swing.JLabel();
         lblReturned = new javax.swing.JLabel();
@@ -103,17 +216,43 @@ public class AdminDashboard extends javax.swing.JFrame {
         pnlPayments = new javax.swing.JPanel();
         lblTotalRevenueTitle = new javax.swing.JLabel();
         lblPayments = new javax.swing.JLabel();
-        lblRecordsAddedTitle = new javax.swing.JLabel();
-        lblRecordsAdded = new javax.swing.JLabel();
+        lblTotalPaymentsTitle = new javax.swing.JLabel();
+        lblTotalPayments = new javax.swing.JLabel();
         lblTotalRevenue = new javax.swing.JLabel();
         pnlUsers = new javax.swing.JPanel();
-        lblAccountsCreatedTitle = new javax.swing.JLabel();
+        lblTotalUsersTitle = new javax.swing.JLabel();
         lblUsers = new javax.swing.JLabel();
+        lblTotalUsers = new javax.swing.JLabel();
+        pnlTopRentedMovies = new javax.swing.JPanel();
+        lblTopRentedMovies = new javax.swing.JLabel();
+        lblImage1 = new javax.swing.JLabel();
+        scrlImage1 = new javax.swing.JScrollPane();
+        txtaTitle1 = new javax.swing.JTextArea();
+        lblImage2 = new javax.swing.JLabel();
+        scrlImage2 = new javax.swing.JScrollPane();
+        txtaTitle2 = new javax.swing.JTextArea();
+        lblImage3 = new javax.swing.JLabel();
+        scrlImage3 = new javax.swing.JScrollPane();
+        txtaTitle3 = new javax.swing.JTextArea();
+        lblImage4 = new javax.swing.JLabel();
+        scrlImage4 = new javax.swing.JScrollPane();
+        txtaTitle4 = new javax.swing.JTextArea();
+        lblImage5 = new javax.swing.JLabel();
+        scrlImage5 = new javax.swing.JScrollPane();
+        txtaTitle5 = new javax.swing.JTextArea();
+        pnlTodaysHighlight = new javax.swing.JPanel();
+        lblTodaysHighlight = new javax.swing.JLabel();
+        lblMovieEntriesAddedTitle = new javax.swing.JLabel();
+        lblAccountsCreatedTitle = new javax.swing.JLabel();
+        lblRentalRequestsReceivedTitle = new javax.swing.JLabel();
+        lblPaymentsCompletedTitle = new javax.swing.JLabel();
+        lblMovieEntriesAdded = new javax.swing.JLabel();
         lblAccountsCreated = new javax.swing.JLabel();
-        btnRefresh = new javax.swing.JButton();
+        lblRentalRequestsReceived = new javax.swing.JLabel();
+        lblPaymentsCompleted = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CineFlix: Admin Dashboard");
+        setTitle("CineFlix: Home");
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
@@ -217,7 +356,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         lblHeader4.setWrapStyleWord(true);
         lblHeader4.setBorder(null);
         lblHeader4.setFocusable(false);
-        jScrollPane5.setViewportView(lblHeader4);
+        scrlHeader4.setViewportView(lblHeader4);
 
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
@@ -232,7 +371,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -249,7 +388,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -262,10 +401,10 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(btnPaymentReview, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(206, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlSummary.setBackground(new java.awt.Color(0, 0, 0));
+        pnlSummaryDetails.setBackground(new java.awt.Color(0, 0, 0));
 
         pnlMovie.setBackground(new java.awt.Color(255, 255, 255));
         pnlMovie.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -278,13 +417,37 @@ public class AdminDashboard extends javax.swing.JFrame {
         lblMovie.setForeground(new java.awt.Color(0, 0, 0));
         lblMovie.setText("Movie Details");
 
-        lblEntriesAddedTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblEntriesAddedTitle.setForeground(new java.awt.Color(0, 0, 0));
-        lblEntriesAddedTitle.setText("Entries Added:");
+        lblTotalMoviesTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTotalMoviesTitle.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotalMoviesTitle.setText("Total Movies:");
 
-        lblEntriesAdded.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblEntriesAdded.setForeground(new java.awt.Color(0, 0, 0));
-        lblEntriesAdded.setText("N/A");
+        lblTotalMovies.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblTotalMovies.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotalMovies.setText("N/A");
+
+        lblLowestStockTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblLowestStockTitle.setForeground(new java.awt.Color(0, 0, 0));
+        lblLowestStockTitle.setText("Lowest Stock:");
+
+        lblHighestStockTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblHighestStockTitle.setForeground(new java.awt.Color(0, 0, 0));
+        lblHighestStockTitle.setText("Highest Stock:");
+
+        lblLowestStock.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblLowestStock.setForeground(new java.awt.Color(0, 0, 0));
+        lblLowestStock.setText("N/A");
+
+        lblHighestStock.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblHighestStock.setForeground(new java.awt.Color(0, 0, 0));
+        lblHighestStock.setText("N/A");
+
+        lblLastAddedTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblLastAddedTitle.setForeground(new java.awt.Color(0, 0, 0));
+        lblLastAddedTitle.setText("Last Added:");
+
+        lblLastAdded.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblLastAdded.setForeground(new java.awt.Color(0, 0, 0));
+        lblLastAdded.setText("N/A");
 
         javax.swing.GroupLayout pnlMovieLayout = new javax.swing.GroupLayout(pnlMovie);
         pnlMovie.setLayout(pnlMovieLayout);
@@ -294,23 +457,47 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlMovieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlMovieLayout.createSequentialGroup()
+                        .addComponent(lblTotalMoviesTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTotalMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlMovieLayout.createSequentialGroup()
+                        .addComponent(lblLowestStockTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblLowestStock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlMovieLayout.createSequentialGroup()
+                        .addComponent(lblHighestStockTitle)
+                        .addGap(3, 3, 3)
+                        .addComponent(lblHighestStock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlMovieLayout.createSequentialGroup()
                         .addComponent(lblMovie)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlMovieLayout.createSequentialGroup()
-                        .addComponent(lblEntriesAddedTitle)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblEntriesAdded, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lblLastAddedTitle)
+                        .addGap(3, 3, 3)
+                        .addComponent(lblLastAdded, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlMovieLayout.setVerticalGroup(
             pnlMovieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMovieLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblMovie)
+                .addComponent(lblMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlMovieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEntriesAddedTitle)
-                    .addComponent(lblEntriesAdded))
+                    .addComponent(lblTotalMoviesTitle)
+                    .addComponent(lblTotalMovies))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMovieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLowestStockTitle)
+                    .addComponent(lblLowestStock, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMovieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblHighestStockTitle)
+                    .addComponent(lblHighestStock, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlMovieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLastAddedTitle)
+                    .addComponent(lblLastAdded, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -351,31 +538,31 @@ public class AdminDashboard extends javax.swing.JFrame {
         lblRequestTitle.setForeground(new java.awt.Color(0, 0, 0));
         lblRequestTitle.setText("Request:");
 
-        lblRentalsAddedTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblRentalsAddedTitle.setForeground(new java.awt.Color(0, 0, 0));
-        lblRentalsAddedTitle.setText("Rentals Added:");
+        lblTotalRentalsTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTotalRentalsTitle.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotalRentalsTitle.setText("Total Rentals:");
 
-        lblRentalsAdded.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblRentalsAdded.setForeground(new java.awt.Color(0, 0, 0));
-        lblRentalsAdded.setText("N/A");
+        lblTotalRentals.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblTotalRentals.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotalRentals.setText("N/A");
 
-        lblRequest.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblRequest.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblRequest.setForeground(new java.awt.Color(0, 0, 0));
         lblRequest.setText("N/A");
 
-        lblOngoing.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblOngoing.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblOngoing.setForeground(new java.awt.Color(0, 0, 0));
         lblOngoing.setText("N/A");
 
-        lblReturned.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblReturned.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblReturned.setForeground(new java.awt.Color(0, 0, 0));
         lblReturned.setText("N/A");
 
-        lblLate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblLate.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblLate.setForeground(new java.awt.Color(0, 0, 0));
         lblLate.setText("N/A");
 
-        lblCancelled.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblCancelled.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblCancelled.setForeground(new java.awt.Color(0, 0, 0));
         lblCancelled.setText("N/A");
 
@@ -385,14 +572,16 @@ public class AdminDashboard extends javax.swing.JFrame {
             pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRentalsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlRentalsLayout.createSequentialGroup()
-                        .addComponent(lblRentalsAddedTitle)
+                        .addComponent(lblReturnedTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblRentalsAdded, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
+                        .addComponent(lblReturned, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblRentals)
                     .addGroup(pnlRentalsLayout.createSequentialGroup()
-                        .addComponent(lblRentals)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(lblTotalRentalsTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTotalRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlRentalsLayout.createSequentialGroup()
                         .addComponent(lblRequestTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -400,34 +589,42 @@ public class AdminDashboard extends javax.swing.JFrame {
                     .addGroup(pnlRentalsLayout.createSequentialGroup()
                         .addComponent(lblOngoingTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblOngoing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(pnlRentalsLayout.createSequentialGroup()
-                        .addComponent(lblReturnedTitle)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblReturned, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(pnlRentalsLayout.createSequentialGroup()
-                        .addComponent(lblLateTitle)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblLate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(lblOngoing, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlRentalsLayout.createSequentialGroup()
                         .addComponent(lblCancelledTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblCancelled, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(6, 6, 6))
+                        .addComponent(lblCancelled, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
+                    .addGroup(pnlRentalsLayout.createSequentialGroup()
+                        .addComponent(lblLateTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblLate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         pnlRentalsLayout.setVerticalGroup(
             pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRentalsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblRentals)
+                .addComponent(lblRentals, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRentalsAddedTitle)
-                    .addComponent(lblRentalsAdded))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRequestTitle)
-                    .addComponent(lblRequest))
+                .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlRentalsLayout.createSequentialGroup()
+                        .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTotalRentalsTitle)
+                            .addComponent(lblTotalRentals))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRequestTitle)
+                            .addComponent(lblRequest)))
+                    .addGroup(pnlRentalsLayout.createSequentialGroup()
+                        .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblLateTitle)
+                            .addComponent(lblLate))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCancelledTitle)
+                            .addComponent(lblCancelled))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblOngoingTitle)
@@ -436,15 +633,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblReturnedTitle)
                     .addComponent(lblReturned))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblLateTitle)
-                    .addComponent(lblLate))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCancelledTitle)
-                    .addComponent(lblCancelled))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlPayments.setBackground(new java.awt.Color(255, 255, 255));
@@ -462,15 +651,15 @@ public class AdminDashboard extends javax.swing.JFrame {
         lblPayments.setForeground(new java.awt.Color(0, 0, 0));
         lblPayments.setText("Payments Details");
 
-        lblRecordsAddedTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblRecordsAddedTitle.setForeground(new java.awt.Color(0, 0, 0));
-        lblRecordsAddedTitle.setText("Records Added:");
+        lblTotalPaymentsTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTotalPaymentsTitle.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotalPaymentsTitle.setText("Total Payments:");
 
-        lblRecordsAdded.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblRecordsAdded.setForeground(new java.awt.Color(0, 0, 0));
-        lblRecordsAdded.setText("N/A");
+        lblTotalPayments.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblTotalPayments.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotalPayments.setText("N/A");
 
-        lblTotalRevenue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTotalRevenue.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblTotalRevenue.setForeground(new java.awt.Color(0, 0, 0));
         lblTotalRevenue.setText("N/A");
 
@@ -482,12 +671,12 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlPaymentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlPaymentsLayout.createSequentialGroup()
-                        .addComponent(lblRecordsAddedTitle)
+                        .addComponent(lblTotalPaymentsTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblRecordsAdded, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+                        .addComponent(lblTotalPayments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlPaymentsLayout.createSequentialGroup()
                         .addComponent(lblPayments)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 115, Short.MAX_VALUE))
                     .addGroup(pnlPaymentsLayout.createSequentialGroup()
                         .addComponent(lblTotalRevenueTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -498,16 +687,16 @@ public class AdminDashboard extends javax.swing.JFrame {
             pnlPaymentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlPaymentsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblPayments)
+                .addComponent(lblPayments, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlPaymentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRecordsAddedTitle)
-                    .addComponent(lblRecordsAdded))
+                    .addComponent(lblTotalPaymentsTitle)
+                    .addComponent(lblTotalPayments))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlPaymentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalRevenueTitle)
                     .addComponent(lblTotalRevenue))
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlUsers.setBackground(new java.awt.Color(255, 255, 255));
@@ -517,17 +706,17 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        lblAccountsCreatedTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblAccountsCreatedTitle.setForeground(new java.awt.Color(0, 0, 0));
-        lblAccountsCreatedTitle.setText("Accounts Created:");
+        lblTotalUsersTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTotalUsersTitle.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotalUsersTitle.setText("Total Users:");
 
         lblUsers.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblUsers.setForeground(new java.awt.Color(0, 0, 0));
         lblUsers.setText("Users Details");
 
-        lblAccountsCreated.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblAccountsCreated.setForeground(new java.awt.Color(0, 0, 0));
-        lblAccountsCreated.setText("N/A");
+        lblTotalUsers.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblTotalUsers.setForeground(new java.awt.Color(0, 0, 0));
+        lblTotalUsers.setText("N/A");
 
         javax.swing.GroupLayout pnlUsersLayout = new javax.swing.GroupLayout(pnlUsers);
         pnlUsers.setLayout(pnlUsersLayout);
@@ -538,66 +727,294 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(pnlUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlUsersLayout.createSequentialGroup()
                         .addComponent(lblUsers)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 59, Short.MAX_VALUE))
                     .addGroup(pnlUsersLayout.createSequentialGroup()
-                        .addComponent(lblAccountsCreatedTitle)
+                        .addComponent(lblTotalUsersTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblAccountsCreated, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)))
+                        .addComponent(lblTotalUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlUsersLayout.setVerticalGroup(
             pnlUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlUsersLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblUsers)
+                .addComponent(lblUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAccountsCreatedTitle)
-                    .addComponent(lblAccountsCreated))
+                    .addComponent(lblTotalUsersTitle)
+                    .addComponent(lblTotalUsers))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout pnlSummaryLayout = new javax.swing.GroupLayout(pnlSummary);
-        pnlSummary.setLayout(pnlSummaryLayout);
-        pnlSummaryLayout.setHorizontalGroup(
-            pnlSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSummaryLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlSummaryDetailsLayout = new javax.swing.GroupLayout(pnlSummaryDetails);
+        pnlSummaryDetails.setLayout(pnlSummaryDetailsLayout);
+        pnlSummaryDetailsLayout.setHorizontalGroup(
+            pnlSummaryDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSummaryDetailsLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(pnlSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlSummaryDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblSummaryDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlMovie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(pnlUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(pnlRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlRentals, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(pnlPayments, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
         );
-        pnlSummaryLayout.setVerticalGroup(
-            pnlSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSummaryLayout.createSequentialGroup()
+        pnlSummaryDetailsLayout.setVerticalGroup(
+            pnlSummaryDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSummaryDetailsLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(lblSummaryDetails)
+                .addComponent(lblSummaryDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlSummaryDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlPayments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlMovie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
-        btnRefresh.setBackground(new java.awt.Color(0, 0, 0));
-        btnRefresh.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnRefresh.setForeground(new java.awt.Color(255, 255, 255));
-        btnRefresh.setText("Refresh");
-        btnRefresh.setFocusable(false);
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
-            }
-        });
+        pnlTopRentedMovies.setBackground(new java.awt.Color(0, 0, 0));
+
+        lblTopRentedMovies.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblTopRentedMovies.setForeground(new java.awt.Color(255, 255, 255));
+        lblTopRentedMovies.setText("Top Rented Movies of All Time");
+        lblTopRentedMovies.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblImage1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblImage1.setForeground(new java.awt.Color(255, 255, 255));
+        lblImage1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        txtaTitle1.setEditable(false);
+        txtaTitle1.setBackground(new java.awt.Color(0, 0, 0));
+        txtaTitle1.setColumns(20);
+        txtaTitle1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtaTitle1.setForeground(new java.awt.Color(255, 255, 255));
+        txtaTitle1.setLineWrap(true);
+        txtaTitle1.setRows(4);
+        txtaTitle1.setWrapStyleWord(true);
+        txtaTitle1.setBorder(null);
+        txtaTitle1.setFocusable(false);
+        scrlImage1.setViewportView(txtaTitle1);
+
+        lblImage2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblImage2.setForeground(new java.awt.Color(255, 255, 255));
+        lblImage2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        txtaTitle2.setEditable(false);
+        txtaTitle2.setBackground(new java.awt.Color(0, 0, 0));
+        txtaTitle2.setColumns(20);
+        txtaTitle2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtaTitle2.setForeground(new java.awt.Color(255, 255, 255));
+        txtaTitle2.setLineWrap(true);
+        txtaTitle2.setRows(4);
+        txtaTitle2.setWrapStyleWord(true);
+        txtaTitle2.setBorder(null);
+        txtaTitle2.setFocusable(false);
+        scrlImage2.setViewportView(txtaTitle2);
+
+        lblImage3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblImage3.setForeground(new java.awt.Color(255, 255, 255));
+        lblImage3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        txtaTitle3.setEditable(false);
+        txtaTitle3.setBackground(new java.awt.Color(0, 0, 0));
+        txtaTitle3.setColumns(20);
+        txtaTitle3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtaTitle3.setForeground(new java.awt.Color(255, 255, 255));
+        txtaTitle3.setLineWrap(true);
+        txtaTitle3.setRows(4);
+        txtaTitle3.setWrapStyleWord(true);
+        txtaTitle3.setBorder(null);
+        txtaTitle3.setFocusable(false);
+        scrlImage3.setViewportView(txtaTitle3);
+
+        lblImage4.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblImage4.setForeground(new java.awt.Color(255, 255, 255));
+        lblImage4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        txtaTitle4.setEditable(false);
+        txtaTitle4.setBackground(new java.awt.Color(0, 0, 0));
+        txtaTitle4.setColumns(20);
+        txtaTitle4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtaTitle4.setForeground(new java.awt.Color(255, 255, 255));
+        txtaTitle4.setLineWrap(true);
+        txtaTitle4.setRows(4);
+        txtaTitle4.setWrapStyleWord(true);
+        txtaTitle4.setBorder(null);
+        txtaTitle4.setFocusable(false);
+        scrlImage4.setViewportView(txtaTitle4);
+
+        lblImage5.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblImage5.setForeground(new java.awt.Color(255, 255, 255));
+        lblImage5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        txtaTitle5.setEditable(false);
+        txtaTitle5.setBackground(new java.awt.Color(0, 0, 0));
+        txtaTitle5.setColumns(20);
+        txtaTitle5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtaTitle5.setForeground(new java.awt.Color(255, 255, 255));
+        txtaTitle5.setLineWrap(true);
+        txtaTitle5.setRows(4);
+        txtaTitle5.setWrapStyleWord(true);
+        txtaTitle5.setBorder(null);
+        txtaTitle5.setFocusable(false);
+        scrlImage5.setViewportView(txtaTitle5);
+
+        javax.swing.GroupLayout pnlTopRentedMoviesLayout = new javax.swing.GroupLayout(pnlTopRentedMovies);
+        pnlTopRentedMovies.setLayout(pnlTopRentedMoviesLayout);
+        pnlTopRentedMoviesLayout.setHorizontalGroup(
+            pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTopRentedMoviesLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTopRentedMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlTopRentedMoviesLayout.createSequentialGroup()
+                        .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scrlImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblImage2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scrlImage2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblImage3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scrlImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblImage4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scrlImage4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblImage5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scrlImage5, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(16, Short.MAX_VALUE))))
+        );
+        pnlTopRentedMoviesLayout.setVerticalGroup(
+            pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTopRentedMoviesLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(lblTopRentedMovies)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTopRentedMoviesLayout.createSequentialGroup()
+                        .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblImage4, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(lblImage3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblImage2, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scrlImage2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scrlImage3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scrlImage4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTopRentedMoviesLayout.createSequentialGroup()
+                        .addComponent(lblImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(scrlImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlTopRentedMoviesLayout.createSequentialGroup()
+                        .addComponent(lblImage5, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(scrlImage5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18))
+        );
+
+        pnlTodaysHighlight.setBackground(new java.awt.Color(0, 0, 0));
+
+        lblTodaysHighlight.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTodaysHighlight.setForeground(new java.awt.Color(255, 255, 255));
+        lblTodaysHighlight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTodaysHighlight.setText("Today's Highlight");
+        lblTodaysHighlight.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblMovieEntriesAddedTitle.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblMovieEntriesAddedTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblMovieEntriesAddedTitle.setText("Movie Entries Added:");
+        lblMovieEntriesAddedTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblAccountsCreatedTitle.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblAccountsCreatedTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblAccountsCreatedTitle.setText("Accounts Created:");
+        lblAccountsCreatedTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblRentalRequestsReceivedTitle.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblRentalRequestsReceivedTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblRentalRequestsReceivedTitle.setText("Rental Requests Received:");
+        lblRentalRequestsReceivedTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblPaymentsCompletedTitle.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblPaymentsCompletedTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaymentsCompletedTitle.setText("Payments Completed:");
+        lblPaymentsCompletedTitle.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblMovieEntriesAdded.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblMovieEntriesAdded.setForeground(new java.awt.Color(255, 255, 255));
+        lblMovieEntriesAdded.setText("N/A");
+        lblMovieEntriesAdded.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblAccountsCreated.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblAccountsCreated.setForeground(new java.awt.Color(255, 255, 255));
+        lblAccountsCreated.setText("N/A");
+        lblAccountsCreated.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblRentalRequestsReceived.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblRentalRequestsReceived.setForeground(new java.awt.Color(255, 255, 255));
+        lblRentalRequestsReceived.setText("N/A");
+        lblRentalRequestsReceived.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblPaymentsCompleted.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblPaymentsCompleted.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaymentsCompleted.setText("N/A");
+        lblPaymentsCompleted.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        javax.swing.GroupLayout pnlTodaysHighlightLayout = new javax.swing.GroupLayout(pnlTodaysHighlight);
+        pnlTodaysHighlight.setLayout(pnlTodaysHighlightLayout);
+        pnlTodaysHighlightLayout.setHorizontalGroup(
+            pnlTodaysHighlightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblTodaysHighlight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlTodaysHighlightLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlTodaysHighlightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblMovieEntriesAdded, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblPaymentsCompleted, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblRentalRequestsReceived, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblAccountsCreated, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlTodaysHighlightLayout.createSequentialGroup()
+                        .addGroup(pnlTodaysHighlightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblMovieEntriesAddedTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblAccountsCreatedTitle)
+                            .addComponent(lblRentalRequestsReceivedTitle)
+                            .addComponent(lblPaymentsCompletedTitle))
+                        .addGap(0, 27, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        pnlTodaysHighlightLayout.setVerticalGroup(
+            pnlTodaysHighlightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTodaysHighlightLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(lblTodaysHighlight)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblMovieEntriesAddedTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMovieEntriesAdded)
+                .addGap(18, 18, 18)
+                .addComponent(lblAccountsCreatedTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblAccountsCreated)
+                .addGap(18, 18, 18)
+                .addComponent(lblRentalRequestsReceivedTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblRentalRequestsReceived, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblPaymentsCompletedTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblPaymentsCompleted)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -606,20 +1023,25 @@ public class AdminDashboard extends javax.swing.JFrame {
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnlSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addComponent(pnlTopRentedMovies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(pnlTodaysHighlight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlSummaryDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlMainLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(pnlSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addComponent(pnlSummaryDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlTopRentedMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlTodaysHighlight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -632,7 +1054,9 @@ public class AdminDashboard extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -667,10 +1091,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         new Login().setVisible(true); // Returns to login frame.
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        populateSummaryDetails();
-    }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void pnlMovieMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMovieMouseClicked
         new AdminMovieInventory().setVisible(true);
@@ -731,45 +1151,77 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMovieInventory;
     private javax.swing.JButton btnPaymentReview;
-    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnRentalLogs;
     private javax.swing.JButton btnUserProfiles;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblAccountsCreated;
     private javax.swing.JLabel lblAccountsCreatedTitle;
     private javax.swing.JLabel lblCancelled;
     private javax.swing.JLabel lblCancelledTitle;
-    private javax.swing.JLabel lblEntriesAdded;
-    private javax.swing.JLabel lblEntriesAddedTitle;
     private javax.swing.JLabel lblHeader1;
     private javax.swing.JLabel lblHeader2;
     private javax.swing.JLabel lblHeader3;
     private javax.swing.JTextArea lblHeader4;
+    private javax.swing.JLabel lblHighestStock;
+    private javax.swing.JLabel lblHighestStockTitle;
+    private javax.swing.JLabel lblImage1;
+    private javax.swing.JLabel lblImage2;
+    private javax.swing.JLabel lblImage3;
+    private javax.swing.JLabel lblImage4;
+    private javax.swing.JLabel lblImage5;
+    private javax.swing.JLabel lblLastAdded;
+    private javax.swing.JLabel lblLastAddedTitle;
     private javax.swing.JLabel lblLate;
     private javax.swing.JLabel lblLateTitle;
+    private javax.swing.JLabel lblLowestStock;
+    private javax.swing.JLabel lblLowestStockTitle;
     private javax.swing.JLabel lblMovie;
+    private javax.swing.JLabel lblMovieEntriesAdded;
+    private javax.swing.JLabel lblMovieEntriesAddedTitle;
     private javax.swing.JLabel lblOngoing;
     private javax.swing.JLabel lblOngoingTitle;
     private javax.swing.JLabel lblPayments;
-    private javax.swing.JLabel lblRecordsAdded;
-    private javax.swing.JLabel lblRecordsAddedTitle;
+    private javax.swing.JLabel lblPaymentsCompleted;
+    private javax.swing.JLabel lblPaymentsCompletedTitle;
+    private javax.swing.JLabel lblRentalRequestsReceived;
+    private javax.swing.JLabel lblRentalRequestsReceivedTitle;
     private javax.swing.JLabel lblRentals;
-    private javax.swing.JLabel lblRentalsAdded;
-    private javax.swing.JLabel lblRentalsAddedTitle;
     private javax.swing.JLabel lblRequest;
     private javax.swing.JLabel lblRequestTitle;
     private javax.swing.JLabel lblReturned;
     private javax.swing.JLabel lblReturnedTitle;
     private javax.swing.JLabel lblSummaryDetails;
+    private javax.swing.JLabel lblTodaysHighlight;
+    private javax.swing.JLabel lblTopRentedMovies;
+    private javax.swing.JLabel lblTotalMovies;
+    private javax.swing.JLabel lblTotalMoviesTitle;
+    private javax.swing.JLabel lblTotalPayments;
+    private javax.swing.JLabel lblTotalPaymentsTitle;
+    private javax.swing.JLabel lblTotalRentals;
+    private javax.swing.JLabel lblTotalRentalsTitle;
     private javax.swing.JLabel lblTotalRevenue;
     private javax.swing.JLabel lblTotalRevenueTitle;
+    private javax.swing.JLabel lblTotalUsers;
+    private javax.swing.JLabel lblTotalUsersTitle;
     private javax.swing.JLabel lblUsers;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlMovie;
     private javax.swing.JPanel pnlPayments;
     private javax.swing.JPanel pnlRentals;
     private javax.swing.JPanel pnlSideNav;
-    private javax.swing.JPanel pnlSummary;
+    private javax.swing.JPanel pnlSummaryDetails;
+    private javax.swing.JPanel pnlTodaysHighlight;
+    private javax.swing.JPanel pnlTopRentedMovies;
     private javax.swing.JPanel pnlUsers;
+    private javax.swing.JScrollPane scrlHeader4;
+    private javax.swing.JScrollPane scrlImage1;
+    private javax.swing.JScrollPane scrlImage2;
+    private javax.swing.JScrollPane scrlImage3;
+    private javax.swing.JScrollPane scrlImage4;
+    private javax.swing.JScrollPane scrlImage5;
+    private javax.swing.JTextArea txtaTitle1;
+    private javax.swing.JTextArea txtaTitle2;
+    private javax.swing.JTextArea txtaTitle3;
+    private javax.swing.JTextArea txtaTitle4;
+    private javax.swing.JTextArea txtaTitle5;
     // End of variables declaration//GEN-END:variables
 }

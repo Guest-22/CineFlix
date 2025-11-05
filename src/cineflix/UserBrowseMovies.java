@@ -185,7 +185,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        scrlHeader4 = new javax.swing.JScrollPane();
         lblHeader4 = new javax.swing.JTextArea();
         lblBrowseMovies = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
@@ -203,7 +203,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         txtaSynopsis = new javax.swing.JTextArea();
         lblDuration = new javax.swing.JLabel();
         lblPricePerWeek = new javax.swing.JLabel();
-        pnlRent = new javax.swing.JPanel();
+        pnlRentalDetails = new javax.swing.JPanel();
         lblRentalDetails = new javax.swing.JLabel();
         btnAddToCart = new javax.swing.JButton();
         cmbPricePerWeek = new javax.swing.JComboBox<>();
@@ -224,6 +224,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         btnConfirmOrder = new javax.swing.JButton();
         lblTotalOrderPrice = new javax.swing.JLabel();
         txtTotalOrderPrice = new javax.swing.JTextField();
+        btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CineFlix: Browse Movies");
@@ -318,7 +319,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         lblHeader4.setWrapStyleWord(true);
         lblHeader4.setBorder(null);
         lblHeader4.setFocusable(false);
-        jScrollPane5.setViewportView(lblHeader4);
+        scrlHeader4.setViewportView(lblHeader4);
 
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
@@ -332,7 +333,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -349,7 +350,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -487,8 +488,8 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         lblPricePerWeek.setText("₱0.00");
         lblPricePerWeek.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        pnlRent.setBackground(new java.awt.Color(0, 0, 0));
-        pnlRent.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(74, 144, 226), 2));
+        pnlRentalDetails.setBackground(new java.awt.Color(0, 0, 0));
+        pnlRentalDetails.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(74, 144, 226), 2));
 
         lblRentalDetails.setBackground(new java.awt.Color(0, 0, 0));
         lblRentalDetails.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -546,46 +547,46 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout pnlRentLayout = new javax.swing.GroupLayout(pnlRent);
-        pnlRent.setLayout(pnlRentLayout);
-        pnlRentLayout.setHorizontalGroup(
-            pnlRentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRentLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlRentalDetailsLayout = new javax.swing.GroupLayout(pnlRentalDetails);
+        pnlRentalDetails.setLayout(pnlRentalDetailsLayout);
+        pnlRentalDetailsLayout.setHorizontalGroup(
+            pnlRentalDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRentalDetailsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlRentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlRentLayout.createSequentialGroup()
+                .addGroup(pnlRentalDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlRentalDetailsLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnAddToCart, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlRentLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlRentalDetailsLayout.createSequentialGroup()
                         .addComponent(lblRentalDetails)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlRentLayout.createSequentialGroup()
-                        .addGroup(pnlRentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlRentalDetailsLayout.createSequentialGroup()
+                        .addGroup(pnlRentalDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblTotalPrice)
                             .addComponent(lblRentalDuration))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                        .addGroup(pnlRentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(pnlRentalDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cmbPricePerWeek, 0, 116, Short.MAX_VALUE)
                             .addComponent(txtWeeklyPrice))))
                 .addGap(14, 14, 14))
         );
-        pnlRentLayout.setVerticalGroup(
-            pnlRentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlRentLayout.createSequentialGroup()
+        pnlRentalDetailsLayout.setVerticalGroup(
+            pnlRentalDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlRentalDetailsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblRentalDetails)
                 .addGap(18, 18, 18)
-                .addGroup(pnlRentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlRentalDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbPricePerWeek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblRentalDuration))
                 .addGap(18, 18, 18)
-                .addGroup(pnlRentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlRentalDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalPrice)
                     .addComponent(txtWeeklyPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnlRentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlRentalDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddToCart, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
@@ -660,7 +661,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                                         .addComponent(lblCopies)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
-                .addComponent(pnlRent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlRentalDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
         );
         pnlMoviePreviewLayout.setVerticalGroup(
@@ -671,7 +672,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                     .addComponent(lblImagePath, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMoviePreviewLayout.createSequentialGroup()
                         .addGroup(pnlMoviePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(pnlRent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlRentalDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pnlMoviePreviewLayout.createSequentialGroup()
                                 .addGroup(pnlMoviePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblTitle)
@@ -775,6 +776,17 @@ public class UserBrowseMovies extends javax.swing.JFrame {
             }
         });
 
+        btnReset.setBackground(new java.awt.Color(0, 0, 0));
+        btnReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnReset.setForeground(new java.awt.Color(255, 255, 255));
+        btnReset.setText("Reset");
+        btnReset.setFocusable(false);
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
@@ -785,15 +797,17 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(pnlMoviePreview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlMainLayout.createSequentialGroup()
-                        .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(pnlMainLayout.createSequentialGroup()
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSearch)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblMovieDetails)
                             .addComponent(lblBrowseMovies))
@@ -805,13 +819,12 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                                 .addGap(12, 12, 12)
                                 .addComponent(txtTotalOrderPrice))
                             .addGroup(pnlMainLayout.createSequentialGroup()
-                                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblMovieCart)
-                                    .addGroup(pnlMainLayout.createSequentialGroup()
-                                        .addComponent(btnRemoveItem, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnConfirmOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(lblMovieCart)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(pnlMainLayout.createSequentialGroup()
+                                .addComponent(btnRemoveItem, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnConfirmOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
@@ -829,7 +842,8 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSearch)
                             .addComponent(cmbSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tglSort))
+                            .addComponent(tglSort)
+                            .addComponent(btnReset))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlMainLayout.createSequentialGroup()
@@ -1108,6 +1122,12 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         selectedCartRow = -1;
     }//GEN-LAST:event_btnClearActionPerformed
 
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        txtSearch.setText("");
+        cmbSort.setSelectedIndex(0);
+        populateMovieTable("");
+    }//GEN-LAST:event_btnResetActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1153,10 +1173,10 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     private javax.swing.JButton btnMyPayments;
     private javax.swing.JButton btnRemoveItem;
     private javax.swing.JButton btnRentalHistory;
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cmbPricePerWeek;
     private javax.swing.JComboBox<String> cmbSort;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblBrowseMovies;
     private javax.swing.JLabel lblCopies;
     private javax.swing.JLabel lblCopies1;
@@ -1181,9 +1201,10 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     private javax.swing.JLabel lblYear1;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlMoviePreview;
-    private javax.swing.JPanel pnlRent;
+    private javax.swing.JPanel pnlRentalDetails;
     private javax.swing.JPanel pnlSideNav;
     private javax.swing.JScrollPane scrlCart;
+    private javax.swing.JScrollPane scrlHeader4;
     private javax.swing.JScrollPane scrlMovie;
     private javax.swing.JScrollPane scrlSynopsis;
     private javax.swing.JTable tblCart;

@@ -35,7 +35,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         if (conn == null) return; // Validates the connection before continuing.
         movieDAO = new MovieDAO(conn); // Pass the connection as an argument inside MovieDAO class for CRUD operations.
         
-        populateMovieTable(""); // Populates the movie table.
+        populateMovieRecord(""); // Populates the movie table.
     }
 
     // Sets the default cover image of a movie.
@@ -80,11 +80,11 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         
         // Clear filtered search.
         txtSearch.setText(""); // lear the ssearch field.
-        populateMovieTable("");
+        populateMovieRecord("");
     }
     
     // Populates movie table with data from our tblMovies.
-    private void populateMovieTable(String keyword) {
+    private void populateMovieRecord(String keyword) {
         DefaultTableModel movieModel = (DefaultTableModel) tblMovieRecord.getModel();
         movieModel.setRowCount(0); // Clear existing rows.
 
@@ -168,7 +168,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         btnRentalLogs = new javax.swing.JButton();
         btnPaymentReview = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        scrlHeader4 = new javax.swing.JScrollPane();
         lblHeader4 = new javax.swing.JTextArea();
         pnlForm = new javax.swing.JPanel();
         lblManageMovieRecord = new javax.swing.JLabel();
@@ -309,14 +309,14 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         lblHeader4.setWrapStyleWord(true);
         lblHeader4.setBorder(null);
         lblHeader4.setFocusable(false);
-        jScrollPane5.setViewportView(lblHeader4);
+        scrlHeader4.setViewportView(lblHeader4);
 
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
         pnlSideNavLayout.setHorizontalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-            .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnMovieInventory, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
             .addComponent(btnUserProfiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnRentalLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnPaymentReview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -324,7 +324,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -341,7 +341,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -563,7 +563,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                                             .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                 .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
                                                 .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                                .addGap(0, 11, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(pnlFormLayout.createSequentialGroup()
                                 .addGroup(pnlFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblReleaseYear)
@@ -766,7 +766,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
                         .addComponent(tglSort, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(scrlMovie))
                 .addGap(18, 18, 18)
-                .addComponent(pnlForm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -791,7 +791,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 1304, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -907,7 +907,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
 
             Message.show("Movie added successfully!");
             clearForm(); // Clear all inputs.
-            populateMovieTable(""); // Refresh/Repopulate movie table.
+            populateMovieRecord(""); // Refresh/Repopulate movie table.
         } catch (NumberFormatException e) { // Catch invalid numerical values.
             Message.show("Please enter valid numeric values for year, duration, copies, and price/week.");
         } catch (Exception e) {
@@ -941,7 +941,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
             Message.show("Movie updated successfully!");
 
             clearForm(); // Reset form
-            populateMovieTable(""); // Refresh/Repopulate movie table.
+            populateMovieRecord(""); // Refresh/Repopulate movie table.
         } catch (NumberFormatException e) { 
             Message.error("Please enter valid numeric values.");
         } catch (Exception e) {
@@ -968,7 +968,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
 
             Message.show("Movie deleted successfully!");
             clearForm(); // Reset form.
-            populateMovieTable(""); // Refresh/Repopulate movie table.
+            populateMovieRecord(""); // Refresh/Repopulate movie table.
         } catch (Exception e) {
             
             Message.error("Error deleting movie: " + e.getMessage());
@@ -981,7 +981,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
              Message.error("Please enter a movie title to search.");
              return;
         }
-        populateMovieTable(keyword);
+        populateMovieRecord(keyword);
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tglSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSortActionPerformed
@@ -990,12 +990,12 @@ public class AdminMovieInventory extends javax.swing.JFrame {
         } else {
             tglSort.setText("ASC");
         }
-        populateMovieTable(txtSearch.getText().trim());
+        populateMovieRecord(txtSearch.getText().trim());
     }//GEN-LAST:event_tglSortActionPerformed
 
     private void cmbSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSortActionPerformed
         String sortQuery = txtSearch.getText().trim();
-        populateMovieTable(sortQuery); 
+        populateMovieRecord(sortQuery); 
     }//GEN-LAST:event_cmbSortActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
@@ -1097,7 +1097,6 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUserProfiles;
     private javax.swing.JComboBox<String> cmbSort;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblCopies;
     private javax.swing.JLabel lblCoverImage;
     private javax.swing.JLabel lblCreatedAt;
@@ -1118,6 +1117,7 @@ public class AdminMovieInventory extends javax.swing.JFrame {
     private javax.swing.JPanel pnlForm;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlSideNav;
+    private javax.swing.JScrollPane scrlHeader4;
     private javax.swing.JScrollPane scrlMovie;
     private javax.swing.JScrollPane scrlSynopsis;
     private javax.swing.JTable tblMovieRecord;

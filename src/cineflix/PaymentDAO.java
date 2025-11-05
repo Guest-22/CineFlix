@@ -341,4 +341,21 @@ public class PaymentDAO {
         }
         return null;
     }
+    
+    // Gets today payment record.
+    public int getTodayPaymentCount() {
+        String sql = 
+                "SELECT COUNT(*) FROM " + TABLE_PAYMENTS + " WHERE DATE(" + COL_DATE + ") = CURDATE()";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Message.error("Error counting today's payments:\n" + e.getMessage());
+        }
+        return 0;
+    }
 }

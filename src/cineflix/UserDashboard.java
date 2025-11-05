@@ -19,7 +19,7 @@ public class UserDashboard extends javax.swing.JFrame {
         initComponents();
         this.setSize(1315, 675);
         this.setLocationRelativeTo(null); // Center the JFrame
-        lblHeader4.setText("Welcome, \n" + ActiveSession.loggedInUsername); // Welcome message.
+        lblHeader4.setText("Welcome, " + ActiveSession.loggedInUsername); // Welcome message.
         
         conn = DBConnection.getConnection();
         if (conn == null) return;
@@ -29,7 +29,7 @@ public class UserDashboard extends javax.swing.JFrame {
         
         populateSummary();
         populateTopMovies();
-        populateRentalRecord();
+        populateRentalTable();
     }
     
     // Populate rental summary.
@@ -78,8 +78,7 @@ public class UserDashboard extends javax.swing.JFrame {
     public void populateTopMovies() {
         try{
             if (conn == null) return;
-
-            MovieDAO movieDAO = new MovieDAO(DBConnection.getConnection());
+            MovieDAO movieDAO = new MovieDAO(conn);
             List<Movie> topMovies = movieDAO.getTopRentedMovieSummaries(4);
 
             for (int i = 0; i < topMovies.size(); i++) {
@@ -107,7 +106,7 @@ public class UserDashboard extends javax.swing.JFrame {
                     }
                 }
 
-                // Assign title and image to corresponding components
+                // Assign title and image to corresponding components.
                 switch (i) {
                     case 0:
                         txtaTitle1.setText(title);
@@ -135,7 +134,7 @@ public class UserDashboard extends javax.swing.JFrame {
     }
 
     // Populate recent rental record made by the user.
-    private void populateRentalRecord(){
+    private void populateRentalTable(){
         try{
             if (conn == null) return;
 
@@ -176,7 +175,7 @@ public class UserDashboard extends javax.swing.JFrame {
         btnRentalHistory = new javax.swing.JButton();
         btnMyPayments = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        scrlHeader4 = new javax.swing.JScrollPane();
         lblHeader4 = new javax.swing.JTextArea();
         pnlRentalSummary = new javax.swing.JPanel();
         lblRentalSummary = new javax.swing.JLabel();
@@ -202,26 +201,26 @@ public class UserDashboard extends javax.swing.JFrame {
         lblTotalOverdueCharges = new javax.swing.JLabel();
         lblLastPaymentDateTitle = new javax.swing.JLabel();
         lblLastPaymentDate = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        pblTopRentedMovies = new javax.swing.JPanel();
         lblTopRentedMovies = new javax.swing.JLabel();
         lblImage1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrlTitle1 = new javax.swing.JScrollPane();
         txtaTitle1 = new javax.swing.JTextArea();
         lblImage2 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        scrlTitle2 = new javax.swing.JScrollPane();
         txtaTitle2 = new javax.swing.JTextArea();
         lblImage3 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        scrlTitle3 = new javax.swing.JScrollPane();
         txtaTitle3 = new javax.swing.JTextArea();
         lblImage4 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
+        scrlTitle4 = new javax.swing.JScrollPane();
         txtaTitle4 = new javax.swing.JTextArea();
-        scrlCart = new javax.swing.JScrollPane();
+        scrlRentalRecord = new javax.swing.JScrollPane();
         tblRentalRecord = new javax.swing.JTable();
-        lblTopRentedMovies1 = new javax.swing.JLabel();
+        lblRecentRentalHistory = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CineFlix: User Dashboard");
+        setTitle("CineFlix: Home");
         setMinimumSize(new java.awt.Dimension(1315, 675));
         setResizable(false);
 
@@ -312,7 +311,7 @@ public class UserDashboard extends javax.swing.JFrame {
         lblHeader4.setWrapStyleWord(true);
         lblHeader4.setBorder(null);
         lblHeader4.setFocusable(false);
-        jScrollPane5.setViewportView(lblHeader4);
+        scrlHeader4.setViewportView(lblHeader4);
 
         javax.swing.GroupLayout pnlSideNavLayout = new javax.swing.GroupLayout(pnlSideNav);
         pnlSideNav.setLayout(pnlSideNavLayout);
@@ -326,12 +325,12 @@ public class UserDashboard extends javax.swing.JFrame {
             .addGroup(pnlSideNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblHeader3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeader2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeader1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
         pnlSideNavLayout.setVerticalGroup(
             pnlSideNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -343,7 +342,7 @@ public class UserDashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblHeader3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlHeader4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -354,7 +353,7 @@ public class UserDashboard extends javax.swing.JFrame {
                 .addComponent(btnMyPayments, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(277, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlRentalSummary.setBackground(new java.awt.Color(0, 0, 0));
@@ -435,7 +434,7 @@ public class UserDashboard extends javax.swing.JFrame {
                         .addComponent(lblOngoingRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
                         .addComponent(lblRentalSummary)
-                        .addGap(0, 148, Short.MAX_VALUE))
+                        .addGap(0, 175, Short.MAX_VALUE))
                     .addGroup(pnlRentalSummaryLayout.createSequentialGroup()
                         .addComponent(lblPendingRequestTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -591,10 +590,10 @@ public class UserDashboard extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        pblTopRentedMovies.setBackground(new java.awt.Color(0, 0, 0));
+        pblTopRentedMovies.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel1MouseClicked(evt);
+                pblTopRentedMoviesMouseClicked(evt);
             }
         });
 
@@ -618,7 +617,7 @@ public class UserDashboard extends javax.swing.JFrame {
         txtaTitle1.setWrapStyleWord(true);
         txtaTitle1.setBorder(null);
         txtaTitle1.setFocusable(false);
-        jScrollPane1.setViewportView(txtaTitle1);
+        scrlTitle1.setViewportView(txtaTitle1);
 
         lblImage2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblImage2.setForeground(new java.awt.Color(255, 255, 255));
@@ -634,7 +633,7 @@ public class UserDashboard extends javax.swing.JFrame {
         txtaTitle2.setWrapStyleWord(true);
         txtaTitle2.setBorder(null);
         txtaTitle2.setFocusable(false);
-        jScrollPane2.setViewportView(txtaTitle2);
+        scrlTitle2.setViewportView(txtaTitle2);
 
         lblImage3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblImage3.setForeground(new java.awt.Color(255, 255, 255));
@@ -650,7 +649,7 @@ public class UserDashboard extends javax.swing.JFrame {
         txtaTitle3.setWrapStyleWord(true);
         txtaTitle3.setBorder(null);
         txtaTitle3.setFocusable(false);
-        jScrollPane3.setViewportView(txtaTitle3);
+        scrlTitle3.setViewportView(txtaTitle3);
 
         lblImage4.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblImage4.setForeground(new java.awt.Color(255, 255, 255));
@@ -666,61 +665,61 @@ public class UserDashboard extends javax.swing.JFrame {
         txtaTitle4.setWrapStyleWord(true);
         txtaTitle4.setBorder(null);
         txtaTitle4.setFocusable(false);
-        jScrollPane4.setViewportView(txtaTitle4);
+        scrlTitle4.setViewportView(txtaTitle4);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pblTopRentedMoviesLayout = new javax.swing.GroupLayout(pblTopRentedMovies);
+        pblTopRentedMovies.setLayout(pblTopRentedMoviesLayout);
+        pblTopRentedMoviesLayout.setHorizontalGroup(
+            pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pblTopRentedMoviesLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pblTopRentedMoviesLayout.createSequentialGroup()
+                        .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(scrlTitle3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(lblImage3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pblTopRentedMoviesLayout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(scrlTitle4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblImage4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(lblTopRentedMovies, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pblTopRentedMoviesLayout.createSequentialGroup()
+                            .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(lblImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
+                                .addComponent(scrlTitle1, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
                             .addGap(18, 18, 18)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(scrlTitle2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                 .addComponent(lblImage2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        pblTopRentedMoviesLayout.setVerticalGroup(
+            pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pblTopRentedMoviesLayout.createSequentialGroup()
                 .addGap(8, 8, 8)
                 .addComponent(lblTopRentedMovies)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pblTopRentedMoviesLayout.createSequentialGroup()
                         .addComponent(lblImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(scrlTitle1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pblTopRentedMoviesLayout.createSequentialGroup()
                         .addComponent(lblImage2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(scrlTitle2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblImage4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblImage3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pblTopRentedMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scrlTitle3)
+                    .addComponent(scrlTitle4, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         tblRentalRecord.setBackground(new java.awt.Color(0, 0, 0));
@@ -752,12 +751,12 @@ public class UserDashboard extends javax.swing.JFrame {
                 tblRentalRecordMouseClicked(evt);
             }
         });
-        scrlCart.setViewportView(tblRentalRecord);
+        scrlRentalRecord.setViewportView(tblRentalRecord);
 
-        lblTopRentedMovies1.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblTopRentedMovies1.setForeground(new java.awt.Color(0, 0, 0));
-        lblTopRentedMovies1.setText("Recent Rental History");
-        lblTopRentedMovies1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblRecentRentalHistory.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblRecentRentalHistory.setForeground(new java.awt.Color(0, 0, 0));
+        lblRecentRentalHistory.setText("Recent Rental History");
+        lblRecentRentalHistory.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
@@ -765,40 +764,42 @@ public class UserDashboard extends javax.swing.JFrame {
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(14, 14, 14)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrlRentalRecord)
                     .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addComponent(pnlRentalSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblRecentRentalHistory)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addComponent(pnlRentalSummary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(pnlPaymentSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblTopRentedMovies1)
-                    .addComponent(scrlCart))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(pnlPaymentSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(pblTopRentedMovies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMainLayout.createSequentialGroup()
-                .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 5, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pblTopRentedMovies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlMainLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlRentalSummary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlPaymentSummary, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(lblTopRentedMovies1)
+                .addGap(12, 12, 12)
+                .addComponent(lblRecentRentalHistory)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrlCart, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrlRentalRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(pnlSideNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -833,10 +834,10 @@ public class UserDashboard extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+    private void pblTopRentedMoviesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pblTopRentedMoviesMouseClicked
         new UserBrowseMovies().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jPanel1MouseClicked
+    }//GEN-LAST:event_pblTopRentedMoviesMouseClicked
 
     private void tblRentalRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalRecordMouseClicked
         
@@ -883,12 +884,6 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMyPayments;
     private javax.swing.JButton btnRentalHistory;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblConfirmedTransactions;
     private javax.swing.JLabel lblConfirmedTransactionsTitle;
     private javax.swing.JLabel lblHeader1;
@@ -908,11 +903,11 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel lblPaymentSummary;
     private javax.swing.JLabel lblPendingRequest;
     private javax.swing.JLabel lblPendingRequestTitle;
+    private javax.swing.JLabel lblRecentRentalHistory;
     private javax.swing.JLabel lblRentalSummary;
     private javax.swing.JLabel lblReturnedRentals;
     private javax.swing.JLabel lblReturnedRentalsTitle;
     private javax.swing.JLabel lblTopRentedMovies;
-    private javax.swing.JLabel lblTopRentedMovies1;
     private javax.swing.JLabel lblTotalAmountPaid;
     private javax.swing.JLabel lblTotalAmountPaidTitle;
     private javax.swing.JLabel lblTotalOverdueCharges;
@@ -921,11 +916,17 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel lblTotalRentalsTitle;
     private javax.swing.JLabel lblTotalUnpaidBalance;
     private javax.swing.JLabel lblTotalUnpaidBalanceTitle;
+    private javax.swing.JPanel pblTopRentedMovies;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlPaymentSummary;
     private javax.swing.JPanel pnlRentalSummary;
     private javax.swing.JPanel pnlSideNav;
-    private javax.swing.JScrollPane scrlCart;
+    private javax.swing.JScrollPane scrlHeader4;
+    private javax.swing.JScrollPane scrlRentalRecord;
+    private javax.swing.JScrollPane scrlTitle1;
+    private javax.swing.JScrollPane scrlTitle2;
+    private javax.swing.JScrollPane scrlTitle3;
+    private javax.swing.JScrollPane scrlTitle4;
     private javax.swing.JTable tblRentalRecord;
     private javax.swing.JTextArea txtaTitle1;
     private javax.swing.JTextArea txtaTitle2;
