@@ -78,7 +78,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="pnlTodaysHighlight" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="pnlSummaryDetails" pref="0" max="32767" attributes="0"/>
+                      <Component id="pnlSummaryDetails" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="54" max="32767" attributes="0"/>
               </Group>
@@ -688,7 +688,7 @@
                       <Color blue="0" green="0" red="0" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
-                    <Property name="text" type="java.lang.String" value="Rentals Details"/>
+                    <Property name="text" type="java.lang.String" value="Rental Details"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblOngoingTitle">
@@ -844,16 +844,16 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblTotalPaymentsTitle" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblTotalPayments" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="lblPayments" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="115" max="32767" attributes="0"/>
+                                  <Component id="lblTotalPayments" pref="160" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblTotalRevenueTitle" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="lblTotalRevenue" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="lblPayments" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
@@ -900,7 +900,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="0" green="0" red="0" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Payments Details"/>
+                    <Property name="text" type="java.lang.String" value="Payment Details"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblTotalPaymentsTitle">
@@ -1003,7 +1003,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="0" green="0" red="0" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Users Details"/>
+                    <Property name="text" type="java.lang.String" value="User Details"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblTotalUsers">

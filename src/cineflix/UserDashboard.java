@@ -357,6 +357,11 @@ public class UserDashboard extends javax.swing.JFrame {
         );
 
         pnlRentalSummary.setBackground(new java.awt.Color(0, 0, 0));
+        pnlRentalSummary.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlRentalSummaryMouseClicked(evt);
+            }
+        });
 
         lblRentalSummary.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblRentalSummary.setForeground(new java.awt.Color(255, 255, 255));
@@ -474,6 +479,11 @@ public class UserDashboard extends javax.swing.JFrame {
         );
 
         pnlPaymentSummary.setBackground(new java.awt.Color(0, 0, 0));
+        pnlPaymentSummary.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlPaymentSummaryMouseClicked(evt);
+            }
+        });
 
         lblPaymentSummary.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblPaymentSummary.setForeground(new java.awt.Color(255, 255, 255));
@@ -842,6 +852,16 @@ public class UserDashboard extends javax.swing.JFrame {
     private void tblRentalRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRentalRecordMouseClicked
         
     }//GEN-LAST:event_tblRentalRecordMouseClicked
+
+    private void pnlRentalSummaryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlRentalSummaryMouseClicked
+        new UserRentalHistory().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_pnlRentalSummaryMouseClicked
+
+    private void pnlPaymentSummaryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlPaymentSummaryMouseClicked
+        new UserMyPayments().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_pnlPaymentSummaryMouseClicked
 
     /**
      * @param args the command line arguments

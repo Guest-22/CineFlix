@@ -87,7 +87,7 @@ public class UserMyPayments extends javax.swing.JFrame {
             Collections.reverse(payments);
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy : h:mm a"); // Formats date.
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy : h:mm a"); // Formats date (e.g., Nov 01, 2025 : 11:00 PM).
 
         for (Payment p : payments) {
             double rentalCost = p.getRentalCost();
@@ -215,11 +215,19 @@ public class UserMyPayments extends javax.swing.JFrame {
                     if (column == 4 && rentalStatusObj != null) {
                         String rentalStatus = rentalStatusObj.toString();
                         switch (rentalStatus) {
-                            case "Late":      baseColor = colOrange; break;
-                            case "Ongoing":   baseColor = colBlue; break;
-                            case "Returned":  baseColor = colTeal; break;
-                            case "Cancelled": baseColor = colRed; break;
-                            default:          /* keep baseColor */
+                            case "Ongoing":
+                                baseColor = colBlue;
+                                break;
+                            case "Returned":
+                                baseColor = colTeal;
+                                break;
+                            case "Late":
+                                baseColor = colOrange;
+                                break;
+                            case "Cancelled": 
+                                baseColor = colRed; 
+                                break;
+                            default:
                         }
                     }
 
@@ -239,7 +247,6 @@ public class UserMyPayments extends javax.swing.JFrame {
                     } else {
                         cell.setBackground(baseColor);
                     }
-
                     cell.setForeground(table.getForeground());
                 }
                 return cell;

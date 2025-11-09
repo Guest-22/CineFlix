@@ -69,7 +69,7 @@ public class UserRentalHistory extends javax.swing.JFrame {
                 Collections.reverse(rentals);
             }
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy : h:mm a"); // e.g., November 10, 2025 at 2:30 PM
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy : h:mm a"); // e.g., Nov 10, 2025 at 2:30 PM
 
             for (Rental rental : rentals) {
                 // Format rental and return dates for display

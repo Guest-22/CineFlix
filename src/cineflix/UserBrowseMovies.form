@@ -79,7 +79,7 @@
                                   <Component id="btnReset" min="-2" pref="82" max="-2" attributes="0"/>
                               </Group>
                               <Component id="scrlMovie" alignment="0" min="-2" pref="724" max="-2" attributes="0"/>
-                              <Component id="lblMovieDetails" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblMoviePreview" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="lblBrowseMovies" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -140,7 +140,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="lblMovieDetails" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMoviePreview" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnRemoveItem" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                           <Component id="btnConfirmOrder" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
@@ -1030,7 +1030,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="lblMovieDetails">
+        <Component class="javax.swing.JLabel" name="lblMoviePreview">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="SansSerif" size="24" style="1"/>
@@ -1038,7 +1038,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Movie Details"/>
+            <Property name="text" type="java.lang.String" value="Movie Preview"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Default Cursor"/>
             </Property>

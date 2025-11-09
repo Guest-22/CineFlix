@@ -216,7 +216,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
         lblDuration1 = new javax.swing.JLabel();
         lblGenre1 = new javax.swing.JLabel();
         lblCopies1 = new javax.swing.JLabel();
-        lblMovieDetails = new javax.swing.JLabel();
+        lblMoviePreview = new javax.swing.JLabel();
         lblMovieCart = new javax.swing.JLabel();
         scrlCart = new javax.swing.JScrollPane();
         tblCart = new javax.swing.JTable();
@@ -696,10 +696,10 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
-        lblMovieDetails.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblMovieDetails.setForeground(new java.awt.Color(0, 0, 0));
-        lblMovieDetails.setText("Movie Details");
-        lblMovieDetails.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblMoviePreview.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblMoviePreview.setForeground(new java.awt.Color(0, 0, 0));
+        lblMoviePreview.setText("Movie Preview");
+        lblMoviePreview.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         lblMovieCart.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         lblMovieCart.setForeground(new java.awt.Color(0, 0, 0));
@@ -809,7 +809,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(scrlMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblMovieDetails)
+                            .addComponent(lblMoviePreview)
                             .addComponent(lblBrowseMovies))
                         .addGap(18, 18, 18)
                         .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -855,7 +855,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
                             .addComponent(txtTotalOrderPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblMovieDetails)
+                    .addComponent(lblMoviePreview)
                     .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnRemoveItem, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnConfirmOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1192,7 +1192,7 @@ public class UserBrowseMovies extends javax.swing.JFrame {
     private javax.swing.JTextArea lblHeader4;
     private javax.swing.JLabel lblImagePath;
     private javax.swing.JLabel lblMovieCart;
-    private javax.swing.JLabel lblMovieDetails;
+    private javax.swing.JLabel lblMoviePreview;
     private javax.swing.JLabel lblPricePerWeek;
     private javax.swing.JLabel lblRentalDetails;
     private javax.swing.JLabel lblRentalDuration;
