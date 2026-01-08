@@ -12,13 +12,13 @@ To make video rental simple and hassle-free for both customers (users) and estab
 - Login  –  Redirects to the Login frame.
 
 **III. User Dashboard**
-- Home 
+**Home**
 - Rental Summary  –  Displays the rental summary of the currently logged-in user based on Account ID.
 - Payment Summary  –  Displays the payment summary of the  currently logged-in user based on Account ID.
 - Top Rented Movies  –  Lists of top 4 rented movies of all time based on rental count.
 - Recent Rental History  –  Lists of the 10 recently rented movies of the currently logged-in user.
 
-- Browse Movies
+**Browse Movies**
 - Movie Table  –  Movie ID (hidden), Title, Genre, Year, Duration, Price/Week, Copies.
 - Movie Table Mouse Click Listener –  Displays the selected movie in the movie preview panel for cart addition purposes.
 - Search  –  Search movie table by keyword (title, genre, or year).
@@ -31,7 +31,7 @@ To make video rental simple and hassle-free for both customers (users) and estab
 - Remove Item  –  Removes the selected item from the movie cart table.
 - Confirm Order  –  Finalizes the cart order and sends a request for the admin to approve.
 
-- Rental History
+**Rental History**
 - Rental Table  –  Rental ID, Movie Title, Rental Date, Return Date, Rental Cost, Amount Paid, Remaining Balance, Rental Stage, Rental Status.
 - Rental Table Color Renderer  –  Applies color highlights based on Rental Stage: requested (gray), approved (green), pickedup (purple), rejected (red). Rental Status: pending (gray), green (ongoing), returned (purple), late/cancelled (red).
 - Search  –  Search table rental by keyword (rental id, title, rental stage, or rental status).
@@ -39,7 +39,7 @@ To make video rental simple and hassle-free for both customers (users) and estab
 - Sort Order  –  Sorts rental table in ascending or descending order.
 - Reset  –  Resets the rental table and sorted options back to its default value.
 
-- My Payments 
+**My Payments**
 - Payments Table  –  Rental ID, Movie Title, Rental Date, Return Date, Rental Status, Payment Status, Rental Cost, Overdue Amount, Paid Amount, Remaining Balance.
 - Payment Table Color Renderer  –  Applies color highlights based on Payment Status: pending (gray), paid upfront (green), paid full (purple). Rental Status: ongoing (blue), returned (teal), late (orange), cancelled (red).
 - Search  –  Search table payment by keyword (rental id, title, rental status, or payment status).
@@ -50,12 +50,12 @@ To make video rental simple and hassle-free for both customers (users) and estab
 - Clear Receipt  –  Clears the generated digital receipt.
 
 **IV. Admin Dashboard**
-- Home
+**Home**
 - Summary Details  –  List of all record statistics based on tables (movie, user, rental, and payment).
 - Top Rented Movies of All Time  –  List of top 5 rented movies of all time based on rental count.
 - Today’s Highlight  –  List of current transaction record count within each table.
 
-- Movie Inventory
+**Movie Inventory**
 - Movie Table  –  Movie ID (hidden), Title, Synopsis, Genre, Year, Duration, Copies, Price/Week, Image Path (hidden), CreatedAt (hidden).
 - Movie Table Mouse Click Listener  –  Displays the selected movie inside the manage movie record panel for update & deletion purposes.
 - Add  –  Inserts a new movie record.
@@ -66,7 +66,7 @@ To make video rental simple and hassle-free for both customers (users) and estab
 - Sort Options  –  Sorts the movie table by date added, title, genre, or release year.
 - Sort Order  –  Sorts movie table in ascending or descending order.
 
-- User Profiles
+**User Profiles**
 - Info Table  –  Info ID (hidden), Username, Account Name (user’s full name), Sex, Email, Contact, Address.
 - Info Mouse Click Listener  –  Displays the selected info inside the manage user profile for update & deletion purposes.
 - Add  –  Insert new personal info & account record.
@@ -77,7 +77,7 @@ To make video rental simple and hassle-free for both customers (users) and estab
 - Sort Options  –  Sort info table by date added, full name, and username.
 - Sort Order  –  Sorts info table in ascending or descending order.
 
-- Rental Logs
+**Rental Logs**
 - Rental Table  –  Rental ID, Account Name (full name), Movie Title, Rental Date, Return Date, Rental Stage, Rental Status, Payment Status (hidden), Total Cost.
 - Rental Table Mouse Click Listener  –  Displays the selected rental inside the manage rental details for update, deletion, and rental finalization purposes.
 - Rental Table Color Renderer  –  Applies color highlights based on Rental Stage: requested(gray), approved (green), pickedup (purple), rejected (red). Rental Status: pending (gray), ongoing (green), returned (purple), late/cancelled (red).
@@ -89,7 +89,7 @@ To make video rental simple and hassle-free for both customers (users) and estab
 - Sort Options  –  Sort by rental date, return date, stage, and status.
 - Sort Order  –  Sorts rental table in ascending or descending order.
 
-- Payment Review
+**Payment Review**
 - Payment Table  –  Payment ID (hidden), Rental ID, Account Name (user’s full name), Movie Title, Rental Date, Return Date, Rental Stage (hidden), Rental Status, Payment Status, Amount, Total Cost, Paid Amount, Overdue Amount, and Payment Date (hidden).
 - Payment Table Mouse Click Listener  –  Displays the selected payment record inside the manage payment details for update, delete, and payment finalization purposes.
 - Payment Table Color Renderer  –  Applies color highlights based on Payment Status: pending (gray), paid upfront (green), paid full (purple). Rental Status: ongoing (blue), returned (teal), late (orange), cancelled (red).
