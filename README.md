@@ -1,5 +1,4 @@
-# Final Requirement for Data Structure & Algorithm
-# CINERENT: A SIMPLE VIDEO RENTAL SYSTEM
+# Final Requirement for Data Structure & Algorithm (CINEFLIX: A SIMPLE VIDEO RENTAL SYSTEM)
 
 ## Main Objective 
 To make video rental simple and hassle-free for both customers (users) and establishment owners (admin). The system helps customers browse through a variety of movies and search for movies that are onto their likings and rent it, while keeping track of rental activity and maintaining organized records all in one place. The system provides the customers with a smooth browsing and renting experience, while giving administrators the necessary tools to manage inventory, monitor transactions, and oversee daily operations efficiently within a single organized software.
@@ -17,7 +16,7 @@ Home
 Rental Summary  –  Displays the rental summary of the currently logged-in user based on Account ID.
 Payment Summary  –  Displays the payment summary of the  currently logged-in user based on Account ID.
 Top Rented Movies  –  Lists of top 4 rented movies of all time based on rental count.
-Recent Rental History  –  Lists of the 10 recently rented movies of the currently logged-in user.
+Recent Rental History  –  Lists of the 10 recently rented movies of the currently logged-in user
 Browse Movies
 Movie Table  –  Movie ID (hidden), Title, Genre, Year, Duration, Price/Week, Copies.
 Movie Table Mouse Click Listener –  Displays the selected movie in the movie preview panel for cart addition purposes.
