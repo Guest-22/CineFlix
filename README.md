@@ -7,6 +7,7 @@ To make video rental simple and hassle-free for both customers (users) and estab
 **I. Login Frame**
 - Login  –  Evaluates the username, password, and role in the database and saves the credentials in the ActiveSession class for reference.
 - Signup  –  Redirects to the Signup frame.
+
 **II. Signup Frame**
 - Signup  –  Inserts all of the necessary details and account credentials in the database for a successful account creation.
 - Login  –  Redirects to the Login frame.
